@@ -1,0 +1,9 @@
+import juego.*
+import wollok.game.*
+
+program tetrizado{
+    game.title("TETRIZADO")
+    game.height(10)
+    game.width(10)
+    game.boardGround("")
+}
