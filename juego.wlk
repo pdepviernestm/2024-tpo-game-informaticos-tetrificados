@@ -44,6 +44,28 @@ object tipo_bloqueL{
     }
 }
 
+
+class Pieza{
+    var position
+    method asignaPosicion(x, y){
+        position = game.at(x, y)
+    }
+    method position() = position
+}
+object rotables{
+    method rotarSentAgujasReloj(pieza, centro){
+        //le restamos el centro a la pieza
+        var posRotada = game.at(pieza.x()-centro.x(),pieza.y()-centro.y())
+        //intercambiamos los ejes x'=y, y'=-x
+        posRotada = game.at(posRotada.y(), -(posRotada.x()))
+        //le sumamos el centro de vuelta
+        posRotada = game.at(posRotada.x()+centro.x(),posRotada.y()+centro.y())
+
+        pieza.asignarPosicion(posRotada.x(), posRotada.y())
+    }
+
+}
+
 object tipo_bloqueLinv{
     
 }
