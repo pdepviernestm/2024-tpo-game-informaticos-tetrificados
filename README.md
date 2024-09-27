@@ -1,22 +1,27 @@
-# Nombre del juego (<- borrar y completar)
+# TETRIZADO (nombre provisorio)
 
 ## Equipo de desarrollo
 
 - Ezequiel Giannoni
-- Persona
-- etc.
+- Mateo Pirchi
+- Fausto Rodriguez
+- Lucas Cerutti
+  
+## IDEA PRINCIPAL DE JUEGO
+Juego se basa en un tetris el cual va a tener una introduccion informativa acerca de su historia
+Se puede acceder a secciones, las cuales tendran variantes del tetris tradicional inventadas por nosotros
 
 ## Capturas
 
 (agregar)
 
+
 ## Reglas de Juego / Instrucciones
 
-(Escribirlas)
 
 
 ## Otros
 
-- Curso/Facultad
-- Versión de wollok
-- Una vez terminado, no tenemos problemas en que el repositorio sea público / queremos manternerlo privado
+- K2005/UTN-FRBA
+- Versión de wollok 0.2.7
+- Repositorio puede ser público
