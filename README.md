@@ -2,7 +2,7 @@
 
 ## Equipo de desarrollo
 
-- Alguien
+- Ezequiel Giannoni
 - Persona
 - etc.
 
