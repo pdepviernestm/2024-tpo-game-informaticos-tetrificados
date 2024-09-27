@@ -1,81 +1,77 @@
 import wollok.game.*
 
-class Pieza {//un "pixel" del bloque de tetris
-    var position
-
-    method caer(){
-        position = position.down(1)
-    }
-
-    method darPos(x, y){//[izq, abajo, der, arriba] recorrer esta lista segun q flecha presione  
-        position = game.at(x,y)
-    }
-
-    method irDerecha(){
-        position = position.right()
-    }
-
-    method irIzquierda(){
-        position = position.right()
-    }
-
-    method irArriba(){}
-
-}
-
-class BloqueTetris{
+class BloqueTetris{ //Tengo dudas de donde deberiamos declarar las piezas del bloque de tetris
     var tipo //asignarle un tipo de bloque
-    var orientacion
-
+    var xCentro = 1 //Estas variables las deberiamos cambiar si queremos editar donde aparecen por primera vez los bloques
+    var yCentro = 1
+    var a = new Pieza(position = game.at(xCentro, yCentro+1)) 
+    var centro = new Pieza(position = game.at(xCentro, yCentro)) 
+    var c = new Pieza(position = game.at(xCentro, yCentro-1))
+    var d = new Pieza(position = game.at(xCentro-1, yCentro-1))
+    
     method rotar(dir){
         if (dir == "derecha"){
-            tipo.rotarHoraria()
+            self.rotarHoraria(a)
+            self.rotarHoraria(c)
+            self.rotarHoraria(d)
+
         }else{
-            tipo.rotarAntiHoraria()
+            self.rotarAntiHoraria(a)
+            self.rotarAntiHoraria(c)
+            self.rotarAntiHoraria(d)
         }
+    }
+    // Las agrego aca ya que todas los bloques de tetris van a ser rotables
+    method rotarHoraria(pieza){
+        //le restamos el centro a la pieza
+        var xRotada = pieza.position().x()-centro.position().x() //La coordenada x de la pieza
+        var yRotada = pieza.position().y()-centro.position().y() //La coordenada y de la pieza
+        //intercambiamos las coordenadas x'=y, y'=-x
+        const aux = xRotada
+        xRotada = yRotada
+        yRotada = -(aux)
+        //le sumamos el centro de vuelta
+        xRotada += centro.position().x() 
+        yRotada += centro.position().y() 
+        //asignamos la posicion rotada a la pieza
+        pieza.asignarPosicion(xRotada, yRotada)
+    }
+    method rotarAntiHoraria(pieza){
+        //le restamos el centro a la pieza
+        var xRotada = pieza.position().x()-centro.position().x() //La coordenada x de la pieza
+        var yRotada = pieza.position().y()-centro.position().y() //La coordenada y de la pieza
+        //intercambiamos las coordenadas x'=-y, y'=x
+        const aux = xRotada
+        xRotada = -(yRotada)
+        yRotada = aux
+        //le sumamos el centro de vuelta
+        xRotada += centro.position().x()
+        yRotada += centro.position().y()
+        //asignamos la posicion rotada a la pieza
+        pieza.asignarPosicion(xRotada, yRotada)
     }
 }
 
 //esto podriamos generalizarlo con clases o herencias para incluir al bloque linea
-object tipo_bloqueL{
-    var centro
-    method rotacionHoraria(a, b, c, d){ //para identificar la pieza centro podriamos hacer que sea la primera que le pasemos
-        
-    }
-}
 
-
-class Pieza{
+class Pieza{//un "pixel" del bloque de tetris
     var position
-    method asignaPosicion(x, y){
+    method asignarPosicion(x, y){
         position = game.at(x, y)
     }
     method position() = position
 }
-object rotables{
-    method rotarSentAgujasReloj(pieza, centro){
-        //le restamos el centro a la pieza
-        var posRotada = game.at(pieza.x()-centro.x(),pieza.y()-centro.y())
-        //intercambiamos los ejes x'=y, y'=-x
-        posRotada = game.at(posRotada.y(), -(posRotada.x()))
-        //le sumamos el centro de vuelta
-        posRotada = game.at(posRotada.x()+centro.x(),posRotada.y()+centro.y())
-
-        pieza.asignarPosicion(posRotada.x(), posRotada.y())
-    }
-
-}
 
 object tipo_bloqueLinv{
     
+
 }
 
 object tipo_bloqueCuadrado{
     
 }
 object tipo_bloqueLinea{
-    var orientacion //para saber que centro tomamos segun este horizontal o vertical
-    var centro
+    
 }
 
 object tipo_bloqueS{
@@ -89,6 +85,33 @@ object tipo_bloqueSinv{
 object tipo_bloqueT{
     
 }
+/* Es medio una idea, pero no se si es buena
+La idea es que cada vez que aparezca un nuevo bloque este objeto elija una de sus posiciones al azar, 
+cree las piezas correspondientes y las devuelva en la posicion correcta.
+el centro no lo devolveria ya que el centro siempre apareceria en el mismo lugar, y el resto de piezas se acomodarian acordemente
+Pero probablemente haya una mejor manera de hacerlo
+////////POSICIONES INICALES///////// 
+object posicionInicial{
+    var xCentro = 1 //Estas variables las deberiamos cambiar si queremos editar donde aparecen por primera vez los bloques
+    var yCentro = 1
+    var a = null
+    var centro = new Pieza(position = game.at(xCentro, yCentro)) 
+    var c = null
+    var d = null
 
-
-
+    method Linv(opcion){                                                    //Posicion que describe cada opcion (b es el centro)
+        if(opcion == 1){
+            a = new Pieza(position = game.at(xCentro, yCentro+1))       //  \\ a \\
+            c = new Pieza(position = game.at(xCentro, yCentro-1))       //  \\ b \\
+            d = new Pieza(position = game.at(xCentro-1, yCentro-1))     //   d c \\
+        }
+        else if(opcion == 2){
+            a = new Pieza(position = game.at(xCentro-1, yCentro))       //  \\ \\ \\
+            c = new Pieza(position = game.at(xCentro+1, yCentro))       //   a  b  c
+            d = new Pieza(position = game.at(xCentro+1, yCentro-1))     //   \\ \\ d
+        }
+        return [a, c, d]
+   }
+   //Asi hariamos con todas las posibles posiciones inicales
+}
+*/
