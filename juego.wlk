@@ -1,4 +1,3 @@
-import wollok.game.*
 
 class BloqueTetris{ //Tengo dudas de donde deberiamos declarar las piezas del bloque de tetris
     var tipo //asignarle un tipo de bloque
@@ -56,6 +55,9 @@ class BloqueTetris{ //Tengo dudas de donde deberiamos declarar las piezas del bl
 
 class Pieza{//un "pixel" del bloque de tetris
     var position
+
+    method image = "azul.png"
+
     method asignarPosicion(x, y){
         position = game.at(x, y)
     }
