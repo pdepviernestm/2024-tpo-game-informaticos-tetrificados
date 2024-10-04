@@ -1,6 +1,5 @@
-
+import wollok.game.*
 class BloqueTetris{ //Tengo dudas de donde deberiamos declarar las piezas del bloque de tetris
-    var tipo //asignarle un tipo de bloque
     var xCentro //Estas variables las deberiamos cambiar si queremos editar donde aparecen por primera vez los bloques
     var yCentro
     var centro = game.at(xCentro, yCentro)
@@ -52,6 +51,14 @@ class BloqueTetris{ //Tengo dudas de donde deberiamos declarar las piezas del bl
         //asignamos la posicion rotada a la pieza
         pieza.asignarPosicion(xRotada, yRotada)
     }
+
+    method caer(){
+        centro.caer()
+        a.caer()
+        b.caer()
+        c.caer()
+        d.caer()
+    }
 }
 
 //esto podriamos generalizarlo con clases o herencias para incluir al bloque linea
@@ -65,6 +72,11 @@ class Pieza{//un "pixel" del bloque de tetris
         position = game.at(x, y)
     }
     method position() = position
+
+    method caer(){
+        position = game.at(position.x(), position.y()-1)
+    }
+
 }
 
 object tipo_bloqueLinv{
@@ -97,6 +109,7 @@ el centro no lo devolveria ya que el centro siempre apareceria en el mismo lugar
 Pero probablemente haya una mejor manera de hacerlo
 */
 ////////POSICIONES INICALES///////// 
+/*
 object posicionInicial{
     var xCentro = 1 //Estas variables las deberiamos cambiar si queremos editar donde aparecen por primera vez los bloques
     var yCentro = 1
@@ -120,3 +133,4 @@ object posicionInicial{
    }
    //Asi hariamos con todas las posibles posiciones inicales
 }
+*/

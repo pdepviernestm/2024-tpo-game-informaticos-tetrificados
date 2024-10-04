@@ -3,11 +3,34 @@ import wollok.game.*
 
 program tetrizado {
     game.title("TETRIZADO")
-    game.height(10)
+    game.height(20)
     game.width(10)
-    game.boardGround("")
+    //game.boardGround("")
+    game.ground("celdaFondo.jpg") //imagen para cada celda
+    game.cellSize(40) //tamaño de cada celda en pixeles que coincide con el tamaño de las piezas (hecho a ojo)
 
-    game.addVisual(new BloqueTetris)
+    game.addVisual( new Pieza(position = game.at(0,0)) )
+    game.addVisual( new Pieza(position = game.at(1,0)) )
+    game.addVisual( new Pieza(position = game.at(2,0)) )
+    game.addVisual( new Pieza(position = game.at(3,0)) )
+    game.addVisual( new Pieza(position = game.at(4,0)) )
+    game.addVisual( new Pieza(position = game.at(5,0)) )
+    game.addVisual( new Pieza(position = game.at(6,0)) )
+    game.addVisual( new Pieza(position = game.at(7,0)) )
+    game.addVisual( new Pieza(position = game.at(8,0)) )
+    game.addVisual( new Pieza(position = game.at(9,0)) )
+
+
+
+    game.addVisual( new BloqueTetris(
+            xCentro = 5,
+            yCentro = 5,
+            a = new Pieza(position = game.at(4,5)),
+            b = new Pieza(position = game.at(5,5)),
+            c = new Pieza(position = game.at(6,5)),
+            d = new Pieza(position = game.at(6,6))
+            )
+        )
 
     game.start()
 }
