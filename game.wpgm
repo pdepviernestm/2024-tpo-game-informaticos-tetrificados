@@ -7,7 +7,6 @@ program tetrizado {
     game.width(10)
     game.boardGround("")
 
-    game.addVisual(new BloqueTetris)
 
     game.start()
 }
