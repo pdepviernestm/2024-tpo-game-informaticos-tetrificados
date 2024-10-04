@@ -9,28 +9,37 @@ program tetrizado {
     game.ground("celdaFondo.jpg") //imagen para cada celda
     game.cellSize(40) //tamaño de cada celda en pixeles que coincide con el tamaño de las piezas (hecho a ojo)
 
-    game.addVisual( new Pieza(position = game.at(0,0)) )
-    game.addVisual( new Pieza(position = game.at(1,0)) )
-    game.addVisual( new Pieza(position = game.at(2,0)) )
-    game.addVisual( new Pieza(position = game.at(3,0)) )
-    game.addVisual( new Pieza(position = game.at(4,0)) )
-    game.addVisual( new Pieza(position = game.at(5,0)) )
-    game.addVisual( new Pieza(position = game.at(6,0)) )
-    game.addVisual( new Pieza(position = game.at(7,0)) )
-    game.addVisual( new Pieza(position = game.at(8,0)) )
-    game.addVisual( new Pieza(position = game.at(9,0)) )
+    game.addVisual( new Pieza(position = game.at(0,0), image = "naranja.png"))
+    game.addVisual( new Pieza(position = game.at(1,0), image = "azul.png") )
+    game.addVisual( new Pieza(position = game.at(2,0), image = "amarillo.png") )
+    game.addVisual( new Pieza(position = game.at(3,0), image = "celeste.png") )
+    game.addVisual( new Pieza(position = game.at(4,0), image = "pared.png") )
+    game.addVisual( new Pieza(position = game.at(5,0), image = "rojo.png") )
+    game.addVisual( new Pieza(position = game.at(6,0), image = "verde.png") )
+    game.addVisual( new Pieza(position = game.at(7,0), image = "violeta.png" ))
+    //game.addVisual( new Pieza(position = game.at(8,0)) )
+    //game.addVisual( new Pieza(position = game.at(9,0)) )
 
 
-
+/*
+    //EL BLOQUE NO ES UN VISUAL, agregar sus piezas (que si son visuales) y de alguna forma agruparlas para que le pertenzcan a un bloque
     game.addVisual( new BloqueTetris(
             xCentro = 5,
             yCentro = 5,
-            a = new Pieza(position = game.at(4,5)),
-            b = new Pieza(position = game.at(5,5)),
-            c = new Pieza(position = game.at(6,5)),
-            d = new Pieza(position = game.at(6,6))
+            a = new Pieza(position = game.at(4,5), image = "naranja.png"),
+            b = new Pieza(position = game.at(5,5), image = "naranja.png"),
+            c = new Pieza(position = game.at(6,5), image = "naranja.png"),
+            d = new Pieza(position = game.at(6,6), image = "naranja.png")
             )
         )
+*/
 
+    var velocidadCaida = 1000 //milisiegundos cada los que las piezas descienden una posicion en el tablero
+    
     game.start()
+
+    game.onTick(velocidadCaida, "Caida", 
+    {
+
+    })
 }
