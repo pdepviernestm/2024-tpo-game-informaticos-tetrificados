@@ -1,21 +1,24 @@
 
 class BloqueTetris{ //Tengo dudas de donde deberiamos declarar las piezas del bloque de tetris
     var tipo //asignarle un tipo de bloque
-    var xCentro = 1 //Estas variables las deberiamos cambiar si queremos editar donde aparecen por primera vez los bloques
-    var yCentro = 1
-    var a = new Pieza(position = game.at(xCentro, yCentro+1)) 
-    var centro = new Pieza(position = game.at(xCentro, yCentro)) 
-    var c = new Pieza(position = game.at(xCentro, yCentro-1))
-    var d = new Pieza(position = game.at(xCentro-1, yCentro-1))
+    var xCentro //Estas variables las deberiamos cambiar si queremos editar donde aparecen por primera vez los bloques
+    var yCentro
+    var centro = game.at(xCentro, yCentro)
+    var a //= new Pieza(position = game.at(xCentro, yCentro+1)) 
+    var b //= new Pieza(position = game.at(xCentro, yCentro)) 
+    var c //= new Pieza(position = game.at(xCentro, yCentro-1))
+    var d //= new Pieza(position = game.at(xCentro-1, yCentro-1))
     
     method rotar(dir){
         if (dir == "derecha"){
             self.rotarHoraria(a)
+            self.rotarHoraria(centro)
             self.rotarHoraria(c)
             self.rotarHoraria(d)
 
         }else{
             self.rotarAntiHoraria(a)
+            self.rotarAntiHoraria(centro)
             self.rotarAntiHoraria(c)
             self.rotarAntiHoraria(d)
         }
@@ -23,8 +26,8 @@ class BloqueTetris{ //Tengo dudas de donde deberiamos declarar las piezas del bl
     // Las agrego aca ya que todas los bloques de tetris van a ser rotables
     method rotarHoraria(pieza){
         //le restamos el centro a la pieza
-        var xRotada = pieza.position().x()-centro.position().x() //La coordenada x de la pieza
-        var yRotada = pieza.position().y()-centro.position().y() //La coordenada y de la pieza
+        var xRotada = pieza.position().x()-centro.x() //La coordenada x de la pieza
+        var yRotada = pieza.position().y()-centro.y() //La coordenada y de la pieza
         //intercambiamos las coordenadas x'=y, y'=-x
         const aux = xRotada
         xRotada = yRotada
@@ -56,7 +59,7 @@ class BloqueTetris{ //Tengo dudas de donde deberiamos declarar las piezas del bl
 class Pieza{//un "pixel" del bloque de tetris
     var position
 
-    method image = "azul.png"
+    method image() = "azul.png"
 
     method asignarPosicion(x, y){
         position = game.at(x, y)
@@ -92,6 +95,7 @@ La idea es que cada vez que aparezca un nuevo bloque este objeto elija una de su
 cree las piezas correspondientes y las devuelva en la posicion correcta.
 el centro no lo devolveria ya que el centro siempre apareceria en el mismo lugar, y el resto de piezas se acomodarian acordemente
 Pero probablemente haya una mejor manera de hacerlo
+*/
 ////////POSICIONES INICALES///////// 
 object posicionInicial{
     var xCentro = 1 //Estas variables las deberiamos cambiar si queremos editar donde aparecen por primera vez los bloques
@@ -116,4 +120,3 @@ object posicionInicial{
    }
    //Asi hariamos con todas las posibles posiciones inicales
 }
-*/
