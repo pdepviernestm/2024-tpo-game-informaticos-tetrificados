@@ -19,6 +19,8 @@ Se puede acceder a secciones, las cuales tendran variantes del tetris tradiciona
 ## Reglas de Juego / Instrucciones
 
 
+## Inspiración
+https://tetris.com/play-tetris
 
 ## Otros
 
