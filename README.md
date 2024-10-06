@@ -15,7 +15,7 @@ Se puede acceder a secciones, las cuales tendran variantes del tetris tradiciona
 
 [Piezas](https://drive.google.com/file/d/1IDfAXGo_7XQEf8TX_SjRxgHXMUrCuEF7/view?usp=drive_link)
 
-[Tetris](https://drive.google.com/file/d/1Sh6TZR4sxygBvT05ExBUo1H8MIJzqjr3/view?usp=drive_link)
+![Tetrizado](assets/Tetrizado.png)
 
 ## Reglas de Juego / Instrucciones
 
