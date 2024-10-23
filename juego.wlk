@@ -11,17 +11,19 @@ class BloqueTetris{ //Tengo dudas de donde deberiamos declarar las piezas del bl
     method rotar(dir){
         if (dir == "derecha"){
             self.rotarHoraria(a)
-            self.rotarHoraria(centro)
+            self.rotarHoraria(b)
             self.rotarHoraria(c)
             self.rotarHoraria(d)
 
         }else{
             self.rotarAntiHoraria(a)
-            self.rotarAntiHoraria(centro)
+            self.rotarAntiHoraria(b)
             self.rotarAntiHoraria(c)
             self.rotarAntiHoraria(d)
         }
     }
+    //AGREGAR QUE NO SE VAYA DE LOS LIMITES DEL TABLERO CUANDO GIRA CERCA DE LOS BORDES
+
     // Las agrego aca ya que todas los bloques de tetris van a ser rotables
     method rotarHoraria(pieza){
         //le restamos el centro a la pieza
@@ -51,9 +53,37 @@ class BloqueTetris{ //Tengo dudas de donde deberiamos declarar las piezas del bl
         //asignamos la posicion rotada a la pieza
         pieza.asignarPosicion(xRotada, yRotada)
     }
+    
+    method mover(dir){
+        if ((dir == "derecha" && [a,b,c,d].all{p => p.position().x() < 9})){ 
+            xCentro += 1
+            centro = game.at(xCentro, yCentro)
+            a.asignarPosicion(a.position().x()+1, a.position().y())
+            b.asignarPosicion(b.position().x()+1, b.position().y())
+            c.asignarPosicion(c.position().x()+1, c.position().y())
+            d.asignarPosicion(d.position().x()+1, d.position().y())
+        }
+        if (dir == "izquierda" && [a,b,c,d].all{p => p.position().x() > 0})
+        {
+            xCentro -= 1
+            centro = game.at(xCentro, yCentro)
+            a.asignarPosicion(a.position().x()-1, a.position().y())
+            b.asignarPosicion(b.position().x()-1, b.position().y())
+            c.asignarPosicion(c.position().x()-1, c.position().y())
+            d.asignarPosicion(d.position().x()-1, d.position().y())
+        }
+    }
+
+    method mostrar(){
+        game.addVisual(a)
+        game.addVisual(b)
+        game.addVisual(c)
+        game.addVisual(d)
+    }
 
     method caer(){
-        centro.caer()
+        yCentro -= 1
+        centro = game.at(xCentro, yCentro)
         a.caer()
         b.caer()
         c.caer()
@@ -80,7 +110,7 @@ class Pieza{//un "pixel" del bloque de tetris
 
 }
 
-class Tipo_bloqueLinv inherits BloqueTetris(xCentro = 1, yCentro = 1,
+object tipo_bloqueLinv inherits BloqueTetris(xCentro = 5, yCentro = 10,
                                             a = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro+1)) ,
                                             b = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro)),
                                             c = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro-1)),
@@ -89,7 +119,7 @@ class Tipo_bloqueLinv inherits BloqueTetris(xCentro = 1, yCentro = 1,
 {
 }
 
-object tipo_bloqueCuadrado inherits BloqueTetris(xCentro = (0.5), yCentro = (0.5),
+object tipo_bloqueCuadrado inherits BloqueTetris(xCentro = (5.5), yCentro = (20.5),
                                             a = new Pieza(image = "naranja.png", position = game.at(xCentro-0.5, yCentro+0.5)) ,
                                             b = new Pieza(image = "naranja.png", position = game.at(xCentro-0.5, yCentro-0.5)),
                                             c = new Pieza(image = "naranja.png", position = game.at(xCentro+0.5, yCentro-0.5)),
@@ -97,11 +127,11 @@ object tipo_bloqueCuadrado inherits BloqueTetris(xCentro = (0.5), yCentro = (0.5
                                             ){
     
 }
-object tipo_bloqueLinea inherits BloqueTetris(xCentro = 1, yCentro = 1.5,
-                                            a = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro+1.5)) ,
-                                            b = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro+0.5)),
-                                            c = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro-0.5)),
-                                            d = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro-1.5))
+object tipo_bloqueLinea inherits BloqueTetris(xCentro = 5.5, yCentro = 10.5,
+                                            a = new Pieza(image = "naranja.png", position = game.at(xCentro-0.5, yCentro+1.5)) ,
+                                            b = new Pieza(image = "naranja.png", position = game.at(xCentro-0.5, yCentro+0.5)),
+                                            c = new Pieza(image = "naranja.png", position = game.at(xCentro-0.5, yCentro-0.5)),
+                                            d = new Pieza(image = "naranja.png", position = game.at(xCentro-0.5, yCentro-1.5))
                                             )
 {
     
@@ -134,8 +164,4 @@ object tipo_bloqueT inherits BloqueTetris(xCentro = 1, yCentro = 1,
     
     
 }
-/* Es medio una idea, pero no se si es buena
-La idea es que cada vez que aparezca un nuevo bloque este objeto elija una de sus posiciones al azar, 
-cree las piezas correspondientes y las devuelva en la posicion correcta.
-el centro no lo devolveria ya que el centro siempre apareceria en el mismo lugar, y el resto de piezas se acomodarian acordemente
-Pero probablemente haya una mejor manera de hacerlo
+

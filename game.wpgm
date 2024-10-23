@@ -8,15 +8,20 @@ program tetrizado {
     //game.boardGround("")
     game.ground("celdaFondo.jpg") //imagen para cada celda
     game.cellSize(40) //tamaño de cada celda en pixeles que coincide con el tamaño de las piezas (hecho a ojo)
+    
 
-    game.addVisual( new Pieza(position = game.at(0,0), image = "naranja.png"))
+    
+    
+    
+
+    /*game.addVisual( new Pieza(position = game.at(0,0), image = "naranja.png"))
     game.addVisual( new Pieza(position = game.at(1,0), image = "azul.png") )
     game.addVisual( new Pieza(position = game.at(2,0), image = "amarillo.png") )
     game.addVisual( new Pieza(position = game.at(3,0), image = "celeste.png") )
     game.addVisual( new Pieza(position = game.at(4,0), image = "pared.png") )
     game.addVisual( new Pieza(position = game.at(5,0), image = "rojo.png") )
     game.addVisual( new Pieza(position = game.at(6,0), image = "verde.png") )
-    game.addVisual( new Pieza(position = game.at(7,0), image = "violeta.png" ))
+    game.addVisual( new Pieza(position = game.at(7,0), image = "violeta.png" ))*/
     //game.addVisual( new Pieza(position = game.at(8,0)) )
     //game.addVisual( new Pieza(position = game.at(9,0)) )
 
@@ -35,11 +40,31 @@ program tetrizado {
 */
 
     var velocidadCaida = 1000 //milisiegundos cada los que las piezas descienden una posicion en el tablero
-    
+    var bloqueActual = tipo_bloqueLinea //ver de que sea una random
+    bloqueActual.mostrar()
+
     game.start()
 
+    keyboard.z().onPressDo({
+        bloqueActual.rotar("izquierda")
+    })
+
+    keyboard.up().onPressDo({
+        bloqueActual.rotar("derecha")
+    })
+
+    keyboard.left().onPressDo({
+        bloqueActual.mover("izquierda")
+    })
+
+    keyboard.right().onPressDo({
+        bloqueActual.mover("derecha")
+    })
+    
     game.onTick(velocidadCaida, "Caida", 
     {
-
+        bloqueActual.caer()
     })
+
+    //hardcodear las posiciones iniciales de los centrps de las piezas para q aparezcan arriba
 }
