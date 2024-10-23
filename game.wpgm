@@ -40,7 +40,8 @@ program tetrizado {
 */
 
     var velocidadCaida = 1000 //milisiegundos cada los que las piezas descienden una posicion en el tablero
-    var bloqueActual = tipo_bloqueLinea //ver de que sea una random
+    const bloquesPosibles = [tipo_bloqueL, tipo_bloqueLinv, tipo_bloqueCuadrado, tipo_bloqueLinea, tipo_bloqueS, tipo_bloqueSinv, tipo_bloqueT]
+    var bloqueActual = bloquesPosibles.get(0.randomUpTo(bloquesPosibles.size()-1))
     bloqueActual.mostrar()
 
     game.start()

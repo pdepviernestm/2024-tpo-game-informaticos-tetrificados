@@ -109,7 +109,14 @@ class Pieza{//un "pixel" del bloque de tetris
     }
 
 }
-
+object tipo_bloqueL inherits BloqueTetris(xCentro = 5, yCentro = 21,
+                                            a = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro+1)) ,
+                                            b = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro)),
+                                            c = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro-1)),
+                                            d = new Pieza(image = "naranja.png", position = game.at(xCentro+1, yCentro-1))
+                                            )
+{
+}
 object tipo_bloqueLinv inherits BloqueTetris(xCentro = 5, yCentro = 10,
                                             a = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro+1)) ,
                                             b = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro)),
@@ -127,7 +134,7 @@ object tipo_bloqueCuadrado inherits BloqueTetris(xCentro = (5.5), yCentro = (20.
                                             ){
     
 }
-object tipo_bloqueLinea inherits BloqueTetris(xCentro = 5.5, yCentro = 10.5,
+object tipo_bloqueLinea inherits BloqueTetris(xCentro = 5.5, yCentro = 21.5,
                                             a = new Pieza(image = "naranja.png", position = game.at(xCentro-0.5, yCentro+1.5)) ,
                                             b = new Pieza(image = "naranja.png", position = game.at(xCentro-0.5, yCentro+0.5)),
                                             c = new Pieza(image = "naranja.png", position = game.at(xCentro-0.5, yCentro-0.5)),
@@ -137,7 +144,7 @@ object tipo_bloqueLinea inherits BloqueTetris(xCentro = 5.5, yCentro = 10.5,
     
 }
 
-object tipo_bloqueS inherits BloqueTetris(xCentro = 1, yCentro = 1,
+object tipo_bloqueS inherits BloqueTetris(xCentro = 5, yCentro = 20,
                                             a = new Pieza(image = "naranja.png", position = game.at(xCentro-1, yCentro)) ,
                                             b = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro)),
                                             c = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro+1)),
@@ -146,7 +153,7 @@ object tipo_bloqueS inherits BloqueTetris(xCentro = 1, yCentro = 1,
     
 }
 
-object tipo_bloqueSinv inherits BloqueTetris(xCentro = 1, yCentro = 1,
+object tipo_bloqueSinv inherits BloqueTetris(xCentro = 5, yCentro = 20,
                                             a = new Pieza(image = "naranja.png", position = game.at(xCentro-1, yCentro)) ,
                                             b = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro)),
                                             c = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro-1)),
@@ -155,7 +162,7 @@ object tipo_bloqueSinv inherits BloqueTetris(xCentro = 1, yCentro = 1,
     
 }
 
-object tipo_bloqueT inherits BloqueTetris(xCentro = 1, yCentro = 1,
+object tipo_bloqueT inherits BloqueTetris(xCentro = 5, yCentro = 20,
                                             a = new Pieza(image = "naranja.png", position = game.at(xCentro-1, yCentro)) ,
                                             b = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro)),
                                             c = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro-1)),
