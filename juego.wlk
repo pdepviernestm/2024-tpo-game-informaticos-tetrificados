@@ -126,55 +126,55 @@ class Tipo_bloqueL inherits BloqueTetris (xCentro = 5, yCentro = 21,
 
 
 class Tipo_bloqueLinv inherits BloqueTetris(xCentro = 5, yCentro = 10,
-                                            a = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro+1)) ,
-                                            b = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro)),
-                                            c = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro-1)),
-                                            d = new Pieza(image = "naranja.png", position = game.at(xCentro-1, yCentro-1))
+                                            a = new Pieza(image = "azul.png", position = game.at(xCentro, yCentro+1)) ,
+                                            b = new Pieza(image = "azul.png", position = game.at(xCentro, yCentro)),
+                                            c = new Pieza(image = "azul.png", position = game.at(xCentro, yCentro-1)),
+                                            d = new Pieza(image = "azul.png", position = game.at(xCentro-1, yCentro-1))
                                             )
 {
 }
 
 class Tipo_bloqueCuadrado inherits BloqueTetris(xCentro = (5.5), yCentro = (20.5),
-                                            a = new Pieza(image = "naranja.png", position = game.at(xCentro-0.5, yCentro+0.5)) ,
-                                            b = new Pieza(image = "naranja.png", position = game.at(xCentro-0.5, yCentro-0.5)),
-                                            c = new Pieza(image = "naranja.png", position = game.at(xCentro+0.5, yCentro-0.5)),
-                                            d = new Pieza(image = "naranja.png", position = game.at(xCentro+0.5, yCentro+0.5))
+                                            a = new Pieza(image = "amarillo.png", position = game.at(xCentro-0.5, yCentro+0.5)) ,
+                                            b = new Pieza(image = "amarillo.png", position = game.at(xCentro-0.5, yCentro-0.5)),
+                                            c = new Pieza(image = "amarillo.png", position = game.at(xCentro+0.5, yCentro-0.5)),
+                                            d = new Pieza(image = "amarillo.png", position = game.at(xCentro+0.5, yCentro+0.5))
                                             ){
     
 }
 class Tipo_bloqueLinea inherits BloqueTetris(xCentro = 5.5, yCentro = 21.5,
-                                            a = new Pieza(image = "naranja.png", position = game.at(xCentro-0.5, yCentro+1.5)) ,
-                                            b = new Pieza(image = "naranja.png", position = game.at(xCentro-0.5, yCentro+0.5)),
-                                            c = new Pieza(image = "naranja.png", position = game.at(xCentro-0.5, yCentro-0.5)),
-                                            d = new Pieza(image = "naranja.png", position = game.at(xCentro-0.5, yCentro-1.5))
+                                            a = new Pieza(image = "celeste.png", position = game.at(xCentro-0.5, yCentro+1.5)) ,
+                                            b = new Pieza(image = "celeste.png", position = game.at(xCentro-0.5, yCentro+0.5)),
+                                            c = new Pieza(image = "celeste.png", position = game.at(xCentro-0.5, yCentro-0.5)),
+                                            d = new Pieza(image = "celeste.png", position = game.at(xCentro-0.5, yCentro-1.5))
                                             )
 {
     
 }
 
 class Tipo_bloqueS inherits BloqueTetris(xCentro = 5, yCentro = 20,
-                                            a = new Pieza(image = "naranja.png", position = game.at(xCentro-1, yCentro)) ,
-                                            b = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro)),
-                                            c = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro+1)),
-                                            d = new Pieza(image = "naranja.png", position = game.at(xCentro+1, yCentro+1))
+                                            a = new Pieza(image = "verde.png", position = game.at(xCentro-1, yCentro)) ,
+                                            b = new Pieza(image = "verde.png", position = game.at(xCentro, yCentro)),
+                                            c = new Pieza(image = "verde.png", position = game.at(xCentro, yCentro+1)),
+                                            d = new Pieza(image = "verde.png", position = game.at(xCentro+1, yCentro+1))
                                             ){
     
 }
 
 class Tipo_bloqueSinv inherits BloqueTetris(xCentro = 5, yCentro = 20,
-                                            a = new Pieza(image = "naranja.png", position = game.at(xCentro-1, yCentro)) ,
-                                            b = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro)),
-                                            c = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro-1)),
-                                            d = new Pieza(image = "naranja.png", position = game.at(xCentro+1, yCentro-1))
+                                            a = new Pieza(image = "rojo.png", position = game.at(xCentro-1, yCentro)) ,
+                                            b = new Pieza(image = "rojo.png", position = game.at(xCentro, yCentro)),
+                                            c = new Pieza(image = "rojo.png", position = game.at(xCentro, yCentro-1)),
+                                            d = new Pieza(image = "rojo.png", position = game.at(xCentro+1, yCentro-1))
                                             ){
     
 }
 
 class Tipo_bloqueT inherits BloqueTetris(xCentro = 5, yCentro = 20,
-                                            a = new Pieza(image = "naranja.png", position = game.at(xCentro-1, yCentro)) ,
-                                            b = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro)),
-                                            c = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro-1)),
-                                            d = new Pieza(image = "naranja.png", position = game.at(xCentro+1, yCentro))
+                                            a = new Pieza(image = "violeta.png", position = game.at(xCentro-1, yCentro)) ,
+                                            b = new Pieza(image = "violeta.png", position = game.at(xCentro, yCentro)),
+                                            c = new Pieza(image = "violeta.png", position = game.at(xCentro, yCentro-1)),
+                                            d = new Pieza(image = "violeta.png", position = game.at(xCentro+1, yCentro))
                                             ){
     
     
