@@ -11,8 +11,6 @@ program tetrizado {
     
 
     
-    
-    
 
     /*game.addVisual( new Pieza(position = game.at(0,0), image = "naranja.png"))
     game.addVisual( new Pieza(position = game.at(1,0), image = "azul.png") )
@@ -40,8 +38,34 @@ program tetrizado {
 */
 
     var velocidadCaida = 1000 //milisiegundos cada los que las piezas descienden una posicion en el tablero
-    const bloquesPosibles = [tipo_bloqueL, tipo_bloqueLinv, tipo_bloqueCuadrado, tipo_bloqueLinea, tipo_bloqueS, tipo_bloqueSinv, tipo_bloqueT]
-    var bloqueActual = bloquesPosibles.get(0.randomUpTo(bloquesPosibles.size()-1))
+
+/*
+    const cantidadDeBloques = 7
+    var numeroAleatorio = 0.randomUpTo(cantidadDeBloques - 1)
+    var bloqueActual = new Tipo_bloqueLinea() //esto esta para evitar un error
+    if(numeroAleatorio == 0){
+        bloqueActual = new Tipo_bloqueL()
+    }
+    else if(numeroAleatorio == 1){
+        bloqueActual = new Tipo_bloqueLinv()
+    }
+    else if(numeroAleatorio == 2){
+        bloqueActual = new Tipo_bloqueCuadrado()
+    }
+    else if(numeroAleatorio == 3){
+        bloqueActual = new Tipo_bloqueLinea()
+    }
+    else if(numeroAleatorio == 4){
+        bloqueActual = new Tipo_bloqueS()
+    }
+    else if(numeroAleatorio == 5){
+        bloqueActual = new Tipo_bloqueSinv()
+    }
+    else if(numeroAleatorio == 6){
+        bloqueActual = new Tipo_bloqueT()
+    }
+*/
+    var bloqueActual = new Tipo_bloqueLinea()
     bloqueActual.mostrar()
 
     game.start()
@@ -65,7 +89,37 @@ program tetrizado {
     game.onTick(velocidadCaida, "Caida", 
     {
         bloqueActual.caer()
+
+        if(bloqueActual.estaEnElFondo()){
+            /*
+            numeroAleatorio = 0.randomUpTo(cantidadDeBloques - 1)
+
+            if(numeroAleatorio == 0){
+                bloqueActual = new Tipo_bloqueL()
+            }
+            else if(numeroAleatorio == 1){
+                bloqueActual = new Tipo_bloqueLinv()
+            }
+            else if(numeroAleatorio == 2){
+                bloqueActual = new Tipo_bloqueCuadrado()
+            }
+            else if(numeroAleatorio == 3){
+                bloqueActual = new Tipo_bloqueLinea()
+            }
+            else if(numeroAleatorio == 4){
+                bloqueActual = new Tipo_bloqueS()
+            }
+            else if(numeroAleatorio == 5){
+                bloqueActual = new Tipo_bloqueSinv()
+            }
+            else if(numeroAleatorio == 6){
+                bloqueActual = new Tipo_bloqueT()
+            }
+            */
+            bloqueActual = new Tipo_bloqueLinea()
+            bloqueActual.mostrar()
+        }
     })
 
-    //hardcodear las posiciones iniciales de los centrps de las piezas para q aparezcan arriba
+    
 }
