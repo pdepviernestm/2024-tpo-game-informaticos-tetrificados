@@ -12,7 +12,7 @@ class BloqueTetris{ //Tengo dudas de donde deberiamos declarar las piezas del bl
         
     method rotar(dir){ //Hacerlo Asi, seria precalculo?
         if (dir == "derecha"){
-            if ([self.rotarHoraria(a), self.rotarHoraria(b), self.rotarHoraria(c), self.rotarHoraria(d)].any( {valorReturn => valorReturn})){
+            if ([self.rotarHoraria(a), self.rotarHoraria(b), self.rotarHoraria(c), self.rotarHoraria(d)].all( {valorReturn => valorReturn})){
                 a.asumirPosicionRotada()
                 b.asumirPosicionRotada()
                 c.asumirPosicionRotada()
@@ -236,6 +236,9 @@ object controlador {
     const cantidadDeBloques = 7
 
     method posEstaOcupada(x, y){
+        if (x < 0 || x > 9 || y < 0 || y > 19){
+            return true
+        }
         return (0 != matriz.get(19-y).get(x))
     }
 
@@ -244,8 +247,6 @@ object controlador {
         //if (filaEditada.get(x) == 1){} Estaria bueno que tire un warning o algo si se intenta ocupar una posicion ya ocupada, pero no se como hacerlo
         filaEditada = filaEditada.take(x) + [1] + filaEditada.drop(x+1)  //Tener en cuenta que take(x) tomara hasta la fila x-1 y drop(x+1) tomara desde la fila x, porque cuentan la cantidad de los elementos y no los indices (la x es un indice)
         matriz = matriz.take(20-y-1) + [filaEditada] + matriz.drop(20-y) //Aca se usa 20-y en vez de 19-y por la razon explicada arriba
-        
-        return filaEditada.join()
     }
 
 
