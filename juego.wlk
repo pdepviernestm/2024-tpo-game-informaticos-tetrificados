@@ -125,7 +125,7 @@ class Tipo_bloqueL inherits BloqueTetris (xCentro = 5, yCentro = 21,
 }
 
 
-class Tipo_bloqueLinv inherits BloqueTetris(xCentro = 5, yCentro = 10,
+class Tipo_bloqueLinv inherits BloqueTetris(xCentro = 5, yCentro = 21,
                                             a = new Pieza(image = "azul.png", position = game.at(xCentro, yCentro+1)) ,
                                             b = new Pieza(image = "azul.png", position = game.at(xCentro, yCentro)),
                                             c = new Pieza(image = "azul.png", position = game.at(xCentro, yCentro-1)),
@@ -158,7 +158,6 @@ class Tipo_bloqueS inherits BloqueTetris(xCentro = 5, yCentro = 20,
                                             c = new Pieza(image = "verde.png", position = game.at(xCentro, yCentro+1)),
                                             d = new Pieza(image = "verde.png", position = game.at(xCentro+1, yCentro+1))
                                             ){
-    
 }
 
 class Tipo_bloqueSinv inherits BloqueTetris(xCentro = 5, yCentro = 20,
@@ -167,7 +166,6 @@ class Tipo_bloqueSinv inherits BloqueTetris(xCentro = 5, yCentro = 20,
                                             c = new Pieza(image = "rojo.png", position = game.at(xCentro, yCentro-1)),
                                             d = new Pieza(image = "rojo.png", position = game.at(xCentro+1, yCentro-1))
                                             ){
-    
 }
 
 class Tipo_bloqueT inherits BloqueTetris(xCentro = 5, yCentro = 20,
@@ -180,3 +178,32 @@ class Tipo_bloqueT inherits BloqueTetris(xCentro = 5, yCentro = 20,
     
 }
 
+object controlador {
+    const cantidadDeBloques = 7
+
+
+    method generarBloqueAleatorio() {
+        const numeroAleatorio = (-0.999).randomUpTo(cantidadDeBloques - 1).roundUp()
+        
+        var bloque = new Tipo_bloqueL()
+        if (numeroAleatorio == 0) {
+            bloque = new Tipo_bloqueL()
+        } else if (numeroAleatorio == 1) {
+            bloque = new Tipo_bloqueLinv()
+        } else if (numeroAleatorio == 2) {
+            bloque = new Tipo_bloqueCuadrado()
+        } else if (numeroAleatorio == 3) {
+            bloque = new Tipo_bloqueLinea()
+        } else if (numeroAleatorio == 4) {
+            bloque = new Tipo_bloqueS()
+        } else if (numeroAleatorio == 5) {
+            bloque = new Tipo_bloqueSinv()
+        } else if (numeroAleatorio == 6) {
+            bloque = new Tipo_bloqueT()
+        } else {
+            bloque = new Tipo_bloqueLinv() //esto esta para evitar un error
+        }
+        return bloque
+    }
+
+}

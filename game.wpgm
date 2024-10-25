@@ -8,64 +8,9 @@ program tetrizado {
     //game.boardGround("")
     game.ground("celdaFondo.jpg") //imagen para cada celda
     game.cellSize(40) //tamaño de cada celda en pixeles que coincide con el tamaño de las piezas (hecho a ojo)
-    
-
-    
-
-    /*game.addVisual( new Pieza(position = game.at(0,0), image = "naranja.png"))
-    game.addVisual( new Pieza(position = game.at(1,0), image = "azul.png") )
-    game.addVisual( new Pieza(position = game.at(2,0), image = "amarillo.png") )
-    game.addVisual( new Pieza(position = game.at(3,0), image = "celeste.png") )
-    game.addVisual( new Pieza(position = game.at(4,0), image = "pared.png") )
-    game.addVisual( new Pieza(position = game.at(5,0), image = "rojo.png") )
-    game.addVisual( new Pieza(position = game.at(6,0), image = "verde.png") )
-    game.addVisual( new Pieza(position = game.at(7,0), image = "violeta.png" ))*/
-    //game.addVisual( new Pieza(position = game.at(8,0)) )
-    //game.addVisual( new Pieza(position = game.at(9,0)) )
-
-
-/*
-    //EL BLOQUE NO ES UN VISUAL, agregar sus piezas (que si son visuales) y de alguna forma agruparlas para que le pertenzcan a un bloque
-    game.addVisual( new BloqueTetris(
-            xCentro = 5,
-            yCentro = 5,
-            a = new Pieza(position = game.at(4,5), image = "naranja.png"),
-            b = new Pieza(position = game.at(5,5), image = "naranja.png"),
-            c = new Pieza(position = game.at(6,5), image = "naranja.png"),
-            d = new Pieza(position = game.at(6,6), image = "naranja.png")
-            )
-        )
-*/
 
     var velocidadCaida = 1000 //milisiegundos cada los que las piezas descienden una posicion en el tablero
-
-/*
-    const cantidadDeBloques = 7
-    var numeroAleatorio = 0.randomUpTo(cantidadDeBloques - 1)
-    var bloqueActual = new Tipo_bloqueLinea() //esto esta para evitar un error
-    if(numeroAleatorio == 0){
-        bloqueActual = new Tipo_bloqueL()
-    }
-    else if(numeroAleatorio == 1){
-        bloqueActual = new Tipo_bloqueLinv()
-    }
-    else if(numeroAleatorio == 2){
-        bloqueActual = new Tipo_bloqueCuadrado()
-    }
-    else if(numeroAleatorio == 3){
-        bloqueActual = new Tipo_bloqueLinea()
-    }
-    else if(numeroAleatorio == 4){
-        bloqueActual = new Tipo_bloqueS()
-    }
-    else if(numeroAleatorio == 5){
-        bloqueActual = new Tipo_bloqueSinv()
-    }
-    else if(numeroAleatorio == 6){
-        bloqueActual = new Tipo_bloqueT()
-    }
-*/
-    var bloqueActual = new Tipo_bloqueLinea()
+    var bloqueActual = controlador.generarBloqueAleatorio()
     bloqueActual.mostrar()
 
     game.start()
@@ -91,32 +36,7 @@ program tetrizado {
         bloqueActual.caer()
 
         if(bloqueActual.estaEnElFondo()){
-            /*
-            numeroAleatorio = 0.randomUpTo(cantidadDeBloques - 1)
-
-            if(numeroAleatorio == 0){
-                bloqueActual = new Tipo_bloqueL()
-            }
-            else if(numeroAleatorio == 1){
-                bloqueActual = new Tipo_bloqueLinv()
-            }
-            else if(numeroAleatorio == 2){
-                bloqueActual = new Tipo_bloqueCuadrado()
-            }
-            else if(numeroAleatorio == 3){
-                bloqueActual = new Tipo_bloqueLinea()
-            }
-            else if(numeroAleatorio == 4){
-                bloqueActual = new Tipo_bloqueS()
-            }
-            else if(numeroAleatorio == 5){
-                bloqueActual = new Tipo_bloqueSinv()
-            }
-            else if(numeroAleatorio == 6){
-                bloqueActual = new Tipo_bloqueT()
-            }
-            */
-            bloqueActual = new Tipo_bloqueLinea()
+            bloqueActual = controlador.generarBloqueAleatorio()
             bloqueActual.mostrar()
         }
     })
