@@ -36,6 +36,7 @@ program tetrizado {
         bloqueActual.caer()
 
         if(bloqueActual.estaEnElFondo()){
+            bloqueActual.establecerEnTablero()
             bloqueActual = controlador.generarBloqueAleatorio()
             bloqueActual.mostrar()
         }

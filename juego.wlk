@@ -7,19 +7,29 @@ class BloqueTetris{ //Tengo dudas de donde deberiamos declarar las piezas del bl
     var b //= new Pieza(position = game.at(xCentro, yCentro)) 
     var c //= new Pieza(position = game.at(xCentro, yCentro-1))
     var d //= new Pieza(position = game.at(xCentro-1, yCentro-1))
+
+
         
-    method rotar(dir){
+    method rotar(dir){ //Hacerlo Asi, seria precalculo?
         if (dir == "derecha"){
-            self.rotarHoraria(a)
-            self.rotarHoraria(b)
-            self.rotarHoraria(c)
-            self.rotarHoraria(d)
+            if ([self.rotarHoraria(a), self.rotarHoraria(b), self.rotarHoraria(c), self.rotarHoraria(d)].any( {valorReturn => valorReturn})){
+                a.asumirPosicionRotada()
+                b.asumirPosicionRotada()
+                c.asumirPosicionRotada()
+                d.asumirPosicionRotada()
+            }else{
+                return
+            }
 
         }else{
-            self.rotarAntiHoraria(a)
-            self.rotarAntiHoraria(b)
-            self.rotarAntiHoraria(c)
-            self.rotarAntiHoraria(d)
+            if ([self.rotarAntiHoraria(a), self.rotarAntiHoraria(b), self.rotarAntiHoraria(c), self.rotarAntiHoraria(d)].any( {valorReturn => valorReturn})){
+                a.asumirPosicionRotada()
+                b.asumirPosicionRotada()
+                c.asumirPosicionRotada()
+                d.asumirPosicionRotada()
+            }else{
+                return
+            }
         }
     }
     //AGREGAR QUE NO SE VAYA DE LOS LIMITES DEL TABLERO CUANDO GIRA CERCA DE LOS BORDES
@@ -36,8 +46,10 @@ class BloqueTetris{ //Tengo dudas de donde deberiamos declarar las piezas del bl
         //le sumamos el centro de vuelta
         xRotada += centro.x() 
         yRotada += centro.y() 
-        //asignamos la posicion rotada a la pieza
-        pieza.asignarPosicion(xRotada, yRotada)
+        //guardamos la posicion rotada a la pieza
+        pieza.guardarPosicionRotada(xRotada, yRotada)
+        //retornamos si la posicion rotada esta ocupada o no (es decir si esa pieza puede girar o no)
+        return !(controlador.posEstaOcupada(xRotada, yRotada))
     }
     method rotarAntiHoraria(pieza){
         //le restamos el centro a la pieza
@@ -50,8 +62,10 @@ class BloqueTetris{ //Tengo dudas de donde deberiamos declarar las piezas del bl
         //le sumamos el centro de vuelta
         xRotada += centro.x()
         yRotada += centro.y()
-        //asignamos la posicion rotada a la pieza
-        pieza.asignarPosicion(xRotada, yRotada)
+        //guardamos la posicion rotada a la pieza
+        pieza.guardarPosicionRotada(xRotada, yRotada)
+        //retornamos si la posicion rotada esta ocupada o no (es decir si esa pieza puede girar o no)
+        return !(controlador.posEstaOcupada(xRotada, yRotada))
     }
     
     method mover(dir){
@@ -93,6 +107,13 @@ class BloqueTetris{ //Tengo dudas de donde deberiamos declarar las piezas del bl
     method estaEnElFondo(){//retorna T o F
         return [a,b,c,d].any{p => p.position().y() == 0}
     }
+
+    method establecerEnTablero(){
+        controlador.ocuparPos(a.position().x(), a.position().y())
+        controlador.ocuparPos(b.position().x(), b.position().y())
+        controlador.ocuparPos(c.position().x(), c.position().y())
+        controlador.ocuparPos(d.position().x(), d.position().y())
+    }
 }
 
 //esto podriamos generalizarlo con clases o herencias para incluir al bloque linea
@@ -100,8 +121,8 @@ class BloqueTetris{ //Tengo dudas de donde deberiamos declarar las piezas del bl
 class Pieza{//un "pixel" del bloque de tetris
     var position
     const image
-
-    
+    var xRotada = 0
+    var yRotada = 0
 
     method image() = image
 
@@ -112,6 +133,15 @@ class Pieza{//un "pixel" del bloque de tetris
 
     method caer(){
         position = game.at(position.x(), position.y()-1)
+    }
+
+    method guardarPosicionRotada(x, y){
+        xRotada = x
+        yRotada = y
+    }
+
+    method asumirPosicionRotada(){
+        position = game.at(xRotada, yRotada)
     }
 
 }
@@ -179,7 +209,44 @@ class Tipo_bloqueT inherits BloqueTetris(xCentro = 5, yCentro = 20,
 }
 
 object controlador {
+    
+    var matriz = [ //Para acceder a indice usar coordenada 19-y, asi fila inferior es y = 0 y la superior es y = 19
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    ]   
     const cantidadDeBloques = 7
+
+    method posEstaOcupada(x, y){
+        return (0 != matriz.get(19-y).get(x))
+    }
+
+    method ocuparPos(x, y){ //No encontre funcion que me permita cambiar una variable accediendo mediante el indice, asi que lo hice asi
+        var filaEditada = matriz.get(19-y)
+        //if (filaEditada.get(x) == 1){} Estaria bueno que tire un warning o algo si se intenta ocupar una posicion ya ocupada, pero no se como hacerlo
+        filaEditada = filaEditada.take(x) + [1] + filaEditada.drop(x+1)  //Tener en cuenta que take(x) tomara hasta la fila x-1 y drop(x+1) tomara desde la fila x, porque cuentan la cantidad de los elementos y no los indices (la x es un indice)
+        matriz = matriz.take(20-y-1) + [filaEditada] + matriz.drop(20-y) //Aca se usa 20-y en vez de 19-y por la razon explicada arriba
+        
+        return filaEditada.join()
+    }
 
 
     method generarBloqueAleatorio() {
