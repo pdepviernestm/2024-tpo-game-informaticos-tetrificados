@@ -17,8 +17,6 @@ class BloqueTetris{ //Tengo dudas de donde deberiamos declarar las piezas del bl
                 b.asumirPosicionRotada()
                 c.asumirPosicionRotada()
                 d.asumirPosicionRotada()
-            }else{
-                return
             }
 
         }else{
@@ -27,8 +25,6 @@ class BloqueTetris{ //Tengo dudas de donde deberiamos declarar las piezas del bl
                 b.asumirPosicionRotada()
                 c.asumirPosicionRotada()
                 d.asumirPosicionRotada()
-            }else{
-                return
             }
         }
     }
@@ -62,6 +58,7 @@ class BloqueTetris{ //Tengo dudas de donde deberiamos declarar las piezas del bl
         //le sumamos el centro de vuelta
         xRotada += centro.x()
         yRotada += centro.y()
+        
         //guardamos la posicion rotada a la pieza
         pieza.guardarPosicionRotada(xRotada, yRotada)
         //retornamos si la posicion rotada esta ocupada o no (es decir si esa pieza puede girar o no)
