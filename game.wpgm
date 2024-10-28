@@ -10,10 +10,12 @@ program tetrizado {
     game.cellSize(40) //tamaño de cada celda en pixeles que coincide con el tamaño de las piezas (hecho a ojo)
 
     var velocidadCaida = 1000 //milisiegundos cada los que las piezas descienden una posicion en el tablero
+    var velocidadCaidaRapida = 10000
     var bloqueActual = controlador.generarBloqueAleatorio()
     bloqueActual.mostrar()
-
+    
     game.start()
+
 
     keyboard.z().onPressDo({
         bloqueActual.rotar("izquierda")
@@ -31,6 +33,9 @@ program tetrizado {
         bloqueActual.mover("derecha")
     })
     
+    
+    
+    
     game.onTick(velocidadCaida, "Caida", 
     {
         bloqueActual.caer()
@@ -42,5 +47,17 @@ program tetrizado {
         }
     })
 
-    
+    keyboard.x().onPressDo({
+        game.onTick(velocidadCaidaRapida, "CaidaRapida", 
+        {
+            bloqueActual.caer()
+
+            if(bloqueActual.estaEnElFondo()){
+                bloqueActual.establecerEnTablero()
+                bloqueActual = controlador.generarBloqueAleatorio()
+                bloqueActual.mostrar()
+            }
+        })
+
+    })
 }

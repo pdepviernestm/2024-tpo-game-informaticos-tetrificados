@@ -270,5 +270,26 @@ object controlador {
         }
         return bloque
     }
+    const anchoTotal = 20
+	const altoTotal = 10
+    method clearGame() {
+		game.allVisuals().forEach({ visual => game.removeVisual(visual) })
+	}
+    method inicio() {
+		self.clearGame()
+		game.title("TETRIZADO")
+		game.width(anchoTotal)
+		game.height(altoTotal)
+		
+	}
+    method gameOver() {
+		game.clear()
+        game.title("TETRIZADO")
+		game.width(anchoTotal)
+		game.height(altoTotal)
+		keyboard.p().onPressDo({ self.inicio() })
+		keyboard.f().onPressDo({ game.stop() })
+	}
 
 }
+
