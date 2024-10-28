@@ -1,5 +1,5 @@
 import wollok.game.*
-class BloqueTetris{ //Tengo dudas de donde deberiamos declarar las piezas del bloque de tetris
+class BloqueTetris{
     var xCentro //Estas variables las deberiamos cambiar si queremos editar donde aparecen por primera vez los bloques
     var yCentro
     var centro = game.at(xCentro, yCentro)
@@ -12,19 +12,35 @@ class BloqueTetris{ //Tengo dudas de donde deberiamos declarar las piezas del bl
         
     method rotar(dir){ //Hacerlo Asi, seria precalculo?
         if (dir == "derecha"){
-            if ([self.rotarHoraria(a), self.rotarHoraria(b), self.rotarHoraria(c), self.rotarHoraria(d)].all( {valorReturn => valorReturn})){
+            const listaValoresReturn = [self.rotarHoraria(a), self.rotarHoraria(b), self.rotarHoraria(c), self.rotarHoraria(d)]
+            if (listaValoresReturn.all( {valorReturn => valorReturn == 0})){
                 a.asumirPosicionRotada()
                 b.asumirPosicionRotada()
                 c.asumirPosicionRotada()
                 d.asumirPosicionRotada()
             }
+            else if(listaValoresReturn.any({valorReturn => valorReturn == 1})){ 
+                return
+            }
+            else{
+                self.mover(listaValoresReturn.filter({valorReturn => valorReturn != 1 && valorReturn != 0}).head())// Se mueve 1 casilla lejos de la pared lateral
+                self.rotar("derecha") //Intenta rotar nuevamente
+            }
 
         }else{
-            if ([self.rotarAntiHoraria(a), self.rotarAntiHoraria(b), self.rotarAntiHoraria(c), self.rotarAntiHoraria(d)].any( {valorReturn => valorReturn})){
+            const listaValoresReturn = [self.rotarAntiHoraria(a), self.rotarAntiHoraria(b), self.rotarAntiHoraria(c), self.rotarAntiHoraria(d)]
+            if (listaValoresReturn.any({valorReturn => valorReturn})){
                 a.asumirPosicionRotada()
                 b.asumirPosicionRotada()
                 c.asumirPosicionRotada()
                 d.asumirPosicionRotada()
+            }
+            else if(listaValoresReturn.any({valorReturn => valorReturn == 1})){ 
+                return
+            }
+            else{
+                self.mover(listaValoresReturn.filter({valorReturn => valorReturn != 1 && valorReturn != 0}).head())// Se mueve 1 casilla lejos de la pared lateral
+                self.rotar("izquierda") //Intenta rotar nuevamente
             }
         }
     }
@@ -42,10 +58,19 @@ class BloqueTetris{ //Tengo dudas de donde deberiamos declarar las piezas del bl
         //le sumamos el centro de vuelta
         xRotada += centro.x() 
         yRotada += centro.y() 
-        //guardamos la posicion rotada a la pieza
-        pieza.guardarPosicionRotada(xRotada, yRotada)
-        //retornamos si la posicion rotada esta ocupada o no (es decir si esa pieza puede girar o no)
-        return !(controlador.posEstaOcupada(xRotada, yRotada))
+        
+        if(xRotada < 0){
+            return "derecha"
+        }
+        else if(xRotada > 9){
+            return "izquierda"
+        }
+        else{
+            //guardamos la posicion rotada a la pieza
+            pieza.guardarPosicionRotada(xRotada, yRotada)
+            //retornamos si la posicion rotada esta ocupada o no (es decir si esa pieza puede girar o no)
+            return controlador.posEstaOcupada(xRotada, yRotada)
+        }
     }
     method rotarAntiHoraria(pieza){
         //le restamos el centro a la pieza
@@ -58,11 +83,19 @@ class BloqueTetris{ //Tengo dudas de donde deberiamos declarar las piezas del bl
         //le sumamos el centro de vuelta
         xRotada += centro.x()
         yRotada += centro.y()
-        
-        //guardamos la posicion rotada a la pieza
-        pieza.guardarPosicionRotada(xRotada, yRotada)
-        //retornamos si la posicion rotada esta ocupada o no (es decir si esa pieza puede girar o no)
-        return !(controlador.posEstaOcupada(xRotada, yRotada))
+
+        if(xRotada < 0){
+            return "derecha"
+        }
+        else if(xRotada > 9){
+            return "izquierda"
+        }
+        else{
+            //guardamos la posicion rotada a la pieza
+            pieza.guardarPosicionRotada(xRotada, yRotada)
+            //retornamos si la posicion rotada esta ocupada o no (es decir si esa pieza puede girar o no)
+            return controlador.posEstaOcupada(xRotada, yRotada)
+        }
     }
     
     method mover(dir){
@@ -206,7 +239,7 @@ class Tipo_bloqueT inherits BloqueTetris(xCentro = 5, yCentro = 20,
 }
 
 object controlador {
-    
+
     var matriz = [ //Para acceder a indice usar coordenada 19-y, asi fila inferior es y = 0 y la superior es y = 19
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -234,9 +267,9 @@ object controlador {
 
     method posEstaOcupada(x, y){
         if (x < 0 || x > 9 || y < 0 || y > 19){
-            return true
+            return 1
         }
-        return (0 != matriz.get(19-y).get(x))
+        return (matriz.get(19-y).get(x))
     }
 
     method ocuparPos(x, y){ //No encontre funcion que me permita cambiar una variable accediendo mediante el indice, asi que lo hice asi
