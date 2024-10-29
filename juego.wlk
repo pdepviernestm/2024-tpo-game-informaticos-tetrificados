@@ -39,9 +39,11 @@ class BloqueTetris{
                 return
             }
             else{
-                self.mover(listaValoresReturn.filter({valorReturn => valorReturn != 1 && valorReturn != 0}).head())// Se mueve 1 casilla lejos de la pared lateral
-                self.rotar("izquierda") //Intenta rotar nuevamente
-            }
+                if(controlador.dirEstaLibre(dir, [a, b, c, d])){
+                    self.mover(listaValoresReturn.filter({valorReturn => valorReturn != 1 && valorReturn != 0}).head())// Se mueve 1 casilla lejos de la pared lateral
+                    self.rotar("izquierda") //Intenta rotar nuevamente
+                }
+            }//HAY UN CASO EN EL QUE ESTO NO FUNCIONA, FIJARSE EN CUADERNO (Mateo)
         }
     }
 
@@ -99,7 +101,7 @@ class BloqueTetris{
     }
     
     method mover(dir){
-        if (dir == "derecha" && controlador.dirEstaLibre("derecha", a, b, c, d)){ 
+        if (dir == "derecha" && controlador.dirEstaLibre("derecha", [a, b, c, d])){ 
             xCentro += 1
             centro = game.at(xCentro, yCentro)
             a.asignarPosicion(a.position().x()+1, a.position().y())
@@ -107,7 +109,7 @@ class BloqueTetris{
             c.asignarPosicion(c.position().x()+1, c.position().y())
             d.asignarPosicion(d.position().x()+1, d.position().y())
         }
-        if (dir == "izquierda" && controlador.dirEstaLibre("izquierda", a, b, c, d))
+        if (dir == "izquierda" && controlador.dirEstaLibre("izquierda", [a, b, c, d]))
         {
             xCentro -= 1
             centro = game.at(xCentro, yCentro)
@@ -116,7 +118,7 @@ class BloqueTetris{
             c.asignarPosicion(c.position().x()-1, c.position().y())
             d.asignarPosicion(d.position().x()-1, d.position().y())
         }
-        if (dir == "abajo" && controlador.dirEstaLibre("abajo", a, b, c, d) ){
+        if (dir == "abajo" && controlador.dirEstaLibre("abajo", [a, b, c, d]) ){
             yCentro -= 1
             centro = game.at(xCentro, yCentro)
             a.caer()
@@ -138,7 +140,7 @@ class BloqueTetris{
     }
 
     method estaEnElFondo(){//retorna T o F
-        return !controlador.dirEstaLibre("abajo", a, b, c, d)
+        return !controlador.dirEstaLibre("abajo", [a, b, c, d])
     }
 
     method establecerEnTablero(){
@@ -315,15 +317,15 @@ object controlador {
         }
         return bloque
     }
-    method dirEstaLibre(dir, pA, pB, pC, pD){
+    method dirEstaLibre(dir, listaPiezas){
         if (dir == "derecha"){
-            return ![pA,pB,pC,pD].any{p => self.posEstaOcupada(p.position().x()+1, p.position().y()) == 1} //Comprueba que todas las posiciones a la derecha no tengan nada
+            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x()+1, p.position().y()) == 1} //Comprueba que todas las posiciones a la derecha no tengan nada
         }
         if (dir == "izquierda"){
-            return ![pA,pB,pC,pD].any{p => self.posEstaOcupada(p.position().x()-1, p.position().y()) == 1} //Comprueba que todas las posiciones a la izquierda no tengan nada
+            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x()-1, p.position().y()) == 1} //Comprueba que todas las posiciones a la izquierda no tengan nada
         }
         if (dir == "abajo"){
-            return ![pA,pB,pC,pD].any{p => self.posEstaOcupada(p.position().x(), p.position().y()-1) == 1} //Comprueba que todas las posiciones abajo de la misma no tengan nada
+            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x(), p.position().y()-1) == 1} //Comprueba que todas las posiciones abajo de la misma no tengan nada
         }
         return EvaluationError
     }
