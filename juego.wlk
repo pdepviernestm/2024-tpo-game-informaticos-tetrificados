@@ -10,7 +10,7 @@ class BloqueTetris{
 
 
         
-    method rotar(dir){ //Hacerlo Asi, seria precalculo?
+    method rotar(dir){ //Hacerlo Asi, seria precalculo?    
         if (dir == "derecha"){
             const listaValoresReturn = [self.rotarHoraria(a), self.rotarHoraria(b), self.rotarHoraria(c), self.rotarHoraria(d)]
             if (listaValoresReturn.all( {valorReturn => valorReturn == 0})){
@@ -44,7 +44,6 @@ class BloqueTetris{
             }
         }
     }
-    //AGREGAR QUE NO SE VAYA DE LOS LIMITES DEL TABLERO CUANDO GIRA CERCA DE LOS BORDES
 
     // Las agrego aca ya que todas los bloques de tetris van a ser rotables
     method rotarHoraria(pieza){
@@ -72,6 +71,7 @@ class BloqueTetris{
             return controlador.posEstaOcupada(xRotada, yRotada)
         }
     }
+
     method rotarAntiHoraria(pieza){
         //le restamos el centro a la pieza
         var xRotada = pieza.position().x()-centro.x() //La coordenada x de la pieza
@@ -99,7 +99,7 @@ class BloqueTetris{
     }
     
     method mover(dir){
-        if ((dir == "derecha" && [a,b,c,d].all{p => p.position().x() < 9})){ 
+        if (dir == "derecha" && controlador.dirEstaLibre("derecha", a, b, c, d)){ 
             xCentro += 1
             centro = game.at(xCentro, yCentro)
             a.asignarPosicion(a.position().x()+1, a.position().y())
@@ -107,7 +107,7 @@ class BloqueTetris{
             c.asignarPosicion(c.position().x()+1, c.position().y())
             d.asignarPosicion(d.position().x()+1, d.position().y())
         }
-        if (dir == "izquierda" && [a,b,c,d].all{p => p.position().x() > 0})
+        if (dir == "izquierda" && controlador.dirEstaLibre("izquierda", a, b, c, d))
         {
             xCentro -= 1
             centro = game.at(xCentro, yCentro)
@@ -115,6 +115,14 @@ class BloqueTetris{
             b.asignarPosicion(b.position().x()-1, b.position().y())
             c.asignarPosicion(c.position().x()-1, c.position().y())
             d.asignarPosicion(d.position().x()-1, d.position().y())
+        }
+        if (dir == "abajo" && controlador.dirEstaLibre("abajo", a, b, c, d) ){
+            yCentro -= 1
+            centro = game.at(xCentro, yCentro)
+            a.caer()
+            b.caer()
+            c.caer()
+            d.caer()
         }
     }
 
@@ -126,16 +134,11 @@ class BloqueTetris{
     }
 
     method caer(){
-        yCentro -= 1
-        centro = game.at(xCentro, yCentro)
-        a.caer()
-        b.caer()
-        c.caer()
-        d.caer()
+        self.mover("abajo")
     }
 
     method estaEnElFondo(){//retorna T o F
-        return [a,b,c,d].any{p => p.position().y() == 0}
+        return !controlador.dirEstaLibre("abajo", a, b, c, d)
     }
 
     method establecerEnTablero(){
@@ -143,6 +146,12 @@ class BloqueTetris{
         controlador.ocuparPos(b.position().x(), b.position().y())
         controlador.ocuparPos(c.position().x(), c.position().y())
         controlador.ocuparPos(d.position().x(), d.position().y())
+    }
+    method decirPosiciones(){
+        game.say(a, "posicion: A: " + a.position().x())
+        game.say(b, "posicion: B: " + b.position().x())
+        game.say(c, "posicion: C: " + c.position().x())
+        game.say(d, "posicion: D: " + d.position().x())
     }
 }
 
@@ -263,12 +272,15 @@ object controlador {
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ]   
-    const cantidadDeBloques = 7
 
     method posEstaOcupada(x, y){
-        if (x < 0 || x > 9 || y < 0 || y > 19){
+        if (x < 0 || x > 9 || y < 0){
             return 1
         }
+        if (y > 19){
+            return 0
+        }
+
         return (matriz.get(19-y).get(x))
     }
 
@@ -279,7 +291,7 @@ object controlador {
         matriz = matriz.take(20-y-1) + [filaEditada] + matriz.drop(20-y) //Aca se usa 20-y en vez de 19-y por la razon explicada arriba
     }
 
-
+    const cantidadDeBloques = 7
     method generarBloqueAleatorio() {
         const numeroAleatorio = (-0.999).randomUpTo(cantidadDeBloques - 1).roundUp()
         
@@ -303,5 +315,16 @@ object controlador {
         }
         return bloque
     }
-
+    method dirEstaLibre(dir, pA, pB, pC, pD){
+        if (dir == "derecha"){
+            return ![pA,pB,pC,pD].any{p => self.posEstaOcupada(p.position().x()+1, p.position().y()) == 1} //Comprueba que todas las posiciones a la derecha no tengan nada
+        }
+        if (dir == "izquierda"){
+            return ![pA,pB,pC,pD].any{p => self.posEstaOcupada(p.position().x()-1, p.position().y()) == 1} //Comprueba que todas las posiciones a la izquierda no tengan nada
+        }
+        if (dir == "abajo"){
+            return ![pA,pB,pC,pD].any{p => self.posEstaOcupada(p.position().x(), p.position().y()-1) == 1} //Comprueba que todas las posiciones abajo de la misma no tengan nada
+        }
+        return EvaluationError
+    }
 }

@@ -30,17 +30,25 @@ program tetrizado {
     keyboard.right().onPressDo({
         bloqueActual.mover("derecha")
     })
+
+    keyboard.down().onPressDo({
+        bloqueActual.mover("abajo")
+    })
     
     game.onTick(velocidadCaida, "Caida", 
     {
         bloqueActual.caer()
 
         if(bloqueActual.estaEnElFondo()){
-            bloqueActual.establecerEnTablero()
-            bloqueActual = controlador.generarBloqueAleatorio()
-            bloqueActual.mostrar()
+            game.schedule(500, { //La idea de esto es que tengas un ratito para mover la pieza antes de que se quede fija
+                if (bloqueActual.estaEnElFondo()){
+                    bloqueActual.establecerEnTablero()
+                    bloqueActual = controlador.generarBloqueAleatorio()
+                    bloqueActual.mostrar()
+                }
+            })
         }
     })
-
+    
     
 }
