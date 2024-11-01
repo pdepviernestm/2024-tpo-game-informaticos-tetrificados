@@ -198,7 +198,7 @@ class BloqueTetris{
     }	
 
     method establecerEnTablero(){
-        controlador.ocuparPos(a.position().x(), a.position().y())
+        controlador.ocuparPos(a.position().x(), a.position().y())//pasarlo como una unica posision
         controlador.ocuparPos(b.position().x(), b.position().y())
         controlador.ocuparPos(c.position().x(), c.position().y())
         controlador.ocuparPos(d.position().x(), d.position().y())
@@ -342,14 +342,13 @@ object controlador {
 
     method ocuparPos(x, y){ //No encontre funcion que me permita cambiar una variable accediendo mediante el indice, asi que lo hice asi
         if(y > 19){
-            //game.say(visual, "Game Over")
-            self.gameOver()
+            self.perder()
+        }else{
+            var filaEditada = matriz.get(19-y)
+            //if (filaEditada.get(x) == 1){} Estaria bueno que tire un warning o algo si se intenta ocupar una posicion ya ocupada, pero no se como hacerlo
+            filaEditada = filaEditada.take(x) + [1] + filaEditada.drop(x+1)  //Tener en cuenta que take(x) tomara hasta la fila x-1 y drop(x+1) tomara desde la fila x, porque cuentan la cantidad de los elementos y no los indices (la x es un indice)
+            matriz = matriz.take(20-y-1) + [filaEditada] + matriz.drop(20-y) //Aca se usa 20-y en vez de 19-y por la razon explicada arriba
         }
-        
-        var filaEditada = matriz.get(19-y)
-        //if (filaEditada.get(x) == 1){} Estaria bueno que tire un warning o algo si se intenta ocupar una posicion ya ocupada, pero no se como hacerlo
-        filaEditada = filaEditada.take(x) + [1] + filaEditada.drop(x+1)  //Tener en cuenta que take(x) tomara hasta la fila x-1 y drop(x+1) tomara desde la fila x, porque cuentan la cantidad de los elementos y no los indices (la x es un indice)
-        matriz = matriz.take(20-y-1) + [filaEditada] + matriz.drop(20-y) //Aca se usa 20-y en vez de 19-y por la razon explicada arriba
     }
 
     const cantidadDeBloques = 7
@@ -388,12 +387,17 @@ object controlador {
         }
         return EvaluationError
     }
-    /*
+    
     method perder(){
         game.addVisual(gameOver)
-        game.schedule(1000, game.stop())
-        game.stop()
+        game.removeTickEvent("Caida")
+        //game.schedule(1000, {game.stop()})
     }
-    */
+    
 
+}
+
+object gameOver {
+    method image() = "pared.png"
+    method position() = game.at(5, 5)
 }
