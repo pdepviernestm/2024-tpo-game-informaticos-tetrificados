@@ -398,6 +398,6 @@ object controlador {
 }
 
 object gameOver {
-    method image() = "pared.png"
-    method position() = game.at(5, 5)
+    method image() = "gameover.png"
+    method position() = game.at(-5, 5)
 }

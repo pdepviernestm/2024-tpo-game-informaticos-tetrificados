@@ -9,7 +9,7 @@ program tetrizado {
     game.ground("celdaFondo.jpg") //imagen para cada celda
     game.cellSize(40) //tamaño de cada celda en pixeles que coincide con el tamaño de las piezas (hecho a ojo)
 
-    var velocidadCaida = 500 //milisiegundos cada los que las piezas descienden una posicion en el tablero
+    var ticksCaida = 500 //milisiegundos cada los que las piezas descienden una posicion en el tablero
     var bloqueActual = controlador.generarBloqueAleatorio()
     
     bloqueActual.mostrar()
@@ -45,7 +45,7 @@ program tetrizado {
     })
     
     
-    game.onTick(velocidadCaida, "Caida", 
+    game.onTick(ticksCaida, "Caida", 
     {
         bloqueActual.caer()
 
@@ -60,4 +60,8 @@ program tetrizado {
         }
     })
     
+    //cada 1.5 minutos (90 segundos) se reduce el tiempo de caida
+    game.onTick(1000* 60*1.5, "Incremento de Dificultad", {
+        ticksCaida -= 50
+    })
 }
