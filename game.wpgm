@@ -14,6 +14,11 @@ program tetrizado {
 
     game.addVisual(new Fondo(posision = game.at(0,0), imagen = "backroundIzquierda.png"))
     game.addVisual(new Fondo(posision = game.at(28,0), imagen = "backroundDerecha.png"))
+    game.addVisual(new Palabra(posision = game.at(29,12), imagen = "puntaje (1).png"))
+    game.addVisual(new Palabra(posision = game.at(29,10), imagen = "lineas.png"))
+    game.addVisual(new Palabra(posision = game.at(29,8), imagen = "nivel.png"))
+    game.addVisual(new Palabra(posision = game.at(29,18), imagen = "next.png"))
+    game.addVisual(new Palabra(posision = game.at(10,18), imagen = "hold.png"))
     
     bloqueActual.mostrar()
 

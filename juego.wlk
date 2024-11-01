@@ -363,3 +363,10 @@ class Fondo{
     method image() = imagen
     method position() = posision
 }
+
+class Palabra{
+    const posision
+    const imagen
+    method image() = imagen
+    method position() = posision
+}
