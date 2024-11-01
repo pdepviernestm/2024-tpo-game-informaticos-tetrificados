@@ -4,16 +4,18 @@ import wollok.game.*
 program tetrizado {
     game.title("TETRIZADO")
     game.height(20)
-    game.width(10)
+    game.width(47)
     //game.boardGround("")
     game.ground("celdaFondo.jpg") //imagen para cada celda
     game.cellSize(40) //tamaño de cada celda en pixeles que coincide con el tamaño de las piezas (hecho a ojo)
 
-    var ticksCaida = 500 //milisiegundos cada los que las piezas descienden una posicion en el tablero
+    var ticksCaida = 250 //milisiegundos cada los que las piezas descienden una posicion en el tablero
     var bloqueActual = controlador.generarBloqueAleatorio()
     
     bloqueActual.mostrar()
 
+    controlador.mostrarPanel()
+    
     game.start()
 
     keyboard.z().onPressDo({

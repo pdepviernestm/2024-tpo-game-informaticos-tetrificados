@@ -3,10 +3,10 @@ class BloqueTetris{
     var xCentro //Estas variables las deberiamos cambiar si queremos editar donde aparecen por primera vez los bloques
     var yCentro
     var centro = game.at(xCentro, yCentro)
-    var a //= new Pieza(position = game.at(xCentro, yCentro+1)) 
-    var b //= new Pieza(position = game.at(xCentro, yCentro)) 
-    var c //= new Pieza(position = game.at(xCentro, yCentro-1))
-    var d //= new Pieza(position = game.at(xCentro-1, yCentro-1))
+    const a 
+    const b 
+    const c 
+    const d 
 
         
     method rotar(dir){ //Hacerlo Asi, seria precalculo?    
@@ -59,10 +59,10 @@ class BloqueTetris{
         xRotada += centro.x() 
         yRotada += centro.y() 
         
-        if(xRotada < 0){
+        if(xRotada < 18){
             return "derecha"
         }
-        else if(xRotada > 9){
+        else if(xRotada > 27){
             return "izquierda"
         }
         else{
@@ -85,10 +85,10 @@ class BloqueTetris{
         xRotada += centro.x()
         yRotada += centro.y()
 
-        if(xRotada < 0){
+        if(xRotada < 18){
             return "derecha"
         }
-        else if(xRotada > 9){
+        else if(xRotada > 27){
             return "izquierda"
         }
         else{
@@ -150,51 +150,6 @@ class BloqueTetris{
             self.establecerEnTablero()
         }
         return 0
-/*
-        if([yPieza1, yPieza2, yPieza3, yPieza4].forEach({y => controlador.posEstaOcupada(x, y)})){
-            //bajarlo pero sin mostrarlo
-            contadorCaidaLibre++
-            self.hardDrop(yPieza1-1, yPieza2-1, yPieza3-1, yPieza4-1)
-        }else{
-            //mostrarlo
-            contadorCaidaLibre.times({
-                self.caer()
-            })
-            contadorCaidaLibre = 0
-
-            self.establecerEnTablero()
-        }
-        return 0
-*/
-        /*
-        var yCentroProvisorio = yCentro
-        var aProvisorio = new Pieza(image = a.image(), position = a.position())
-        if(controlador.dirEstaLibre("abajo", [a, b, c, d])){
-            //bajarlo pero sin mostrarlo
-            yCentroProvisorio -= 1
-            self.hardDrop()
-        }else{
-            //mostrarlo
-            centro = game.at(xCentro, yCentroProvisorio)
-            a.caer()
-            b.caer()
-            c.caer()
-            d.caer()
-            self.establecerEnTablero()
-        }
-        return 0
-        */
-
-        /*
-        if(controlador.dirEstaLibre("abajo", [a, b, c, d])){
-            self.caer()
-            self.establecerEnTablero()
-            self.hardDrop()
-        }else{
-            self.mostrar()
-            return 0
-        }
-        */
     }	
 
     method establecerEnTablero(){
@@ -241,7 +196,7 @@ class Pieza{//un "pixel" del bloque de tetris
 
 }
 
-class Tipo_bloqueL inherits BloqueTetris (xCentro = 5, yCentro = 21,
+class Tipo_bloqueL inherits BloqueTetris (xCentro = 23, yCentro = 21,
                                             a = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro+1)) ,
                                             b = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro)),
                                             c = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro-1)),
@@ -250,7 +205,7 @@ class Tipo_bloqueL inherits BloqueTetris (xCentro = 5, yCentro = 21,
 }
 
 
-class Tipo_bloqueLinv inherits BloqueTetris(xCentro = 5, yCentro = 21,
+class Tipo_bloqueLinv inherits BloqueTetris(xCentro = 23, yCentro = 21,
                                             a = new Pieza(image = "azul.png", position = game.at(xCentro, yCentro+1)) ,
                                             b = new Pieza(image = "azul.png", position = game.at(xCentro, yCentro)),
                                             c = new Pieza(image = "azul.png", position = game.at(xCentro, yCentro-1)),
@@ -259,7 +214,7 @@ class Tipo_bloqueLinv inherits BloqueTetris(xCentro = 5, yCentro = 21,
 {
 }
 
-class Tipo_bloqueCuadrado inherits BloqueTetris(xCentro = (5.5), yCentro = (20.5),
+class Tipo_bloqueCuadrado inherits BloqueTetris(xCentro = (23.5), yCentro = (20.5),
                                             a = new Pieza(image = "amarillo.png", position = game.at(xCentro-0.5, yCentro+0.5)) ,
                                             b = new Pieza(image = "amarillo.png", position = game.at(xCentro-0.5, yCentro-0.5)),
                                             c = new Pieza(image = "amarillo.png", position = game.at(xCentro+0.5, yCentro-0.5)),
@@ -267,7 +222,7 @@ class Tipo_bloqueCuadrado inherits BloqueTetris(xCentro = (5.5), yCentro = (20.5
                                             ){
     
 }
-class Tipo_bloqueLinea inherits BloqueTetris(xCentro = 5.5, yCentro = 21.5,
+class Tipo_bloqueLinea inherits BloqueTetris(xCentro = 23.5, yCentro = 21.5,
                                             a = new Pieza(image = "celeste.png", position = game.at(xCentro-0.5, yCentro+1.5)) ,
                                             b = new Pieza(image = "celeste.png", position = game.at(xCentro-0.5, yCentro+0.5)),
                                             c = new Pieza(image = "celeste.png", position = game.at(xCentro-0.5, yCentro-0.5)),
@@ -277,7 +232,7 @@ class Tipo_bloqueLinea inherits BloqueTetris(xCentro = 5.5, yCentro = 21.5,
     
 }
 
-class Tipo_bloqueS inherits BloqueTetris(xCentro = 5, yCentro = 20,
+class Tipo_bloqueS inherits BloqueTetris(xCentro = 23, yCentro = 20,
                                             a = new Pieza(image = "verde.png", position = game.at(xCentro-1, yCentro)) ,
                                             b = new Pieza(image = "verde.png", position = game.at(xCentro, yCentro)),
                                             c = new Pieza(image = "verde.png", position = game.at(xCentro, yCentro+1)),
@@ -285,7 +240,7 @@ class Tipo_bloqueS inherits BloqueTetris(xCentro = 5, yCentro = 20,
                                             ){
 }
 
-class Tipo_bloqueSinv inherits BloqueTetris(xCentro = 5, yCentro = 20,
+class Tipo_bloqueSinv inherits BloqueTetris(xCentro = 23, yCentro = 20,
                                             a = new Pieza(image = "rojo.png", position = game.at(xCentro-1, yCentro)) ,
                                             b = new Pieza(image = "rojo.png", position = game.at(xCentro, yCentro)),
                                             c = new Pieza(image = "rojo.png", position = game.at(xCentro, yCentro-1)),
@@ -293,7 +248,7 @@ class Tipo_bloqueSinv inherits BloqueTetris(xCentro = 5, yCentro = 20,
                                             ){
 }
 
-class Tipo_bloqueT inherits BloqueTetris(xCentro = 5, yCentro = 20,
+class Tipo_bloqueT inherits BloqueTetris(xCentro = 23, yCentro = 20,
                                             a = new Pieza(image = "violeta.png", position = game.at(xCentro-1, yCentro)) ,
                                             b = new Pieza(image = "violeta.png", position = game.at(xCentro, yCentro)),
                                             c = new Pieza(image = "violeta.png", position = game.at(xCentro, yCentro-1)),
@@ -304,6 +259,30 @@ class Tipo_bloqueT inherits BloqueTetris(xCentro = 5, yCentro = 20,
 }
 
 object controlador {
+    var xPared = 0
+    var yPared = 0
+
+    method mostrarPanel(){
+        if(yPared<20){
+            self.mostrarPanelenX()
+            xPared = 0
+            yPared += 1
+            self.mostrarPanel()
+        }
+
+    }	
+
+    method mostrarPanelenX(){
+        if(xPared<18){
+                game.addVisual(new Fondo(posision = game.at(xPared, yPared)))
+                xPared += 1
+                self.mostrarPanelenX()
+        }else if(xPared<47-10){
+            game.addVisual(new Fondo(posision = game.at(xPared+10, yPared)))
+                xPared += 1
+                self.mostrarPanelenX()
+        }
+    }
 
     var matriz = [ //Para acceder a indice usar coordenada 19-y, asi fila inferior es y = 0 y la superior es y = 19
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -330,14 +309,14 @@ object controlador {
     ]   
 
     method posEstaOcupada(x, y){
-        if (x < 0 || x > 9 || y < 0){
+        if (x < 18 || x > 27 || y < 0){
             return 1
         }
         if (y > 19){
             return 0
         }
 
-        return (matriz.get(19-y).get(x))
+        return (matriz.get(19-y).get(x-18))
     }
 
     method ocuparPos(x, y){ //No encontre funcion que me permita cambiar una variable accediendo mediante el indice, asi que lo hice asi
@@ -346,7 +325,7 @@ object controlador {
         }else{
             var filaEditada = matriz.get(19-y)
             //if (filaEditada.get(x) == 1){} Estaria bueno que tire un warning o algo si se intenta ocupar una posicion ya ocupada, pero no se como hacerlo
-            filaEditada = filaEditada.take(x) + [1] + filaEditada.drop(x+1)  //Tener en cuenta que take(x) tomara hasta la fila x-1 y drop(x+1) tomara desde la fila x, porque cuentan la cantidad de los elementos y no los indices (la x es un indice)
+            filaEditada = filaEditada.take(x-18) + [1] + filaEditada.drop(x-18+1)  //Tener en cuenta que take(x) tomara hasta la fila x-1 y drop(x+1) tomara desde la fila x, porque cuentan la cantidad de los elementos y no los indices (la x es un indice)
             matriz = matriz.take(20-y-1) + [filaEditada] + matriz.drop(20-y) //Aca se usa 20-y en vez de 19-y por la razon explicada arriba
         }
     }
@@ -399,5 +378,11 @@ object controlador {
 
 object gameOver {
     method image() = "gameover.png"
-    method position() = game.at(-5, 5)
+    method position() = game.at(13, 5)
+}
+
+class Fondo{
+    const posision
+    method image() = "pared.png"
+    method position() = posision
 }
