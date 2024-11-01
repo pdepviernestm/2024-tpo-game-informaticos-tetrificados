@@ -8,7 +8,6 @@ class BloqueTetris{
     var c //= new Pieza(position = game.at(xCentro, yCentro-1))
     var d //= new Pieza(position = game.at(xCentro-1, yCentro-1))
 
-
         
     method rotar(dir){ //Hacerlo Asi, seria precalculo?    
         if (dir == "derecha"){
@@ -142,6 +141,61 @@ class BloqueTetris{
     method estaEnElFondo(){//retorna T o F
         return !controlador.dirEstaLibre("abajo", [a, b, c, d])
     }
+
+    method hardDrop(){
+        if(controlador.dirEstaLibre("abajo", [a, b, c, d])){
+            self.caer()
+            self.hardDrop()
+        }else{
+            self.establecerEnTablero()
+        }
+        return 0
+/*
+        if([yPieza1, yPieza2, yPieza3, yPieza4].forEach({y => controlador.posEstaOcupada(x, y)})){
+            //bajarlo pero sin mostrarlo
+            contadorCaidaLibre++
+            self.hardDrop(yPieza1-1, yPieza2-1, yPieza3-1, yPieza4-1)
+        }else{
+            //mostrarlo
+            contadorCaidaLibre.times({
+                self.caer()
+            })
+            contadorCaidaLibre = 0
+
+            self.establecerEnTablero()
+        }
+        return 0
+*/
+        /*
+        var yCentroProvisorio = yCentro
+        var aProvisorio = new Pieza(image = a.image(), position = a.position())
+        if(controlador.dirEstaLibre("abajo", [a, b, c, d])){
+            //bajarlo pero sin mostrarlo
+            yCentroProvisorio -= 1
+            self.hardDrop()
+        }else{
+            //mostrarlo
+            centro = game.at(xCentro, yCentroProvisorio)
+            a.caer()
+            b.caer()
+            c.caer()
+            d.caer()
+            self.establecerEnTablero()
+        }
+        return 0
+        */
+
+        /*
+        if(controlador.dirEstaLibre("abajo", [a, b, c, d])){
+            self.caer()
+            self.establecerEnTablero()
+            self.hardDrop()
+        }else{
+            self.mostrar()
+            return 0
+        }
+        */
+    }	
 
     method establecerEnTablero(){
         controlador.ocuparPos(a.position().x(), a.position().y())
@@ -329,4 +383,5 @@ object controlador {
         }
         return EvaluationError
     }
+
 }

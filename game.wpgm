@@ -9,8 +9,9 @@ program tetrizado {
     game.ground("celdaFondo.jpg") //imagen para cada celda
     game.cellSize(40) //tamaño de cada celda en pixeles que coincide con el tamaño de las piezas (hecho a ojo)
 
-    var velocidadCaida = 1000 //milisiegundos cada los que las piezas descienden una posicion en el tablero
+    var velocidadCaida = 500 //milisiegundos cada los que las piezas descienden una posicion en el tablero
     var bloqueActual = controlador.generarBloqueAleatorio()
+    
     bloqueActual.mostrar()
 
     game.start()
@@ -34,6 +35,15 @@ program tetrizado {
     keyboard.down().onPressDo({
         bloqueActual.mover("abajo")
     })
+
+    keyboard.space().onPressDo({
+        const retorno = bloqueActual.hardDrop()
+        if (retorno == 0){
+            bloqueActual = controlador.generarBloqueAleatorio()
+            bloqueActual.mostrar()
+        }
+    })
+    
     
     game.onTick(velocidadCaida, "Caida", 
     {
