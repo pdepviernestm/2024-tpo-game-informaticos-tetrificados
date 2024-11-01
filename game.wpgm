@@ -9,13 +9,14 @@ program tetrizado {
     game.ground("celdaFondo.jpg") //imagen para cada celda
     game.cellSize(40) //tamaño de cada celda en pixeles que coincide con el tamaño de las piezas (hecho a ojo)
 
-    var ticksCaida = 250 //milisiegundos cada los que las piezas descienden una posicion en el tablero
+    var ticksCaida = 500 //milisiegundos cada los que las piezas descienden una posicion en el tablero
     var bloqueActual = controlador.generarBloqueAleatorio()
+
+    game.addVisual(new Fondo(posision = game.at(0,0), imagen = "backroundIzquierda.png"))
+    game.addVisual(new Fondo(posision = game.at(28,0), imagen = "backroundDerecha.png"))
     
     bloqueActual.mostrar()
 
-    controlador.mostrarPanel()
-    
     game.start()
 
     keyboard.z().onPressDo({

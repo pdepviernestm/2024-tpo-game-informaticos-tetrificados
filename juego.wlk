@@ -259,30 +259,6 @@ class Tipo_bloqueT inherits BloqueTetris(xCentro = 23, yCentro = 20,
 }
 
 object controlador {
-    var xPared = 0
-    var yPared = 0
-
-    method mostrarPanel(){
-        if(yPared<20){
-            self.mostrarPanelenX()
-            xPared = 0
-            yPared += 1
-            self.mostrarPanel()
-        }
-
-    }	
-
-    method mostrarPanelenX(){
-        if(xPared<18){
-                game.addVisual(new Fondo(posision = game.at(xPared, yPared)))
-                xPared += 1
-                self.mostrarPanelenX()
-        }else if(xPared<47-10){
-            game.addVisual(new Fondo(posision = game.at(xPared+10, yPared)))
-                xPared += 1
-                self.mostrarPanelenX()
-        }
-    }
 
     var matriz = [ //Para acceder a indice usar coordenada 19-y, asi fila inferior es y = 0 y la superior es y = 19
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -383,6 +359,7 @@ object gameOver {
 
 class Fondo{
     const posision
-    method image() = "pared.png"
+    const imagen
+    method image() = imagen
     method position() = posision
 }
