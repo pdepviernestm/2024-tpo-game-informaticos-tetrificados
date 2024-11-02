@@ -132,12 +132,7 @@ class BloqueTetris{
             game.addVisual(b)
             game.addVisual(c)
             game.addVisual(d)
-    }
-
-    method mostrarNext(){
-
-    }
-        
+    }  
 
     method caer(){
         self.mover("abajo")
@@ -215,6 +210,15 @@ class Tipo_bloqueL inherits BloqueTetris (xCentro = 33, yCentro = 16,
         c.asignarPosicion(xCentro, yCentro-1)
         d.asignarPosicion(xCentro+1, yCentro-1)
     }
+
+    method entrarEnHold(){
+        xCentro = 15
+        yCentro = 16
+        a.asignarPosicion(xCentro, yCentro+1)
+        b.asignarPosicion(xCentro, yCentro)
+        c.asignarPosicion(xCentro, yCentro-1)
+        d.asignarPosicion(xCentro+1, yCentro-1)
+    }
 }
 
 
@@ -228,6 +232,15 @@ class Tipo_bloqueLinv inherits BloqueTetris(xCentro = 34, yCentro = 16,
     method entrarEnTablero(){
         xCentro = 23
         yCentro = 21
+        a.asignarPosicion(xCentro, yCentro+1)
+        b.asignarPosicion(xCentro, yCentro)
+        c.asignarPosicion(xCentro, yCentro-1)
+        d.asignarPosicion(xCentro-1, yCentro-1)
+    }
+
+    method entrarEnHold(){
+        xCentro = 15
+        yCentro = 16
         a.asignarPosicion(xCentro, yCentro+1)
         b.asignarPosicion(xCentro, yCentro)
         c.asignarPosicion(xCentro, yCentro-1)
@@ -251,8 +264,16 @@ class Tipo_bloqueCuadrado inherits BloqueTetris(xCentro = (33.5), yCentro = (15.
         d.asignarPosicion(xCentro+0.5, yCentro+0.5)
     }                                        
     
+    method entrarEnHold(){
+        xCentro = 14.5
+        yCentro = 15.5
+        a.asignarPosicion(xCentro-0.5, yCentro+0.5)
+        b.asignarPosicion(xCentro-0.5, yCentro-0.5)
+        c.asignarPosicion(xCentro+0.5, yCentro-0.5)
+        d.asignarPosicion(xCentro+0.5, yCentro+0.5)
+    }
 }
-class Tipo_bloqueLinea inherits BloqueTetris(xCentro = 33.5, yCentro = 16.5,
+class Tipo_bloqueLinea inherits BloqueTetris(xCentro = 34.5, yCentro = 16.5,
                                             a = new Pieza(image = "celeste.png", position = game.at(xCentro-0.5, yCentro+1.5)) ,
                                             b = new Pieza(image = "celeste.png", position = game.at(xCentro-0.5, yCentro+0.5)),
                                             c = new Pieza(image = "celeste.png", position = game.at(xCentro-0.5, yCentro-0.5)),
@@ -262,6 +283,15 @@ class Tipo_bloqueLinea inherits BloqueTetris(xCentro = 33.5, yCentro = 16.5,
     method entrarEnTablero(){
         xCentro = 23.5
         yCentro = 21.5
+        a.asignarPosicion(xCentro-0.5, yCentro+1.5)
+        b.asignarPosicion(xCentro-0.5, yCentro+0.5)
+        c.asignarPosicion(xCentro-0.5, yCentro-0.5)
+        d.asignarPosicion(xCentro-0.5, yCentro-1.5)
+    }
+    
+    method entrarEnHold(){
+        xCentro = 15.5
+        yCentro = 16.5
         a.asignarPosicion(xCentro-0.5, yCentro+1.5)
         b.asignarPosicion(xCentro-0.5, yCentro+0.5)
         c.asignarPosicion(xCentro-0.5, yCentro-0.5)
@@ -284,6 +314,15 @@ class Tipo_bloqueS inherits BloqueTetris(xCentro = 34, yCentro = 15,
         c.asignarPosicion(xCentro, yCentro+1)
         d.asignarPosicion(xCentro+1, yCentro+1)
     }
+
+    method entrarEnHold(){
+        xCentro = 15
+        yCentro = 15
+        a.asignarPosicion(xCentro-1, yCentro)
+        b.asignarPosicion(xCentro, yCentro)
+        c.asignarPosicion(xCentro, yCentro+1)
+        d.asignarPosicion(xCentro+1, yCentro+1)
+    }
 }
 
 class Tipo_bloqueSinv inherits BloqueTetris(xCentro = 34, yCentro = 16,
@@ -301,6 +340,15 @@ class Tipo_bloqueSinv inherits BloqueTetris(xCentro = 34, yCentro = 16,
         c.asignarPosicion(xCentro, yCentro-1)
         d.asignarPosicion(xCentro+1, yCentro-1)
     }
+
+    method entrarEnHold(){
+        xCentro = 15
+        yCentro = 16
+        a.asignarPosicion(xCentro-1, yCentro)
+        b.asignarPosicion(xCentro, yCentro)
+        c.asignarPosicion(xCentro, yCentro-1)
+        d.asignarPosicion(xCentro+1, yCentro-1)
+    }
 }
 
 class Tipo_bloqueT inherits BloqueTetris(xCentro = 34, yCentro = 16,
@@ -313,6 +361,15 @@ class Tipo_bloqueT inherits BloqueTetris(xCentro = 34, yCentro = 16,
     method entrarEnTablero(){
         xCentro = 23
         yCentro = 20
+        a.asignarPosicion(xCentro-1, yCentro)
+        b.asignarPosicion(xCentro, yCentro)
+        c.asignarPosicion(xCentro, yCentro-1)
+        d.asignarPosicion(xCentro+1, yCentro)
+    }
+
+    method entrarEnHold(){
+        xCentro = 15
+        yCentro = 16
         a.asignarPosicion(xCentro-1, yCentro)
         b.asignarPosicion(xCentro, yCentro)
         c.asignarPosicion(xCentro, yCentro-1)

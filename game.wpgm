@@ -12,6 +12,8 @@ program tetrizado {
     var ticksCaida = 500 //milisiegundos cada los que las piezas descienden una posicion en el tablero
     var bloqueActual = controlador.generarBloqueAleatorio()
     var bloqueNext = controlador.generarBloqueAleatorio()
+    var bloqueHold
+    var contadorHolds = 0
 
     game.addVisual(new Fondo(posision = game.at(0,0), imagen = "backroundIzquierda.png"))
     game.addVisual(new Fondo(posision = game.at(28,0), imagen = "backroundDerecha.png"))
@@ -79,12 +81,34 @@ program tetrizado {
         if (retorno == 0){
             bloqueActual.establecerEnTablero()
             bloqueActual = bloqueNext
+            contadorHolds = 0
             bloqueActual.entrarEnTablero()
             bloqueNext = controlador.generarBloqueAleatorio()
             bloqueNext.mostrar()
         }
     })
     
+    keyboard.c().onPressDo({
+        if(contadorHolds == 0){
+            contadorHolds += 1
+            if(bloqueHold == null){
+                bloqueHold = bloqueActual
+                bloqueHold.entrarEnHold()
+                bloqueActual = bloqueNext
+                bloqueActual.entrarEnTablero()
+                bloqueNext = controlador.generarBloqueAleatorio()
+                bloqueNext.mostrar()
+            }else{
+                var bloqueAux
+                bloqueAux = bloqueHold
+                bloqueHold = bloqueActual
+                bloqueActual = bloqueAux
+                bloqueHold.entrarEnHold()
+                bloqueActual.entrarEnTablero()
+            }
+
+        }
+    })
     
     game.onTick(ticksCaida, "Caida", 
     {
@@ -95,6 +119,7 @@ program tetrizado {
                 if (bloqueActual.estaEnElFondo()){
                     bloqueActual.establecerEnTablero()
                     bloqueActual = bloqueNext
+                    contadorHolds = 0
                     bloqueActual.entrarEnTablero()
                     bloqueNext = controlador.generarBloqueAleatorio()
                     bloqueNext.mostrar()
