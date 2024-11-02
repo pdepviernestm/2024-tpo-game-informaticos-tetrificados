@@ -19,7 +19,25 @@ program tetrizado {
     game.addVisual(new Palabra(posision = game.at(29,8), imagen = "nivel.png"))
     game.addVisual(new Palabra(posision = game.at(29,18), imagen = "next.png"))
     game.addVisual(new Palabra(posision = game.at(10,18), imagen = "hold.png"))
-    
+    //celdas para next
+    game.addVisual(new Palabra(posision = game.at(33,18), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(33,17), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(33,16), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(33,15), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(34,18), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(34,17), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(34,16), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(34,15), imagen = "celdaFondo2.jpg"))
+    //celdas para hold
+    game.addVisual(new Palabra(posision = game.at(14,18), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(14,17), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(14,16), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(14,15), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(15,18), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(15,17), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(15,16), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(15,15), imagen = "celdaFondo2.jpg"))
+
     bloqueActual.mostrar()
 
     game.start()
