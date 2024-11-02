@@ -13,6 +13,7 @@ program tetrizado {
     var bloqueActual = controlador.generarBloqueAleatorio()
     var bloqueNext = controlador.generarBloqueAleatorio()
     var bloqueHold
+    var bloqueSombra
     var contadorHolds = 0
 
     game.addVisual(new Fondo(posision = game.at(0,0), imagen = "backroundIzquierda.png"))
@@ -51,6 +52,9 @@ program tetrizado {
 
 
     bloqueActual.entrarEnTablero()
+    bloqueSombra = bloqueActual.crearSombra()
+    bloqueSombra.descender()
+    bloqueSombra.mostrar()
     bloqueActual.mostrar()
     bloqueNext.mostrar()
 
@@ -58,18 +62,24 @@ program tetrizado {
 
     keyboard.z().onPressDo({
         bloqueActual.rotar("izquierda")
+        bloqueSombra.rotar("izquierda")
+        bloqueSombra.descender()
     })
 
     keyboard.up().onPressDo({
         bloqueActual.rotar("derecha")
+        bloqueSombra.rotar("derecha")
+        bloqueSombra.descender()
     })
 
     keyboard.left().onPressDo({
         bloqueActual.mover("izquierda")
+        bloqueSombra.mover("izquierda")
     })
 
     keyboard.right().onPressDo({
         bloqueActual.mover("derecha")
+        bloqueSombra.mover("derecha")
     })
 
     keyboard.down().onPressDo({
@@ -85,6 +95,10 @@ program tetrizado {
             bloqueActual.entrarEnTablero()
             bloqueNext = controlador.generarBloqueAleatorio()
             bloqueNext.mostrar()
+            bloqueSombra.eliminar()
+            bloqueSombra = bloqueActual.crearSombra()
+            bloqueSombra.descender()
+            bloqueSombra.mostrar()
         }
     })
     
@@ -98,6 +112,10 @@ program tetrizado {
                 bloqueActual.entrarEnTablero()
                 bloqueNext = controlador.generarBloqueAleatorio()
                 bloqueNext.mostrar()
+                bloqueSombra.eliminar()
+                bloqueSombra = bloqueActual.crearSombra()
+                bloqueSombra.descender()
+                bloqueSombra.mostrar()
             }else{
                 var bloqueAux
                 bloqueAux = bloqueHold
@@ -105,6 +123,10 @@ program tetrizado {
                 bloqueActual = bloqueAux
                 bloqueHold.entrarEnHold()
                 bloqueActual.entrarEnTablero()
+                bloqueSombra.eliminar()
+                bloqueSombra = bloqueActual.crearSombra()
+                bloqueSombra.descender()
+                bloqueSombra.mostrar()
             }
 
         }
@@ -123,6 +145,10 @@ program tetrizado {
                     bloqueActual.entrarEnTablero()
                     bloqueNext = controlador.generarBloqueAleatorio()
                     bloqueNext.mostrar()
+                    bloqueSombra.eliminar()
+                    bloqueSombra = bloqueActual.crearSombra()
+                    bloqueSombra.descender()
+                    bloqueSombra.mostrar()
                 }
             })
         }

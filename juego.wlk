@@ -164,6 +164,21 @@ class BloqueTetris{
         game.say(c, "posicion: C: " + c.position().x())
         game.say(d, "posicion: D: " + d.position().x())
     }
+
+    method xCentro() = xCentro
+    method yCentro() = yCentro
+    method a() = a
+    method b() = b
+    method c() = c
+    method d() = d
+
+    method crearSombra(){
+        const sombraA = new Pieza(image = "pared.png", position = game.at(a.position().x(), a.position().y()))
+        const sombraB = new Pieza(image = "pared.png", position = game.at(b.position().x(), b.position().y()))
+        const sombraC = new Pieza(image = "pared.png", position = game.at(c.position().x(), c.position().y()))
+        const sombraD = new Pieza(image = "pared.png", position = game.at(d.position().x(), d.position().y()))
+        return new Tipo_bloqueSombra(xCentro = xCentro, yCentro = yCentro, a = sombraA, b = sombraB, c = sombraC, d = sombraD)
+    }
 }
 
 //esto podriamos generalizarlo con clases o herencias para incluir al bloque linea
@@ -377,6 +392,125 @@ class Tipo_bloqueT inherits BloqueTetris(xCentro = 34, yCentro = 16,
     }
 }
 
+class Tipo_bloqueSombra inherits BloqueTetris(){
+    method descender(){
+        if(controlador.dirEstaLibre("abajo", [a, b, c, d])){
+            self.caer()
+            self.descender()
+        }
+    }
+    method eliminar(){
+        game.removeVisual(a)
+        game.removeVisual(b)
+        game.removeVisual(c)
+        game.removeVisual(d)
+    }
+/*
+    override method rotar(dir){ 
+        if (dir == "derecha"){
+            const listaValoresReturn = [self.rotarHoraria(a), self.rotarHoraria(b), self.rotarHoraria(c), self.rotarHoraria(d)]
+            if (listaValoresReturn.all( {valorReturn => valorReturn == 0})){
+                a.asumirPosicionRotada()
+                b.asumirPosicionRotada()
+                c.asumirPosicionRotada()
+                d.asumirPosicionRotada()
+            }
+            else if(listaValoresReturn.any({valorReturn => valorReturn == 1})){ 
+                return
+            }
+            else{
+                self.mover(listaValoresReturn.filter({valorReturn => valorReturn != 1 && valorReturn != 0}).head())// Se mueve 1 casilla lejos de la pared lateral
+                self.rotar("derecha") //Intenta rotar nuevamente
+            }
+
+        }else{
+            const listaValoresReturn = [self.rotarAntiHoraria(a), self.rotarAntiHoraria(b), self.rotarAntiHoraria(c), self.rotarAntiHoraria(d)]
+            if (listaValoresReturn.any({valorReturn => valorReturn})){
+                a.asumirPosicionRotada()
+                b.asumirPosicionRotada()
+                c.asumirPosicionRotada()
+                d.asumirPosicionRotada()
+            }
+            else if(listaValoresReturn.any({valorReturn => valorReturn == 1})){ 
+                return
+            }
+            else{
+                if(controlador.dirEstaLibre(dir, [a, b, c, d])){
+                    self.mover(listaValoresReturn.filter({valorReturn => valorReturn != 1 && valorReturn != 0}).head())// Se mueve 1 casilla lejos de la pared lateral
+                    self.rotar("izquierda") //Intenta rotar nuevamente
+                }
+            }//HAY UN CASO EN EL QUE ESTO NO FUNCIONA, FIJARSE EN CUADERNO (Mateo)
+        }
+    }
+*/
+    override method mover(dir){
+        if (dir == "derecha" && controlador.dirEstaLibre("derecha", [a, b, c, d])){ 
+            xCentro += 1
+            centro = game.at(xCentro, yCentro)
+            a.asignarPosicion(a.position().x()+1, a.position().y())
+            b.asignarPosicion(b.position().x()+1, b.position().y())
+            c.asignarPosicion(c.position().x()+1, c.position().y())
+            d.asignarPosicion(d.position().x()+1, d.position().y())
+            self.descender()
+        } else if(dir == "derecha" && [a, b, c, d].any{p => controlador.posEstaFueraDeTablero(p.position().x()+1, p.position().y())}){
+            return
+        } else if(dir == "derecha"){
+            xCentro += 1
+            centro = game.at(xCentro, yCentro)
+            a.asignarPosicion(a.position().x()+1, a.position().y())
+            b.asignarPosicion(b.position().x()+1, b.position().y())
+            c.asignarPosicion(c.position().x()+1, c.position().y())
+            d.asignarPosicion(d.position().x()+1, d.position().y())
+            self.mover("arriba")
+        }
+        if (dir == "izquierda" && controlador.dirEstaLibre("izquierda", [a, b, c, d]))
+        {
+            xCentro -= 1
+            centro = game.at(xCentro, yCentro)
+            a.asignarPosicion(a.position().x()-1, a.position().y())
+            b.asignarPosicion(b.position().x()-1, b.position().y())
+            c.asignarPosicion(c.position().x()-1, c.position().y())
+            d.asignarPosicion(d.position().x()-1, d.position().y())
+            self.descender()
+        } else if(dir == "izquierda" && [a, b, c, d].any{p => controlador.posEstaFueraDeTablero(p.position().x()-1, p.position().y())}){
+            return
+        } else if(dir == "izquierda"){
+            xCentro -= 1
+            centro = game.at(xCentro, yCentro)
+            a.asignarPosicion(a.position().x()-1, a.position().y())
+            b.asignarPosicion(b.position().x()-1, b.position().y())
+            c.asignarPosicion(c.position().x()-1, c.position().y())
+            d.asignarPosicion(d.position().x()-1, d.position().y())
+            self.mover("arriba")
+        }
+        if (dir == "abajo" && controlador.dirEstaLibre("abajo", [a, b, c, d]) ){
+            yCentro -= 1
+            centro = game.at(xCentro, yCentro)
+            a.caer()
+            b.caer()
+            c.caer()
+            d.caer()
+        }
+        if (dir == "arriba" && controlador.dirEstaLibre("arriba", [a, b, c, d])){
+            xCentro += 1
+            centro = game.at(xCentro, yCentro)
+            a.asignarPosicion(a.position().x(), a.position().y()+1)
+            b.asignarPosicion(b.position().x(), b.position().y()+1)
+            c.asignarPosicion(c.position().x(), c.position().y()+1)
+            d.asignarPosicion(d.position().x(), d.position().y()+1)
+        }else if(dir == "arriba"){
+            xCentro += 1
+            centro = game.at(xCentro, yCentro)
+            a.asignarPosicion(a.position().x(), a.position().y()+1)
+            b.asignarPosicion(b.position().x(), b.position().y()+1)
+            c.asignarPosicion(c.position().x(), c.position().y()+1)
+            d.asignarPosicion(d.position().x(), d.position().y()+1)
+            self.mover("arriba")
+        }
+    }
+
+}
+
 object controlador {
 
     var matriz = [ //Para acceder a indice usar coordenada 19-y, asi fila inferior es y = 0 y la superior es y = 19
@@ -402,6 +536,10 @@ object controlador {
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ]   
+
+    method posEstaFueraDeTablero(x, y) {
+        return (x < 18 || x > 27 || y < 0)
+    }
 
     method posEstaOcupada(x, y){
         if (x < 18 || x > 27 || y < 0){
@@ -459,13 +597,15 @@ object controlador {
         if (dir == "abajo"){
             return !listaPiezas.any{p => self.posEstaOcupada(p.position().x(), p.position().y()-1) == 1} //Comprueba que todas las posiciones abajo de la misma no tengan nada
         }
+        if (dir == "arriba"){
+            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x(), p.position().y()+1) == 1} //Comprueba que todas las posiciones arriba de la misma no tengan nada
+        }
         return EvaluationError
     }
     
     method perder(){
         game.addVisual(gameOver)
         game.removeTickEvent("Caida")
-        //game.schedule(1000, {game.stop()})
     }
 
 }
