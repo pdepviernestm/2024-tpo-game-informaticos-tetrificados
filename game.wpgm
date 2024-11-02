@@ -11,6 +11,7 @@ program tetrizado {
 
     var ticksCaida = 500 //milisiegundos cada los que las piezas descienden una posicion en el tablero
     var bloqueActual = controlador.generarBloqueAleatorio()
+    var bloqueNext = controlador.generarBloqueAleatorio()
 
     game.addVisual(new Fondo(posision = game.at(0,0), imagen = "backroundIzquierda.png"))
     game.addVisual(new Fondo(posision = game.at(28,0), imagen = "backroundDerecha.png"))
@@ -28,6 +29,10 @@ program tetrizado {
     game.addVisual(new Palabra(posision = game.at(34,17), imagen = "celdaFondo2.jpg"))
     game.addVisual(new Palabra(posision = game.at(34,16), imagen = "celdaFondo2.jpg"))
     game.addVisual(new Palabra(posision = game.at(34,15), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(35,18), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(35,17), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(35,16), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(35,15), imagen = "celdaFondo2.jpg"))
     //celdas para hold
     game.addVisual(new Palabra(posision = game.at(14,18), imagen = "celdaFondo2.jpg"))
     game.addVisual(new Palabra(posision = game.at(14,17), imagen = "celdaFondo2.jpg"))
@@ -37,8 +42,15 @@ program tetrizado {
     game.addVisual(new Palabra(posision = game.at(15,17), imagen = "celdaFondo2.jpg"))
     game.addVisual(new Palabra(posision = game.at(15,16), imagen = "celdaFondo2.jpg"))
     game.addVisual(new Palabra(posision = game.at(15,15), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(16,18), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(16,17), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(16,16), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(16,15), imagen = "celdaFondo2.jpg"))
 
+
+    bloqueActual.entrarEnTablero()
     bloqueActual.mostrar()
+    bloqueNext.mostrar()
 
     game.start()
 
@@ -65,8 +77,11 @@ program tetrizado {
     keyboard.space().onPressDo({
         const retorno = bloqueActual.hardDrop()
         if (retorno == 0){
-            bloqueActual = controlador.generarBloqueAleatorio()
-            bloqueActual.mostrar()
+            bloqueActual.establecerEnTablero()
+            bloqueActual = bloqueNext
+            bloqueActual.entrarEnTablero()
+            bloqueNext = controlador.generarBloqueAleatorio()
+            bloqueNext.mostrar()
         }
     })
     
@@ -79,8 +94,10 @@ program tetrizado {
             game.schedule(500, { //La idea de esto es que tengas un ratito para mover la pieza antes de que se quede fija
                 if (bloqueActual.estaEnElFondo()){
                     bloqueActual.establecerEnTablero()
-                    bloqueActual = controlador.generarBloqueAleatorio()
-                    bloqueActual.mostrar()
+                    bloqueActual = bloqueNext
+                    bloqueActual.entrarEnTablero()
+                    bloqueNext = controlador.generarBloqueAleatorio()
+                    bloqueNext.mostrar()
                 }
             })
         }

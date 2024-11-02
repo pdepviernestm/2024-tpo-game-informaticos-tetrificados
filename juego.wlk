@@ -128,11 +128,16 @@ class BloqueTetris{
     }
 
     method mostrar(){
-        game.addVisual(a)
-        game.addVisual(b)
-        game.addVisual(c)
-        game.addVisual(d)
+            game.addVisual(a)
+            game.addVisual(b)
+            game.addVisual(c)
+            game.addVisual(d)
     }
+
+    method mostrarNext(){
+
+    }
+        
 
     method caer(){
         self.mover("abajo")
@@ -196,66 +201,123 @@ class Pieza{//un "pixel" del bloque de tetris
 
 }
 
-class Tipo_bloqueL inherits BloqueTetris (xCentro = 23, yCentro = 21,
+class Tipo_bloqueL inherits BloqueTetris (xCentro = 33, yCentro = 16,
                                             a = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro+1)) ,
                                             b = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro)),
                                             c = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro-1)),
                                             d = new Pieza(image = "naranja.png", position = game.at(xCentro+1, yCentro-1)))
 {
+    method entrarEnTablero(){
+        xCentro = 23
+        yCentro = 21
+        a.asignarPosicion(xCentro, yCentro+1)
+        b.asignarPosicion(xCentro, yCentro)
+        c.asignarPosicion(xCentro, yCentro-1)
+        d.asignarPosicion(xCentro+1, yCentro-1)
+    }
 }
 
 
-class Tipo_bloqueLinv inherits BloqueTetris(xCentro = 23, yCentro = 21,
+class Tipo_bloqueLinv inherits BloqueTetris(xCentro = 34, yCentro = 16,
                                             a = new Pieza(image = "azul.png", position = game.at(xCentro, yCentro+1)) ,
                                             b = new Pieza(image = "azul.png", position = game.at(xCentro, yCentro)),
                                             c = new Pieza(image = "azul.png", position = game.at(xCentro, yCentro-1)),
                                             d = new Pieza(image = "azul.png", position = game.at(xCentro-1, yCentro-1))
                                             )
 {
+    method entrarEnTablero(){
+        xCentro = 23
+        yCentro = 21
+        a.asignarPosicion(xCentro, yCentro+1)
+        b.asignarPosicion(xCentro, yCentro)
+        c.asignarPosicion(xCentro, yCentro-1)
+        d.asignarPosicion(xCentro-1, yCentro-1)
+    }
 }
 
-class Tipo_bloqueCuadrado inherits BloqueTetris(xCentro = (23.5), yCentro = (20.5),
+class Tipo_bloqueCuadrado inherits BloqueTetris(xCentro = (33.5), yCentro = (15.5),
                                             a = new Pieza(image = "amarillo.png", position = game.at(xCentro-0.5, yCentro+0.5)) ,
                                             b = new Pieza(image = "amarillo.png", position = game.at(xCentro-0.5, yCentro-0.5)),
                                             c = new Pieza(image = "amarillo.png", position = game.at(xCentro+0.5, yCentro-0.5)),
                                             d = new Pieza(image = "amarillo.png", position = game.at(xCentro+0.5, yCentro+0.5))
-                                            ){
+                                            )
+{
+    method entrarEnTablero(){
+        xCentro = 23.5
+        yCentro = 20.5
+        a.asignarPosicion(xCentro-0.5, yCentro+0.5)
+        b.asignarPosicion(xCentro-0.5, yCentro-0.5)
+        c.asignarPosicion(xCentro+0.5, yCentro-0.5)
+        d.asignarPosicion(xCentro+0.5, yCentro+0.5)
+    }                                        
     
 }
-class Tipo_bloqueLinea inherits BloqueTetris(xCentro = 23.5, yCentro = 21.5,
+class Tipo_bloqueLinea inherits BloqueTetris(xCentro = 33.5, yCentro = 16.5,
                                             a = new Pieza(image = "celeste.png", position = game.at(xCentro-0.5, yCentro+1.5)) ,
                                             b = new Pieza(image = "celeste.png", position = game.at(xCentro-0.5, yCentro+0.5)),
                                             c = new Pieza(image = "celeste.png", position = game.at(xCentro-0.5, yCentro-0.5)),
                                             d = new Pieza(image = "celeste.png", position = game.at(xCentro-0.5, yCentro-1.5))
                                             )
 {
-    
+    method entrarEnTablero(){
+        xCentro = 23.5
+        yCentro = 21.5
+        a.asignarPosicion(xCentro-0.5, yCentro+1.5)
+        b.asignarPosicion(xCentro-0.5, yCentro+0.5)
+        c.asignarPosicion(xCentro-0.5, yCentro-0.5)
+        d.asignarPosicion(xCentro-0.5, yCentro-1.5)
+    }
 }
 
-class Tipo_bloqueS inherits BloqueTetris(xCentro = 23, yCentro = 20,
+class Tipo_bloqueS inherits BloqueTetris(xCentro = 34, yCentro = 15,
                                             a = new Pieza(image = "verde.png", position = game.at(xCentro-1, yCentro)) ,
                                             b = new Pieza(image = "verde.png", position = game.at(xCentro, yCentro)),
                                             c = new Pieza(image = "verde.png", position = game.at(xCentro, yCentro+1)),
                                             d = new Pieza(image = "verde.png", position = game.at(xCentro+1, yCentro+1))
-                                            ){
+                                            )
+{
+    method entrarEnTablero(){
+        xCentro = 23
+        yCentro = 20
+        a.asignarPosicion(xCentro-1, yCentro)
+        b.asignarPosicion(xCentro, yCentro)
+        c.asignarPosicion(xCentro, yCentro+1)
+        d.asignarPosicion(xCentro+1, yCentro+1)
+    }
 }
 
-class Tipo_bloqueSinv inherits BloqueTetris(xCentro = 23, yCentro = 20,
+class Tipo_bloqueSinv inherits BloqueTetris(xCentro = 34, yCentro = 16,
                                             a = new Pieza(image = "rojo.png", position = game.at(xCentro-1, yCentro)) ,
                                             b = new Pieza(image = "rojo.png", position = game.at(xCentro, yCentro)),
                                             c = new Pieza(image = "rojo.png", position = game.at(xCentro, yCentro-1)),
                                             d = new Pieza(image = "rojo.png", position = game.at(xCentro+1, yCentro-1))
-                                            ){
+                                            )
+{
+    method entrarEnTablero(){
+        xCentro = 23
+        yCentro = 20
+        a.asignarPosicion(xCentro-1, yCentro)
+        b.asignarPosicion(xCentro, yCentro)
+        c.asignarPosicion(xCentro, yCentro-1)
+        d.asignarPosicion(xCentro+1, yCentro-1)
+    }
 }
 
-class Tipo_bloqueT inherits BloqueTetris(xCentro = 23, yCentro = 20,
+class Tipo_bloqueT inherits BloqueTetris(xCentro = 34, yCentro = 16,
                                             a = new Pieza(image = "violeta.png", position = game.at(xCentro-1, yCentro)) ,
                                             b = new Pieza(image = "violeta.png", position = game.at(xCentro, yCentro)),
                                             c = new Pieza(image = "violeta.png", position = game.at(xCentro, yCentro-1)),
                                             d = new Pieza(image = "violeta.png", position = game.at(xCentro+1, yCentro))
-                                            ){
-    
-    
+                                            )
+{    
+    method entrarEnTablero(){
+        xCentro = 23
+        yCentro = 20
+        a.asignarPosicion(xCentro-1, yCentro)
+        b.asignarPosicion(xCentro, yCentro)
+        c.asignarPosicion(xCentro, yCentro-1)
+        d.asignarPosicion(xCentro+1, yCentro)
+    }
 }
 
 object controlador {
@@ -348,7 +410,6 @@ object controlador {
         game.removeTickEvent("Caida")
         //game.schedule(1000, {game.stop()})
     }
-    
 
 }
 
