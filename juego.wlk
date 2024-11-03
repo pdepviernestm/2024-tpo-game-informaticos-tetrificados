@@ -180,10 +180,10 @@ class BloqueTetris{
     method d() = d
 
     method crearSombra(){
-        const sombraA = new Pieza(image = "pared.png", position = game.at(a.position().x(), a.position().y()))
-        const sombraB = new Pieza(image = "pared.png", position = game.at(b.position().x(), b.position().y()))
-        const sombraC = new Pieza(image = "pared.png", position = game.at(c.position().x(), c.position().y()))
-        const sombraD = new Pieza(image = "pared.png", position = game.at(d.position().x(), d.position().y()))
+        const sombraA = new Pieza(image = "sombraFina.png", position = game.at(a.position().x(), a.position().y()))
+        const sombraB = new Pieza(image = "sombraFina.png", position = game.at(b.position().x(), b.position().y()))
+        const sombraC = new Pieza(image = "sombraFina.png", position = game.at(c.position().x(), c.position().y()))
+        const sombraD = new Pieza(image = "sombraFina.png", position = game.at(d.position().x(), d.position().y()))
         return new Tipo_bloqueSombra(xCentro = xCentro, yCentro = yCentro, a = sombraA, b = sombraB, c = sombraC, d = sombraD)
     }
 }
