@@ -15,15 +15,46 @@ program tetrizado {
     var bloqueHold
     var bloqueSombra
     var contadorHolds = 0
+    var contadorNivel = 1
+
+    var puntajeUnidad = new Numero(posision = game.at(37,12), imagen = "numero0.png")
+    var puntajeDecena = new Numero(posision = game.at(36,12), imagen = "numero0.png")
+    var puntajeCentena = new Numero(posision = game.at(35,12), imagen = "numero0.png")
+    var puntajeUnidadDeMil = new Numero(posision = game.at(34,12), imagen = "numero0.png")
+    var puntajeDecenaDeMil = new Numero(posision = game.at(33,12), imagen = "numero0.png")
+
+    var linasUnidad = new Numero(posision = game.at(37,10), imagen = "numero0.png")
+    var linasDecena = new Numero(posision = game.at(36,10), imagen = "numero0.png")
+    var linasCentena = new Numero(posision = game.at(35,10), imagen = "numero0.png")
+    var lineasUnidadDeMil = new Numero(posision = game.at(34,10), imagen = "numero0.png")
+
+    var nivelUnidad = new Numero(posision = game.at(37,8), imagen = "numero0.png")
+    var nivelDecena = new Numero(posision = game.at(36,8), imagen = "numero0.png")
+
 
     game.addVisual(new Fondo(posision = game.at(0,0), imagen = "fondoDiseñoIzq.png"))
     game.addVisual(new Fondo(posision = game.at(28,0), imagen = "fondoDiseñoDer.png"))
-    game.addVisual(new Palabra(posision = game.at(29,12), imagen = "puntaje (1).png"))
-    game.addVisual(new Palabra(posision = game.at(29,10), imagen = "lineas.png"))
-    game.addVisual(new Palabra(posision = game.at(29,8), imagen = "nivel.png"))
-    game.addVisual(new Palabra(posision = game.at(29,18), imagen = "next.png"))
-    game.addVisual(new Palabra(posision = game.at(10,18), imagen = "hold.png"))
+    game.addVisual(new Palabra(posision = game.at(29,12), imagen = "puntajeDiseño.png"))
+    game.addVisual(puntajeUnidad)
+    game.addVisual(puntajeDecena)
+    game.addVisual(puntajeCentena)
+    game.addVisual(puntajeUnidadDeMil)
+    game.addVisual(puntajeDecenaDeMil)
+    game.addVisual(new Palabra(posision = game.at(29,10), imagen = "lineasDiseño.png"))
+    game.addVisual(linasUnidad)
+    game.addVisual(linasDecena)
+    game.addVisual(linasCentena)
+    game.addVisual(lineasUnidadDeMil)
+    game.addVisual(new Palabra(posision = game.at(29,8), imagen = "nivelDiseño.png"))
+    game.addVisual(nivelUnidad)
+    game.addVisual(nivelDecena)
+    game.addVisual(new Palabra(posision = game.at(29,18), imagen = "nextDiseño.png"))
+    game.addVisual(new Palabra(posision = game.at(11,18), imagen = "holdDiseño.png"))
     //celdas para next
+    game.addVisual(new Palabra(posision = game.at(32,18), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(32,17), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(32,16), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(32,15), imagen = "celdaFondo2.jpg"))
     game.addVisual(new Palabra(posision = game.at(33,18), imagen = "celdaFondo2.jpg"))
     game.addVisual(new Palabra(posision = game.at(33,17), imagen = "celdaFondo2.jpg"))
     game.addVisual(new Palabra(posision = game.at(33,16), imagen = "celdaFondo2.jpg"))
@@ -32,10 +63,6 @@ program tetrizado {
     game.addVisual(new Palabra(posision = game.at(34,17), imagen = "celdaFondo2.jpg"))
     game.addVisual(new Palabra(posision = game.at(34,16), imagen = "celdaFondo2.jpg"))
     game.addVisual(new Palabra(posision = game.at(34,15), imagen = "celdaFondo2.jpg"))
-    game.addVisual(new Palabra(posision = game.at(35,18), imagen = "celdaFondo2.jpg"))
-    game.addVisual(new Palabra(posision = game.at(35,17), imagen = "celdaFondo2.jpg"))
-    game.addVisual(new Palabra(posision = game.at(35,16), imagen = "celdaFondo2.jpg"))
-    game.addVisual(new Palabra(posision = game.at(35,15), imagen = "celdaFondo2.jpg"))
     //celdas para hold
     game.addVisual(new Palabra(posision = game.at(14,18), imagen = "celdaFondo2.jpg"))
     game.addVisual(new Palabra(posision = game.at(14,17), imagen = "celdaFondo2.jpg"))
@@ -166,6 +193,9 @@ program tetrizado {
     
     //cada 1.5 minutos (90 segundos) se reduce el tiempo de caida
     game.onTick(1000* 60*1.5, "Incremento de Dificultad", {
-        ticksCaida -= 50
+        if(ticksCaida > 50){
+            ticksCaida -= 50
+            contadorNivel += 1
+        }
     })
 }
