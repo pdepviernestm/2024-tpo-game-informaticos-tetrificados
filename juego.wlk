@@ -412,8 +412,18 @@ class Tipo_bloqueSombra inherits BloqueTetris(){
         game.removeVisual(c)
         game.removeVisual(d)
     }
-
-
+    method imitarPos(bloque){
+        a.asignarPosicion(bloque.a().position().x(), bloque.a().position().y())
+        b.asignarPosicion(bloque.b().position().x(), bloque.b().position().y())
+        c.asignarPosicion(bloque.c().position().x(), bloque.c().position().y())
+        d.asignarPosicion(bloque.d().position().x(), bloque.d().position().y())
+        if (!controlador.dirEstaLibre("actual", [a, b, c, d])){
+            self.mover("arriba")
+        } else if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
+            self.descender()
+        }
+    }
+/*
     override method rotar(bloque){ 
         a.asignarPosicion(bloque.a().position().x(), bloque.a().position().y())
         b.asignarPosicion(bloque.b().position().x(), bloque.b().position().y())
@@ -426,6 +436,18 @@ class Tipo_bloqueSombra inherits BloqueTetris(){
         }
     }
 
+    override method mover(bloque){
+        a.asignarPosicion(bloque.a().position().x(), bloque.a().position().y())
+        b.asignarPosicion(bloque.b().position().x(), bloque.b().position().y())
+        c.asignarPosicion(bloque.c().position().x(), bloque.c().position().y())
+        d.asignarPosicion(bloque.d().position().x(), bloque.d().position().y())
+        if (!controlador.dirEstaLibre("actual", [a, b, c, d])){
+            self.mover("arriba")
+        } else if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
+            self.descender()
+        }
+    }*/
+/*
     override method mover(dir){
         if (dir == "derecha" && controlador.dirEstaLibre("derecha", [a, b, c, d])){ 
             xCentro += 1
@@ -491,7 +513,7 @@ class Tipo_bloqueSombra inherits BloqueTetris(){
             self.mover("arriba")
         }
     }
-
+*/
 }
 
 object controlador {

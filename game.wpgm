@@ -62,22 +62,22 @@ program tetrizado {
 
     keyboard.z().onPressDo({
         bloqueActual.rotar("izquierda")
-        bloqueSombra.rotar(bloqueActual)
+        bloqueSombra.imitarPos(bloqueActual)
     })
 
     keyboard.up().onPressDo({
         bloqueActual.rotar("derecha")
-        bloqueSombra.rotar(bloqueActual)
+        bloqueSombra.imitarPos(bloqueActual)
     })
 
     keyboard.left().onPressDo({
         bloqueActual.mover("izquierda")
-        bloqueSombra.mover("izquierda")
+        bloqueSombra.imitarPos(bloqueActual)
     })
 
     keyboard.right().onPressDo({
         bloqueActual.mover("derecha")
-        bloqueSombra.mover("derecha")
+        bloqueSombra.imitarPos(bloqueActual)
     })
 
     keyboard.down().onPressDo({
