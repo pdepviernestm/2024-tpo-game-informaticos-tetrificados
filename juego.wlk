@@ -405,44 +405,19 @@ class Tipo_bloqueSombra inherits BloqueTetris(){
         game.removeVisual(c)
         game.removeVisual(d)
     }
-/*
-    override method rotar(dir){ 
-        if (dir == "derecha"){
-            const listaValoresReturn = [self.rotarHoraria(a), self.rotarHoraria(b), self.rotarHoraria(c), self.rotarHoraria(d)]
-            if (listaValoresReturn.all( {valorReturn => valorReturn == 0})){
-                a.asumirPosicionRotada()
-                b.asumirPosicionRotada()
-                c.asumirPosicionRotada()
-                d.asumirPosicionRotada()
-            }
-            else if(listaValoresReturn.any({valorReturn => valorReturn == 1})){ 
-                return
-            }
-            else{
-                self.mover(listaValoresReturn.filter({valorReturn => valorReturn != 1 && valorReturn != 0}).head())// Se mueve 1 casilla lejos de la pared lateral
-                self.rotar("derecha") //Intenta rotar nuevamente
-            }
 
-        }else{
-            const listaValoresReturn = [self.rotarAntiHoraria(a), self.rotarAntiHoraria(b), self.rotarAntiHoraria(c), self.rotarAntiHoraria(d)]
-            if (listaValoresReturn.any({valorReturn => valorReturn})){
-                a.asumirPosicionRotada()
-                b.asumirPosicionRotada()
-                c.asumirPosicionRotada()
-                d.asumirPosicionRotada()
-            }
-            else if(listaValoresReturn.any({valorReturn => valorReturn == 1})){ 
-                return
-            }
-            else{
-                if(controlador.dirEstaLibre(dir, [a, b, c, d])){
-                    self.mover(listaValoresReturn.filter({valorReturn => valorReturn != 1 && valorReturn != 0}).head())// Se mueve 1 casilla lejos de la pared lateral
-                    self.rotar("izquierda") //Intenta rotar nuevamente
-                }
-            }//HAY UN CASO EN EL QUE ESTO NO FUNCIONA, FIJARSE EN CUADERNO (Mateo)
+    override method rotar(bloque){ 
+        a.asignarPosicion(bloque.a().position().x(), bloque.a().position().y())
+        b.asignarPosicion(bloque.b().position().x(), bloque.b().position().y())
+        c.asignarPosicion(bloque.c().position().x(), bloque.c().position().y())
+        d.asignarPosicion(bloque.d().position().x(), bloque.d().position().y())
+        if (!controlador.dirEstaLibre("actual", [a, b, c, d])){
+            self.mover("arriba")
+        } else if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
+            self.descender()
         }
     }
-*/
+
     override method mover(dir){
         if (dir == "derecha" && controlador.dirEstaLibre("derecha", [a, b, c, d])){ 
             xCentro += 1
@@ -599,6 +574,9 @@ object controlador {
         }
         if (dir == "arriba"){
             return !listaPiezas.any{p => self.posEstaOcupada(p.position().x(), p.position().y()+1) == 1} //Comprueba que todas las posiciones arriba de la misma no tengan nada
+        }
+        if (dir == "actual"){
+            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x(), p.position().y()) == 1} //Comprueba que todas las posiciones de la misma no tengan nada
         }
         return EvaluationError
     }

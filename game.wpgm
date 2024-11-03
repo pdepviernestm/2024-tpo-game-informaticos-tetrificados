@@ -16,8 +16,8 @@ program tetrizado {
     var bloqueSombra
     var contadorHolds = 0
 
-    game.addVisual(new Fondo(posision = game.at(0,0), imagen = "backroundIzquierda.png"))
-    game.addVisual(new Fondo(posision = game.at(28,0), imagen = "backroundDerecha.png"))
+    game.addVisual(new Fondo(posision = game.at(0,0), imagen = "fondoDiseñoIzq.png"))
+    game.addVisual(new Fondo(posision = game.at(28,0), imagen = "fondoDiseñoDer.png"))
     game.addVisual(new Palabra(posision = game.at(29,12), imagen = "puntaje (1).png"))
     game.addVisual(new Palabra(posision = game.at(29,10), imagen = "lineas.png"))
     game.addVisual(new Palabra(posision = game.at(29,8), imagen = "nivel.png"))
@@ -62,14 +62,12 @@ program tetrizado {
 
     keyboard.z().onPressDo({
         bloqueActual.rotar("izquierda")
-        bloqueSombra.rotar("izquierda")
-        bloqueSombra.descender()
+        bloqueSombra.rotar(bloqueActual)
     })
 
     keyboard.up().onPressDo({
         bloqueActual.rotar("derecha")
-        bloqueSombra.rotar("derecha")
-        bloqueSombra.descender()
+        bloqueSombra.rotar(bloqueActual)
     })
 
     keyboard.left().onPressDo({
