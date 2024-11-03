@@ -134,6 +134,13 @@ class BloqueTetris{
             game.addVisual(d)
     }  
 
+    method remover(){
+        game.removeVisual(a)
+        game.removeVisual(b)
+        game.removeVisual(c)
+        game.removeVisual(d)
+    }
+
     method caer(){
         self.mover("abajo")
     }
@@ -405,6 +412,7 @@ class Tipo_bloqueSombra inherits BloqueTetris(){
         game.removeVisual(c)
         game.removeVisual(d)
     }
+
 
     override method rotar(bloque){ 
         a.asignarPosicion(bloque.a().position().x(), bloque.a().position().y())

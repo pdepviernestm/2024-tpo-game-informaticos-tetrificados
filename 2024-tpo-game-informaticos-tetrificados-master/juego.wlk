@@ -109,6 +109,13 @@ class BloqueTetris{ //Tengo dudas de donde deberiamos declarar las piezas del bl
         game.addVisual(d)
     }
 
+    method remover(){
+        game.removeVisual(a)
+        game.removeVisual(b)
+        game.removeVisual(c)
+        game.removeVisual(d)
+    }
+
     method caer(){
         yCentro -= 1
         centro = game.at(xCentro, yCentro)

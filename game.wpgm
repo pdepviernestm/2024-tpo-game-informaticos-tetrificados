@@ -97,6 +97,10 @@ program tetrizado {
             bloqueSombra = bloqueActual.crearSombra()
             bloqueSombra.descender()
             bloqueSombra.mostrar()
+
+            //esto es para que la sombra no quede por encima del bloqueActual cuando se superpongan
+                bloqueActual.remover()
+                bloqueActual.mostrar()
         }
     })
     
@@ -127,6 +131,10 @@ program tetrizado {
                 bloqueSombra.mostrar()
             }
 
+            //esto es para que la sombra no quede por encima del bloqueActual cuando se superpongan
+                bloqueActual.remover()
+                bloqueActual.mostrar()
+
         }
     })
     
@@ -147,6 +155,10 @@ program tetrizado {
                     bloqueSombra = bloqueActual.crearSombra()
                     bloqueSombra.descender()
                     bloqueSombra.mostrar()
+
+                    //esto es para que la sombra no quede por encima del bloqueActual cuando se superpongan
+                    bloqueActual.remover()
+                    bloqueActual.mostrar()
                 }
             })
         }
