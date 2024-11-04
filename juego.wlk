@@ -447,7 +447,6 @@ object controlador {
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ]   
 
@@ -525,6 +524,62 @@ object controlador {
         game.removeTickEvent("Caida")
     }
 
+    method actualizarNivel(contador, bloqueUnidad, bloqueDecena){
+        bloqueUnidad.image("numero" + (contador%10) + ".png")
+        bloqueDecena.image("numero" + (contador/10).truncate(0) + ".png")
+    }
+
+    var matriz2 = [ //Para acceder a indice usar coordenada 19-y, asi fila inferior es y = 0 y la superior es y = 19
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()]
+    ]  
+
+    method posEstaOcupada2(x, y){
+        if (x < 18 || x > 27 || y < 0){
+            return 1
+        }
+        if (y > 19){
+            return 0
+        }
+        if (matriz2.get(19-y).get(x-18).pieza() != null){
+            return 1
+        }
+        return 0
+    }
+
+    method verificarPorLineasCompletas(){
+        /*
+        var cantLineasCompletas = 0
+        var fila = 19
+        20.times({
+            if (matriz.get(fila).all({valor => valor == 1})){
+                cantLineasCompletas += 1
+                matriz = matriz.take(fila) + [List.fill(10, 0)] + matriz.drop(fila+1)
+            }
+            fila -= 1
+        })
+        */
+    }
+
 }
 
 object gameOver {
@@ -548,7 +603,13 @@ class Palabra{
 
 class Numero{
     const posision
-    const imagen
+    var imagen
     method image() = imagen
+    method image(nuevaImagen){imagen = nuevaImagen} 
     method position() = posision
+}
+
+class ElementoMatriz{
+    var pieza = null
+    method pieza() = pieza
 }

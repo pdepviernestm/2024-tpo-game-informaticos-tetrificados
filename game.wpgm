@@ -17,19 +17,19 @@ program tetrizado {
     var contadorHolds = 0
     var contadorNivel = 1
 
-    var puntajeUnidad = new Numero(posision = game.at(37,12), imagen = "numero0.png")
-    var puntajeDecena = new Numero(posision = game.at(36,12), imagen = "numero0.png")
-    var puntajeCentena = new Numero(posision = game.at(35,12), imagen = "numero0.png")
-    var puntajeUnidadDeMil = new Numero(posision = game.at(34,12), imagen = "numero0.png")
-    var puntajeDecenaDeMil = new Numero(posision = game.at(33,12), imagen = "numero0.png")
+    const puntajeUnidad = new Numero(posision = game.at(37,12), imagen = "numero0.png")
+    const puntajeDecena = new Numero(posision = game.at(36,12), imagen = "numero0.png")
+    const puntajeCentena = new Numero(posision = game.at(35,12), imagen = "numero0.png")
+    const puntajeUnidadDeMil = new Numero(posision = game.at(34,12), imagen = "numero0.png")
+    const puntajeDecenaDeMil = new Numero(posision = game.at(33,12), imagen = "numero0.png")
 
-    var linasUnidad = new Numero(posision = game.at(37,10), imagen = "numero0.png")
-    var linasDecena = new Numero(posision = game.at(36,10), imagen = "numero0.png")
-    var linasCentena = new Numero(posision = game.at(35,10), imagen = "numero0.png")
-    var lineasUnidadDeMil = new Numero(posision = game.at(34,10), imagen = "numero0.png")
+    const linasUnidad = new Numero(posision = game.at(37,10), imagen = "numero0.png")
+    const linasDecena = new Numero(posision = game.at(36,10), imagen = "numero0.png")
+    const linasCentena = new Numero(posision = game.at(35,10), imagen = "numero0.png")
+    const lineasUnidadDeMil = new Numero(posision = game.at(34,10), imagen = "numero0.png")
 
-    var nivelUnidad = new Numero(posision = game.at(37,8), imagen = "numero0.png")
-    var nivelDecena = new Numero(posision = game.at(36,8), imagen = "numero0.png")
+    const nivelUnidad = new Numero(posision = game.at(37,8), imagen = "numero1.png")
+    const nivelDecena = new Numero(posision = game.at(36,8), imagen = "numero0.png")
 
 
     game.addVisual(new Fondo(posision = game.at(0,0), imagen = "fondoDiseñoIzq.png"))
@@ -191,11 +191,20 @@ program tetrizado {
         }
     })
     
-    //cada 1.5 minutos (90 segundos) se reduce el tiempo de caida
-    game.onTick(1000* 60*1.5, "Incremento de Dificultad", {
+    //cada 1 minuto (60 segundos) se reduce el tiempo de caida
+    game.onTick(1000*60 , "Incremento de Dificultad", {
         if(ticksCaida > 50){
             ticksCaida -= 50
             contadorNivel += 1
+            controlador.actualizarNivel(contadorNivel, nivelUnidad, nivelDecena)
+        } else {
+            game.removeTickEvent("Incremento de Dificultad")
         }
     })
+    /*
+       No pareciera acelerarse la velocidad de caida de las piezas...
+       Quizas porque hay muchas acciones que se hacen cada vez que la pieza cae y 
+       hasta que no se hacen todas no se vuelve a ejecutar el evento de caida
+    */
+
 }
