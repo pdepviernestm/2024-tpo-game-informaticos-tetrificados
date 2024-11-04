@@ -529,7 +529,7 @@ object controlador {
         bloqueDecena.image("numero" + (contador/10).truncate(0) + ".png")
     }
 
-    var matriz2 = [ //Para acceder a indice usar coordenada 19-y, asi fila inferior es y = 0 y la superior es y = 19
+    const matriz2 = [ //Para acceder a indice usar coordenada 19-y, asi fila inferior es y = 0 y la superior es y = 19
         [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
         [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
         [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
@@ -566,18 +566,73 @@ object controlador {
         return 0
     }
 
-    method verificarPorLineasCompletas(){
-        /*
+    method ocuparPos2(x, y, pieza){
+        if(y > 19){
+            self.perder()
+        }else{
+            matriz2.get(19-y).get(x-18).pieza(pieza)
+        }
+    }
+
+    method dirEstaLibre2(dir, listaPiezas){
+        if (dir == "derecha"){
+            return !listaPiezas.any{p => self.posEstaOcupada2(p.position().x()+1, p.position().y()) == 1}
+        }
+        if (dir == "izquierda"){
+            return !listaPiezas.any{p => self.posEstaOcupada2(p.position().x()-1, p.position().y()) == 1}
+        }
+        if (dir == "abajo"){
+            return !listaPiezas.any{p => self.posEstaOcupada2(p.position().x(), p.position().y()-1) == 1} 
+        }
+        if (dir == "arriba"){
+            return !listaPiezas.any{p => self.posEstaOcupada2(p.position().x(), p.position().y()+1) == 1}
+        }
+        if (dir == "actual"){
+            return !listaPiezas.any{p => self.posEstaOcupada2(p.position().x(), p.position().y()) == 1}
+        }
+        return EvaluationError
+    }
+
+    method verificarLineasCompletas(){
         var cantLineasCompletas = 0
         var fila = 19
         20.times({
-            if (matriz.get(fila).all({valor => valor == 1})){
+            if (cantLineasCompletas == 4){//por como es el juego nunca se pueden eliminar mas de 4 filas a la vez, entonces evito seguir verificando por lineas completas
+                return
+            }
+            else if (matriz2.get(fila).all({elemento => elemento.pieza() != null})){
                 cantLineasCompletas += 1
-                matriz = matriz.take(fila) + [List.fill(10, 0)] + matriz.drop(fila+1)
+                self.eliminarLinea(fila)
             }
             fila -= 1
         })
-        */
+        return
+    }
+
+    method eliminarLinea(fila){
+        var indice = 0
+        10.times({
+            game.removeVisual(matriz2.get(fila).get(indice).pieza())
+            matriz2.get(fila).get(indice).pieza(null)
+            indice += 1
+        })
+        self.bajarLineas(fila)
+    }
+
+    method bajarLineas(fila){//recibe el indice de la fila que se elimino
+        if(fila >= 19){
+            return
+        }
+        var filaActual = fila
+        const listaAuxiliar = [] //lista de piezas que se van a bajar
+
+        matriz2.get(filaActual+1).forEach({elemento => listaAuxiliar.add(elemento.pieza())})
+
+        matriz2.get(filaActual).forEach({elemento => elemento.pieza(listaAuxiliar.pop())})
+
+        filaActual += 1
+        self.bajarLineas(filaActual)
+        return
     }
 
 }
@@ -612,4 +667,5 @@ class Numero{
 class ElementoMatriz{
     var pieza = null
     method pieza() = pieza
+    method pieza(nuevaPieza){pieza = nuevaPieza}
 }
