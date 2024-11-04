@@ -426,6 +426,8 @@ class Tipo_bloqueSombra inherits BloqueTetris(){
 }
 
 object controlador {
+    var fila = 19
+    var columna = 0
 
     var matriz = [ //Para acceder a indice usar coordenada 19-y, asi fila inferior es y = 0 y la superior es y = 19
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -595,39 +597,43 @@ object controlador {
 
     method verificarLineasCompletas(){
         var cantLineasCompletas = 0
-        var fila = 19
-        20.times({
-            if (cantLineasCompletas == 4){//por como es el juego nunca se pueden eliminar mas de 4 filas a la vez, entonces evito seguir verificando por lineas completas
-                return
-            }
-            else if (matriz2.get(fila).all({elemento => elemento.pieza() != null})){
-                cantLineasCompletas += 1
-                self.eliminarLinea(fila)
-            }
-            fila -= 1
-        })
+        
+        if (cantLineasCompletas < 4){//por como es el juego nunca se pueden eliminar mas de 4 filas a la vez, entonces evito seguir verificando por lineas completas
+                if (matriz2.get(fila).all({elemento => elemento.pieza() != null})){
+                    cantLineasCompletas += 1
+                    self.eliminarLinea(fila)
+                }
+        }
+        fila -= 1
+        if (fila>=0){
+            self.verificarLineasCompletas()
+        }
+        
+        fila = 19
         return
     }
 
-    method eliminarLinea(fila){
-        var indice = 0
-        10.times({
-            game.removeVisual(matriz2.get(fila).get(indice).pieza())
-            matriz2.get(fila).get(indice).pieza(null)
-            indice += 1
-        })
-        self.bajarLineas(fila)
+    method eliminarLinea(indexLinea){
+        game.removeVisual(matriz2.get(columna).get(columna).pieza())
+        matriz2.get(indexLinea).get(columna).pieza(null)
+        columna += 1
+        if (columna < 10){
+            self.eliminarLinea(indexLinea)
+        }
+        self.bajarLineas(indexLinea)
     }
 
-    method bajarLineas(fila){//recibe el indice de la fila que se elimino
-        if(fila >= 19){
+    method bajarLineas(indexLinea){//recibe el indice de la fila que se elimino
+        if(indexLinea >= 19){
             return
         }
-        var filaActual = fila
+        var filaActual = indexLinea
         const listaAuxiliar = [] //lista de piezas que se van a bajar
 
+        // Copiar las piezas de la fila superior a la lista auxiliar
         matriz2.get(filaActual+1).forEach({elemento => listaAuxiliar.add(elemento.pieza())})
 
+        // Asignar las piezas de la lista auxiliar a la fila actual
         matriz2.get(filaActual).forEach({elemento => elemento.pieza(listaAuxiliar.pop())})
 
         filaActual += 1
