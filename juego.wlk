@@ -614,7 +614,7 @@ object controlador {
     }
 
     method eliminarLinea(indexLinea){
-        game.removeVisual(matriz2.get(columna).get(columna).pieza())
+        game.removeVisual(matriz2.get(indexLinea).get(columna).pieza())
         matriz2.get(indexLinea).get(columna).pieza(null)
         columna += 1
         if (columna < 10){
@@ -624,21 +624,19 @@ object controlador {
     }
 
     method bajarLineas(indexLinea){//recibe el indice de la fila que se elimino
-        if(indexLinea >= 19){
-            return
-        }
         var filaActual = indexLinea
-        const listaAuxiliar = [] //lista de piezas que se van a bajar
+        if(filaActual < 19){
+            const listaAuxiliar = [] //lista de piezas que se van a bajar
 
-        // Copiar las piezas de la fila superior a la lista auxiliar
-        matriz2.get(filaActual+1).forEach({elemento => listaAuxiliar.add(elemento.pieza())})
+            // Copiar las piezas de la fila superior a la lista auxiliar
+            matriz2.get(filaActual+1).forEach({elemento => listaAuxiliar.add(elemento.pieza())})
 
-        // Asignar las piezas de la lista auxiliar a la fila actual
-        matriz2.get(filaActual).forEach({elemento => elemento.pieza(listaAuxiliar.pop())})
+            // Asignar las piezas de la lista auxiliar a la fila actual
+            matriz2.get(filaActual).forEach({elemento => elemento.pieza(listaAuxiliar.pop())})
 
-        filaActual += 1
-        self.bajarLineas(filaActual)
-        return
+            filaActual += 1
+            self.bajarLineas(filaActual)
+        }
     }
 
 }
