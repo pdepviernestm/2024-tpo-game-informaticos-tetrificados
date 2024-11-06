@@ -526,15 +526,14 @@ object controlador {
         fila = 19
         return
     }
-*/  var columna = 0
+*/
     method eliminarLinea(indexLinea){
-        game.removeVisual(matriz2.get(indexLinea).get(columna).pieza())
-        matriz2.get(indexLinea).get(columna).pieza(null)
-        columna += 1
-        if (columna < 10){
-            self.eliminarLinea(indexLinea)
-        }
-        columna = 0
+         var columna = 0
+        10.times({_=>
+            game.removeVisual(matriz2.get(indexLinea).get(columna).pieza())
+            matriz2.get(indexLinea).get(columna).pieza(null)
+            columna += 1
+            })
         self.bajarLineas(indexLinea)
     }
 
