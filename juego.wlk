@@ -161,10 +161,10 @@ class BloqueTetris{
     }	
 
     method establecerEnTablero(){
-        controlador.ocuparPos2(a.position().x(), a.position().y(), a)//pasarlo como una unica posision
-        controlador.ocuparPos2(b.position().x(), b.position().y(), b)
-        controlador.ocuparPos2(c.position().x(), c.position().y(), c)
-        controlador.ocuparPos2(d.position().x(), d.position().y(), d)
+        controlador.ocuparPos(a.position().x(), a.position().y(), a)//pasarlo como una unica posision
+        controlador.ocuparPos(b.position().x(), b.position().y(), b)
+        controlador.ocuparPos(c.position().x(), c.position().y(), c)
+        controlador.ocuparPos(d.position().x(), d.position().y(), d)
     }
 
     method xCentro() = xCentro
@@ -328,58 +328,7 @@ class Tipo_bloqueSombra inherits BloqueTetris(){
 }
 
 object controlador {
-    var finjuego = false
-    var matriz = [ //Para acceder a indice usar coordenada 19-y, asi fila inferior es y = 0 y la superior es y = 19
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    ]   
-
-    method posEstaFueraDeTablero(x, y) {
-        return (x < 18 || x > 27 || y < 0)
-    }
-
-    method posEstaOcupada(x, y){
-        if (x < 18 || x > 27 || y < 0){
-            return 1
-        }
-        if (y > 19){
-            return 0
-        }
-
-        return (matriz.get(19-y).get(x-18))
-    }
-
-    method ocuparPos(x, y){ //No encontre funcion que me permita cambiar una variable accediendo mediante el indice, asi que lo hice asi
-        if(y > 19 ){
-            if (!finjuego){
-                finjuego = true
-                self.perder()
-            }
-        }else{
-            var filaEditada = matriz.get(19-y)
-            //if (filaEditada.get(x) == 1){} Estaria bueno que tire un warning o algo si se intenta ocupar una posicion ya ocupada, pero no se como hacerlo
-            filaEditada = filaEditada.take(x-18) + [1] + filaEditada.drop(x-18+1)  //Tener en cuenta que take(x) tomara hasta la fila x-1 y drop(x+1) tomara desde la fila x, porque cuentan la cantidad de los elementos y no los indices (la x es un indice)
-            matriz = matriz.take(20-y-1) + [filaEditada] + matriz.drop(20-y) //Aca se usa 20-y en vez de 19-y por la razon explicada arriba
-        }
-    }
+    var finjuego = false 
 
     const cantidadDeBloques = 7
     method generarBloqueAleatorio() {
@@ -405,24 +354,6 @@ object controlador {
         }
         return bloque
     }
-    method dirEstaLibreBORRAR(dir, listaPiezas){
-        if (dir == "derecha"){
-            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x()+1, p.position().y()) == 1} //Comprueba que todas las posiciones a la derecha no tengan nada
-        }
-        if (dir == "izquierda"){
-            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x()-1, p.position().y()) == 1} //Comprueba que todas las posiciones a la izquierda no tengan nada
-        }
-        if (dir == "abajo"){
-            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x(), p.position().y()-1) == 1} //Comprueba que todas las posiciones abajo de la misma no tengan nada
-        }
-        if (dir == "arriba"){
-            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x(), p.position().y()+1) == 1} //Comprueba que todas las posiciones arriba de la misma no tengan nada
-        }
-        if (dir == "actual"){
-            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x(), p.position().y()) == 1} //Comprueba que todas las posiciones de la misma no tengan nada
-        }
-        return EvaluationError
-    }
     
     method perder(){
         game.addVisual(gameOver)
@@ -436,7 +367,7 @@ object controlador {
     }
 
     var contadoresDeLineaCompleta = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] //Se suma 1 cada vez que se ocupa un lugar de su fila, hay 1 contador por cada fila
-    const matriz2 = [ //Para acceder a indice usar coordenada 19-y, asi fila inferior es y = 0 y la superior es y = 19
+    const matriz = [ //Para acceder a indice usar coordenada 19-y, asi fila inferior es y = 0 y la superior es y = 19
         [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
         [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
         [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
@@ -460,27 +391,27 @@ object controlador {
         [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()]
     ]  
 
-    method posEstaOcupada2(x, y){
+    method posEstaOcupada(x, y){
         if (x < 18 || x > 27 || y < 0){
             return 1
         }
         if (y > 19){
             return 0
         }
-        if (matriz2.get(19-y).get(x-18).pieza() != null){
+        if (matriz.get(19-y).get(x-18).pieza() != null){
             return 1
         }
         return 0
     }
 
-    method ocuparPos2(x, y, pieza){
+    method ocuparPos(x, y, pieza){
         if(y > 19){
              if (!finjuego){
                 finjuego = true
                 self.perder()
             }
         }else{
-            matriz2.get(19-y).get(x-18).pieza(pieza)
+            matriz.get(19-y).get(x-18).pieza(pieza)
             contadoresDeLineaCompleta = contadoresDeLineaCompleta.take(y) +[(contadoresDeLineaCompleta.get(y))+1] + contadoresDeLineaCompleta.drop(y+1)
             if (contadoresDeLineaCompleta.get(y) == 10){
                 self.eliminarLinea(19-y)
@@ -492,46 +423,28 @@ object controlador {
 
     method dirEstaLibre(dir, listaPiezas){
         if (dir == "derecha"){
-            return !listaPiezas.any{p => self.posEstaOcupada2(p.position().x()+1, p.position().y()) == 1}
+            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x()+1, p.position().y()) == 1}
         }
         if (dir == "izquierda"){
-            return !listaPiezas.any{p => self.posEstaOcupada2(p.position().x()-1, p.position().y()) == 1}
+            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x()-1, p.position().y()) == 1}
         }
         if (dir == "abajo"){
-            return !listaPiezas.any{p => self.posEstaOcupada2(p.position().x(), p.position().y()-1) == 1} 
+            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x(), p.position().y()-1) == 1} 
         }
         if (dir == "arriba"){
-            return !listaPiezas.any{p => self.posEstaOcupada2(p.position().x(), p.position().y()+1) == 1}
+            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x(), p.position().y()+1) == 1}
         }
         if (dir == "actual"){
-            return !listaPiezas.any{p => self.posEstaOcupada2(p.position().x(), p.position().y()) == 1}
+            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x(), p.position().y()) == 1}
         }
         return EvaluationError
     }
-/* No se usaria
-    method verificarLineasCompletas(fila){
-        var cantLineasCompletas = 0
-        
-        if (cantLineasCompletas < 4){//por como es el juego nunca se pueden eliminar mas de 4 filas a la vez, entonces evito seguir verificando por lineas completas
-                if (matriz2.get(fila).all({elemento => elemento.pieza() != null})){
-                    cantLineasCompletas += 1
-                    self.eliminarLinea(fila)
-                }
-        }
-        fila -= 1
-        if (fila>=0){
-            self.verificarLineasCompletas()
-        }
-        
-        fila = 19
-        return
-    }
-*/
+
     method eliminarLinea(indexLinea){
          var columna = 0
         10.times({_=>
-            game.removeVisual(matriz2.get(indexLinea).get(columna).pieza())
-            matriz2.get(indexLinea).get(columna).pieza(null)
+            game.removeVisual(matriz.get(indexLinea).get(columna).pieza())
+            matriz.get(indexLinea).get(columna).pieza(null)
             columna += 1
             })
         self.bajarLineas(indexLinea)
@@ -546,10 +459,10 @@ object controlador {
             _=>
             
             // Copiar las piezas de la fila superior a la lista auxiliar
-            matriz2.get(contadorLineas+1).forEach({elemento => listaAuxiliar.add(elemento.pieza())})
+            matriz.get(contadorLineas+1).forEach({elemento => listaAuxiliar.add(elemento.pieza())})
 
             // Asignar las piezas de la lista auxiliar a la fila actual
-            matriz2.get(contadorLineas).forEach({
+            matriz.get(contadorLineas).forEach({
                 elemento => 
                 elemento.pieza(listaAuxiliar.head())
                 listaAuxiliar = listaAuxiliar.drop(1)
