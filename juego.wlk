@@ -160,16 +160,10 @@ class BloqueTetris{
     }	
 
     method establecerEnTablero(){
-        controlador.ocuparPos(a.position().x(), a.position().y())//pasarlo como una unica posision
-        controlador.ocuparPos(b.position().x(), b.position().y())
-        controlador.ocuparPos(c.position().x(), c.position().y())
-        controlador.ocuparPos(d.position().x(), d.position().y())
-    }
-    method decirPosiciones(){
-        game.say(a, "posicion: A: " + a.position().x())
-        game.say(b, "posicion: B: " + b.position().x())
-        game.say(c, "posicion: C: " + c.position().x())
-        game.say(d, "posicion: D: " + d.position().x())
+        controlador.ocuparPos2(a.position().x(), a.position().y(), a)//pasarlo como una unica posision
+        controlador.ocuparPos2(b.position().x(), b.position().y(), b)
+        controlador.ocuparPos2(c.position().x(), c.position().y(), c)
+        controlador.ocuparPos2(d.position().x(), d.position().y(), d)
     }
 
     method xCentro() = xCentro
@@ -426,9 +420,6 @@ class Tipo_bloqueSombra inherits BloqueTetris(){
 }
 
 object controlador {
-    var fila = 19
-    var columna = 0
-
     var matriz = [ //Para acceder a indice usar coordenada 19-y, asi fila inferior es y = 0 y la superior es y = 19
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -531,6 +522,8 @@ object controlador {
         bloqueDecena.image("numero" + (contador/10).truncate(0) + ".png")
     }
 
+    var contadoresDeLineaCompleta = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] //Se suma 1 cada vez que se ocupa un lugar de su fila, hay 1 contador por cada fila
+
     const matriz2 = [ //Para acceder a indice usar coordenada 19-y, asi fila inferior es y = 0 y la superior es y = 19
         [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
         [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
@@ -573,6 +566,12 @@ object controlador {
             self.perder()
         }else{
             matriz2.get(19-y).get(x-18).pieza(pieza)
+            contadoresDeLineaCompleta = contadoresDeLineaCompleta.take(20-y-1) +[(contadoresDeLineaCompleta.get(20-y))+1] + contadoresDeLineaCompleta.drop(20-y)
+            if (contadoresDeLineaCompleta.get(19-y) == 10){
+                self.eliminarLinea(19-y)
+                contadoresDeLineaCompleta.remove(10)
+                contadoresDeLineaCompleta.add(0)
+            }
         }
     }
 
@@ -594,8 +593,8 @@ object controlador {
         }
         return EvaluationError
     }
-
-    method verificarLineasCompletas(){
+/* No se usaria
+    method verificarLineasCompletas(fila){
         var cantLineasCompletas = 0
         
         if (cantLineasCompletas < 4){//por como es el juego nunca se pueden eliminar mas de 4 filas a la vez, entonces evito seguir verificando por lineas completas
@@ -612,14 +611,14 @@ object controlador {
         fila = 19
         return
     }
-
+*/
     method eliminarLinea(indexLinea){
-        game.removeVisual(matriz2.get(indexLinea).get(columna).pieza())
-        matriz2.get(indexLinea).get(columna).pieza(null)
-        columna += 1
-        if (columna < 10){
-            self.eliminarLinea(indexLinea)
-        }
+        var columna = 0
+        10.times({_=>
+            game.removeVisual(matriz2.get(indexLinea).get(columna).pieza())
+            matriz2.get(indexLinea).get(columna).pieza(null)
+            columna += 1
+            })
         self.bajarLineas(indexLinea)
     }
 
