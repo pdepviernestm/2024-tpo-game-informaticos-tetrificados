@@ -91,7 +91,7 @@ program tetrizado {
         bloqueActual.rotar("izquierda")
         bloqueSombra.imitarPos(bloqueActual)
     })
-
+ 
     keyboard.up().onPressDo({
         bloqueActual.rotar("derecha")
         bloqueSombra.imitarPos(bloqueActual)
@@ -114,7 +114,6 @@ program tetrizado {
     keyboard.space().onPressDo({
         const retorno = bloqueActual.hardDrop()
         if (retorno == 0){
-            bloqueActual.establecerEnTablero()
             bloqueActual = bloqueNext
             contadorHolds = 0
             bloqueActual.entrarEnTablero()

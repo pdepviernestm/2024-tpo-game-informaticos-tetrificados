@@ -2,6 +2,7 @@ import wollok.game.*
 class BloqueTetris{
     var xCentro //Estas variables las deberiamos cambiar si queremos editar donde aparecen por primera vez los bloques
     var yCentro
+ 
     var centro = game.at(xCentro, yCentro)
     const a 
     const b 
@@ -182,6 +183,32 @@ class BloqueTetris{
     }
 }
 
+class BloqueJugable inherits BloqueTetris{
+    const xCentroTablero
+    const yCentroTablero
+    const xCentroHold
+    const yCentroHold
+
+    method entrarEnTablero(){
+        a.asignarPosicion((xCentro-a.position().x())+xCentroTablero, (yCentro-a.position().y())+yCentroTablero)
+        b.asignarPosicion((xCentro-b.position().x())+xCentroTablero, (yCentro-b.position().y())+yCentroTablero)
+        c.asignarPosicion((xCentro-c.position().x())+xCentroTablero, (yCentro-c.position().y())+yCentroTablero)
+        d.asignarPosicion((xCentro-d.position().x())+xCentroTablero, (yCentro-d.position().y())+yCentroTablero)
+        xCentro = xCentroTablero
+        yCentro = yCentroTablero
+    }
+
+    method entrarEnHold(){
+        a.asignarPosicion((xCentro-a.position().x())+xCentroHold, (yCentro-a.position().y())+yCentroHold)
+        b.asignarPosicion((xCentro-b.position().x())+xCentroHold, (yCentro-b.position().y())+yCentroHold)
+        c.asignarPosicion((xCentro-c.position().x())+xCentroHold, (yCentro-c.position().y())+yCentroHold)
+        d.asignarPosicion((xCentro-d.position().x())+xCentroHold, (yCentro-d.position().y())+yCentroHold)
+        xCentro = xCentroHold
+        yCentro = yCentroHold
+    }
+
+}
+
 //esto podriamos generalizarlo con clases o herencias para incluir al bloque linea
 
 class Pieza{//un "pixel" del bloque de tetris
@@ -212,185 +239,66 @@ class Pieza{//un "pixel" del bloque de tetris
 
 }
 
-class Tipo_bloqueL inherits BloqueTetris (xCentro = 32, yCentro = 16,
+class Tipo_bloqueL inherits BloqueJugable (xCentro = 32, yCentro = 16, xCentroTablero = 23, yCentroTablero = 21, xCentroHold = 15, yCentroHold = 16,
                                             a = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro+1)) ,
                                             b = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro)),
                                             c = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro-1)),
                                             d = new Pieza(image = "naranja.png", position = game.at(xCentro+1, yCentro-1)))
 {
-    method entrarEnTablero(){
-        xCentro = 23
-        yCentro = 21
-        a.asignarPosicion(xCentro, yCentro+1)
-        b.asignarPosicion(xCentro, yCentro)
-        c.asignarPosicion(xCentro, yCentro-1)
-        d.asignarPosicion(xCentro+1, yCentro-1)
-    }
-
-    method entrarEnHold(){
-        xCentro = 15
-        yCentro = 16
-        a.asignarPosicion(xCentro, yCentro+1)
-        b.asignarPosicion(xCentro, yCentro)
-        c.asignarPosicion(xCentro, yCentro-1)
-        d.asignarPosicion(xCentro+1, yCentro-1)
-    }
 }
 
 
-class Tipo_bloqueLinv inherits BloqueTetris(xCentro = 33, yCentro = 16,
+class Tipo_bloqueLinv inherits BloqueJugable(xCentro = 33, yCentro = 16, xCentroTablero = 23, yCentroTablero = 21, xCentroHold = 15, yCentroHold = 16,
                                             a = new Pieza(image = "azul.png", position = game.at(xCentro, yCentro+1)) ,
                                             b = new Pieza(image = "azul.png", position = game.at(xCentro, yCentro)),
                                             c = new Pieza(image = "azul.png", position = game.at(xCentro, yCentro-1)),
                                             d = new Pieza(image = "azul.png", position = game.at(xCentro-1, yCentro-1))
                                             )
 {
-    method entrarEnTablero(){
-        xCentro = 23
-        yCentro = 21
-        a.asignarPosicion(xCentro, yCentro+1)
-        b.asignarPosicion(xCentro, yCentro)
-        c.asignarPosicion(xCentro, yCentro-1)
-        d.asignarPosicion(xCentro-1, yCentro-1)
-    }
-
-    method entrarEnHold(){
-        xCentro = 15
-        yCentro = 16
-        a.asignarPosicion(xCentro, yCentro+1)
-        b.asignarPosicion(xCentro, yCentro)
-        c.asignarPosicion(xCentro, yCentro-1)
-        d.asignarPosicion(xCentro-1, yCentro-1)
-    }
 }
 
-class Tipo_bloqueCuadrado inherits BloqueTetris(xCentro = (32.5), yCentro = (15.5),
+class Tipo_bloqueCuadrado inherits BloqueJugable(xCentro = (32.5), yCentro = (15.5),xCentroTablero = 22.5, yCentroTablero = 20.5, xCentroHold = 14.5, yCentroHold = 15.5,
                                             a = new Pieza(image = "amarillo.png", position = game.at(xCentro-0.5, yCentro+0.5)) ,
                                             b = new Pieza(image = "amarillo.png", position = game.at(xCentro-0.5, yCentro-0.5)),
                                             c = new Pieza(image = "amarillo.png", position = game.at(xCentro+0.5, yCentro-0.5)),
                                             d = new Pieza(image = "amarillo.png", position = game.at(xCentro+0.5, yCentro+0.5))
                                             )
 {
-    method entrarEnTablero(){
-        xCentro = 23.5
-        yCentro = 20.5
-        a.asignarPosicion(xCentro-0.5, yCentro+0.5)
-        b.asignarPosicion(xCentro-0.5, yCentro-0.5)
-        c.asignarPosicion(xCentro+0.5, yCentro-0.5)
-        d.asignarPosicion(xCentro+0.5, yCentro+0.5)
-    }                                        
-    
-    method entrarEnHold(){
-        xCentro = 14.5
-        yCentro = 15.5
-        a.asignarPosicion(xCentro-0.5, yCentro+0.5)
-        b.asignarPosicion(xCentro-0.5, yCentro-0.5)
-        c.asignarPosicion(xCentro+0.5, yCentro-0.5)
-        d.asignarPosicion(xCentro+0.5, yCentro+0.5)
-    }
 }
-class Tipo_bloqueLinea inherits BloqueTetris(xCentro = 33.5, yCentro = 16.5,
+class Tipo_bloqueLinea inherits BloqueJugable(xCentro = 33.5, yCentro = 16.5, xCentroTablero = 22.5, yCentroTablero = 21.5, xCentroHold = 15.5, yCentroHold = 16.5,
                                             a = new Pieza(image = "celeste.png", position = game.at(xCentro-0.5, yCentro+1.5)) ,
                                             b = new Pieza(image = "celeste.png", position = game.at(xCentro-0.5, yCentro+0.5)),
                                             c = new Pieza(image = "celeste.png", position = game.at(xCentro-0.5, yCentro-0.5)),
                                             d = new Pieza(image = "celeste.png", position = game.at(xCentro-0.5, yCentro-1.5))
                                             )
 {
-    method entrarEnTablero(){
-        xCentro = 23.5
-        yCentro = 21.5
-        a.asignarPosicion(xCentro-0.5, yCentro+1.5)
-        b.asignarPosicion(xCentro-0.5, yCentro+0.5)
-        c.asignarPosicion(xCentro-0.5, yCentro-0.5)
-        d.asignarPosicion(xCentro-0.5, yCentro-1.5)
-    }
-    
-    method entrarEnHold(){
-        xCentro = 15.5
-        yCentro = 16.5
-        a.asignarPosicion(xCentro-0.5, yCentro+1.5)
-        b.asignarPosicion(xCentro-0.5, yCentro+0.5)
-        c.asignarPosicion(xCentro-0.5, yCentro-0.5)
-        d.asignarPosicion(xCentro-0.5, yCentro-1.5)
-    }
 }
 
-class Tipo_bloqueS inherits BloqueTetris(xCentro = 33, yCentro = 15,
+class Tipo_bloqueS inherits BloqueJugable(xCentro = 33, yCentro = 15, xCentroTablero = 23, yCentroTablero = 20, xCentroHold = 15, yCentroHold = 15,
                                             a = new Pieza(image = "verde.png", position = game.at(xCentro-1, yCentro)) ,
                                             b = new Pieza(image = "verde.png", position = game.at(xCentro, yCentro)),
                                             c = new Pieza(image = "verde.png", position = game.at(xCentro, yCentro+1)),
                                             d = new Pieza(image = "verde.png", position = game.at(xCentro+1, yCentro+1))
                                             )
 {
-    method entrarEnTablero(){
-        xCentro = 23
-        yCentro = 20
-        a.asignarPosicion(xCentro-1, yCentro)
-        b.asignarPosicion(xCentro, yCentro)
-        c.asignarPosicion(xCentro, yCentro+1)
-        d.asignarPosicion(xCentro+1, yCentro+1)
-    }
-
-    method entrarEnHold(){
-        xCentro = 15
-        yCentro = 15
-        a.asignarPosicion(xCentro-1, yCentro)
-        b.asignarPosicion(xCentro, yCentro)
-        c.asignarPosicion(xCentro, yCentro+1)
-        d.asignarPosicion(xCentro+1, yCentro+1)
-    }
 }
 
-class Tipo_bloqueSinv inherits BloqueTetris(xCentro = 33, yCentro = 16,
+class Tipo_bloqueSinv inherits BloqueJugable(xCentro = 33, yCentro = 16,xCentroTablero = 23, yCentroTablero = 20, xCentroHold = 15, yCentroHold = 16,
                                             a = new Pieza(image = "rojo.png", position = game.at(xCentro-1, yCentro)) ,
                                             b = new Pieza(image = "rojo.png", position = game.at(xCentro, yCentro)),
                                             c = new Pieza(image = "rojo.png", position = game.at(xCentro, yCentro-1)),
                                             d = new Pieza(image = "rojo.png", position = game.at(xCentro+1, yCentro-1))
                                             )
 {
-    method entrarEnTablero(){
-        xCentro = 23
-        yCentro = 20
-        a.asignarPosicion(xCentro-1, yCentro)
-        b.asignarPosicion(xCentro, yCentro)
-        c.asignarPosicion(xCentro, yCentro-1)
-        d.asignarPosicion(xCentro+1, yCentro-1)
-    }
-
-    method entrarEnHold(){
-        xCentro = 15
-        yCentro = 16
-        a.asignarPosicion(xCentro-1, yCentro)
-        b.asignarPosicion(xCentro, yCentro)
-        c.asignarPosicion(xCentro, yCentro-1)
-        d.asignarPosicion(xCentro+1, yCentro-1)
-    }
 }
 
-class Tipo_bloqueT inherits BloqueTetris(xCentro = 33, yCentro = 16,
+class Tipo_bloqueT inherits BloqueJugable(xCentro = 33, yCentro = 16, xCentroTablero = 23, yCentroTablero = 20, xCentroHold = 15, yCentroHold = 16,
                                             a = new Pieza(image = "violeta.png", position = game.at(xCentro-1, yCentro)) ,
                                             b = new Pieza(image = "violeta.png", position = game.at(xCentro, yCentro)),
                                             c = new Pieza(image = "violeta.png", position = game.at(xCentro, yCentro-1)),
                                             d = new Pieza(image = "violeta.png", position = game.at(xCentro+1, yCentro))
                                             )
 {    
-    method entrarEnTablero(){
-        xCentro = 23
-        yCentro = 20
-        a.asignarPosicion(xCentro-1, yCentro)
-        b.asignarPosicion(xCentro, yCentro)
-        c.asignarPosicion(xCentro, yCentro-1)
-        d.asignarPosicion(xCentro+1, yCentro)
-    }
-
-    method entrarEnHold(){
-        xCentro = 15
-        yCentro = 16
-        a.asignarPosicion(xCentro-1, yCentro)
-        b.asignarPosicion(xCentro, yCentro)
-        c.asignarPosicion(xCentro, yCentro-1)
-        d.asignarPosicion(xCentro+1, yCentro)
-    }
 }
 
 class Tipo_bloqueSombra inherits BloqueTetris(){
@@ -420,6 +328,7 @@ class Tipo_bloqueSombra inherits BloqueTetris(){
 }
 
 object controlador {
+    var finjuego = false
     var matriz = [ //Para acceder a indice usar coordenada 19-y, asi fila inferior es y = 0 y la superior es y = 19
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -459,8 +368,11 @@ object controlador {
     }
 
     method ocuparPos(x, y){ //No encontre funcion que me permita cambiar una variable accediendo mediante el indice, asi que lo hice asi
-        if(y > 19){
-            self.perder()
+        if(y > 19 ){
+            if (!finjuego){
+                finjuego = true
+                self.perder()
+            }
         }else{
             var filaEditada = matriz.get(19-y)
             //if (filaEditada.get(x) == 1){} Estaria bueno que tire un warning o algo si se intenta ocupar una posicion ya ocupada, pero no se como hacerlo
@@ -493,7 +405,7 @@ object controlador {
         }
         return bloque
     }
-    method dirEstaLibre(dir, listaPiezas){
+    method dirEstaLibreBORRAR(dir, listaPiezas){
         if (dir == "derecha"){
             return !listaPiezas.any{p => self.posEstaOcupada(p.position().x()+1, p.position().y()) == 1} //Comprueba que todas las posiciones a la derecha no tengan nada
         }
@@ -515,6 +427,7 @@ object controlador {
     method perder(){
         game.addVisual(gameOver)
         game.removeTickEvent("Caida")
+        game.schedule(100, {game.stop()})
     }
 
     method actualizarNivel(contador, bloqueUnidad, bloqueDecena){
@@ -523,7 +436,6 @@ object controlador {
     }
 
     var contadoresDeLineaCompleta = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] //Se suma 1 cada vez que se ocupa un lugar de su fila, hay 1 contador por cada fila
-
     const matriz2 = [ //Para acceder a indice usar coordenada 19-y, asi fila inferior es y = 0 y la superior es y = 19
         [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
         [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
@@ -563,11 +475,14 @@ object controlador {
 
     method ocuparPos2(x, y, pieza){
         if(y > 19){
-            self.perder()
+             if (!finjuego){
+                finjuego = true
+                self.perder()
+            }
         }else{
             matriz2.get(19-y).get(x-18).pieza(pieza)
-            contadoresDeLineaCompleta = contadoresDeLineaCompleta.take(20-y-1) +[(contadoresDeLineaCompleta.get(20-y))+1] + contadoresDeLineaCompleta.drop(20-y)
-            if (contadoresDeLineaCompleta.get(19-y) == 10){
+            contadoresDeLineaCompleta = contadoresDeLineaCompleta.take(y) +[(contadoresDeLineaCompleta.get(y))+1] + contadoresDeLineaCompleta.drop(y+1)
+            if (contadoresDeLineaCompleta.get(y) == 10){
                 self.eliminarLinea(19-y)
                 contadoresDeLineaCompleta.remove(10)
                 contadoresDeLineaCompleta.add(0)
@@ -575,7 +490,7 @@ object controlador {
         }
     }
 
-    method dirEstaLibre2(dir, listaPiezas){
+    method dirEstaLibre(dir, listaPiezas){
         if (dir == "derecha"){
             return !listaPiezas.any{p => self.posEstaOcupada2(p.position().x()+1, p.position().y()) == 1}
         }
@@ -611,31 +526,42 @@ object controlador {
         fila = 19
         return
     }
-*/
+*/  var columna = 0
     method eliminarLinea(indexLinea){
-        var columna = 0
-        10.times({_=>
-            game.removeVisual(matriz2.get(indexLinea).get(columna).pieza())
-            matriz2.get(indexLinea).get(columna).pieza(null)
-            columna += 1
-            })
+        game.removeVisual(matriz2.get(indexLinea).get(columna).pieza())
+        matriz2.get(indexLinea).get(columna).pieza(null)
+        columna += 1
+        if (columna < 10){
+            self.eliminarLinea(indexLinea)
+        }
+        columna = 0
         self.bajarLineas(indexLinea)
     }
 
-    method bajarLineas(indexLinea){//recibe el indice de la fila que se elimino
-        var filaActual = indexLinea
-        if(filaActual < 19){
-            const listaAuxiliar = [] //lista de piezas que se van a bajar
 
+    method bajarLineas(indexLinea){//recibe el indice (de la matriz) de la fila que se elimino
+        var listaAuxiliar = []
+        var contadorLineas= indexLinea
+
+        indexLinea.times({
+            _=>
+            
             // Copiar las piezas de la fila superior a la lista auxiliar
-            matriz2.get(filaActual+1).forEach({elemento => listaAuxiliar.add(elemento.pieza())})
+            matriz2.get(contadorLineas+1).forEach({elemento => listaAuxiliar.add(elemento.pieza())})
 
             // Asignar las piezas de la lista auxiliar a la fila actual
-            matriz2.get(filaActual).forEach({elemento => elemento.pieza(listaAuxiliar.pop())})
+            matriz2.get(contadorLineas).forEach({
+                elemento => 
+                elemento.pieza(listaAuxiliar.head())
+                listaAuxiliar = listaAuxiliar.drop(1)
+                if(elemento.pieza() != null){                   
+                    elemento.pieza().caer() //actualizamos la posision real (visual) de la pieza
+                }
+            
+            })
 
-            filaActual += 1
-            self.bajarLineas(filaActual)
-        }
+            contadorLineas -= 1
+        })
     }
 
 }
