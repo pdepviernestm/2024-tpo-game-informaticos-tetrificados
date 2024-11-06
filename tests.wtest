@@ -1,3 +1,24 @@
-describe "un test"{
-    
+import juego.*
+import wollok.game.*
+describe "Testeo De tablero"{
+       test "Tablero inicializa en todo 0"{
+            var y = 0
+            var x = 18
+            const listaValores = []
+            20.times({ _=>
+                10.times({_=>
+                    listaValores.add(controlador.posEstaOcupada(x, y))
+                    x += 1
+                })
+                x = 0
+                y += 1
+            })
+            assert.that(listaValores.all({p => p == 1}))
+       }
+
+       test "Tablero ocupa posicion correctamente"{
+            const piezaPrueba = new Pieza(image = "azul.png", position = game.at(23, 15))
+            controlador.ocuparPos(piezaPrueba)
+            assert.that(controlador.posEstaOcupada(23, 15) == 1)
+       }
 }

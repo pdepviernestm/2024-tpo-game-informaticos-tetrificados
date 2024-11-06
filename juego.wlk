@@ -161,10 +161,10 @@ class BloqueTetris{
     }	
 
     method establecerEnTablero(){
-        controlador.ocuparPos(a.position().x(), a.position().y(), a)//pasarlo como una unica posision
-        controlador.ocuparPos(b.position().x(), b.position().y(), b)
-        controlador.ocuparPos(c.position().x(), c.position().y(), c)
-        controlador.ocuparPos(d.position().x(), d.position().y(), d)
+        controlador.ocuparPos(a)//pasarlo como una unica posision
+        controlador.ocuparPos(b)
+        controlador.ocuparPos(c)
+        controlador.ocuparPos(d)
     }
 
     method xCentro() = xCentro
@@ -404,7 +404,9 @@ object controlador {
         return 0
     }
 
-    method ocuparPos(x, y, pieza){
+    method ocuparPos(pieza){
+        const x = pieza.position().x()
+        const y = pieza.position().y()
         if(y > 19){
              if (!finjuego){
                 finjuego = true
