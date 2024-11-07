@@ -23,8 +23,11 @@ class BloqueTetris{
                 return
             }
             else{
-                self.mover(listaValoresReturn.filter({valorReturn => valorReturn != 1 && valorReturn != 0}).head())// Se mueve 1 casilla lejos de la pared lateral
-                self.rotar("derecha") //Intenta rotar nuevamente
+                const dirLejosDePared = listaValoresReturn.filter({valorReturn => valorReturn != 1 && valorReturn != 0}).head()
+                if(controlador.dirEstaLibre(dirLejosDePared, [a, b, c, d])){
+                    self.mover(dirLejosDePared)// Se mueve 1 casilla lejos de la pared lateral
+                    self.rotar("derecha") //Intenta rotar nuevamente
+                }
             }
 
         }else{
@@ -39,11 +42,12 @@ class BloqueTetris{
                 return
             }
             else{
-                if(controlador.dirEstaLibre(dir, [a, b, c, d])){
-                    self.mover(listaValoresReturn.filter({valorReturn => valorReturn != 1 && valorReturn != 0}).head())// Se mueve 1 casilla lejos de la pared lateral
+                const dirLejosDePared = listaValoresReturn.filter({valorReturn => valorReturn != 1 && valorReturn != 0}).head()
+                if(controlador.dirEstaLibre(dirLejosDePared, [a, b, c, d])){
+                    self.mover(dirLejosDePared)// Se mueve 1 casilla lejos de la pared lateral
                     self.rotar("izquierda") //Intenta rotar nuevamente
                 }
-            }//HAY UN CASO EN EL QUE ESTO NO FUNCIONA, FIJARSE EN CUADERNO (Mateo)
+            }
         }
     }
 
@@ -161,13 +165,13 @@ class BloqueTetris{
     }	
 
     method establecerEnTablero(){
-        const listaDeFlagsLineaCompleta = [controlador.ocuparPos(a),
-                                           controlador.ocuparPos(b),
-                                           controlador.ocuparPos(c),
-                                           controlador.ocuparPos(d)]
-        if(listaDeFlagsLineaCompleta.any({flag => flag > -1})){ //Si hubo una linea completa que se ejecute el method quitar linea completa
-            const yDeFilaCompleta = listaDeFlagsLineaCompleta.filter({flag => flag > -1}).head()
-            controlador.quitarLineaCompleta(yDeFilaCompleta)
+        var yDeFilaCompleta = [controlador.ocuparPos(a), controlador.ocuparPos(b), controlador.ocuparPos(c), controlador.ocuparPos(d)].filter({flag => flag > -1})
+        if(yDeFilaCompleta.size() > 0){ //Si hubo una linea completa que se ejecute el method quitar linea completa
+            const cantidadDeLineasCompletadas = yDeFilaCompleta.size()
+            cantidadDeLineasCompletadas.times({_=>
+                controlador.quitarLineaCompleta(yDeFilaCompleta.max())
+                yDeFilaCompleta.remove(yDeFilaCompleta.max())
+            })
         }
     }
 
@@ -333,6 +337,30 @@ class Tipo_bloqueSombra inherits BloqueTetris(){
 
 object controlador {
     var finjuego = false 
+    var contadoresDeLineaCompleta = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] //Se suma 1 cada vez que se ocupa un lugar de su fila, hay 1 contador por cada fila
+    const matriz = [ //Para acceder a indice usar coordenada 19-y, asi fila inferior es y = 0 y la superior es y = 19
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
+        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()]
+    ]  
 
     const cantidadDeBloques = 7
     method generarBloqueAleatorio() {
@@ -369,32 +397,8 @@ object controlador {
         bloqueUnidad.image("numero" + (contador%10) + ".png")
         bloqueDecena.image("numero" + (contador/10).truncate(0) + ".png")
     }
-    var contadoresDeLineaCompleta = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] //Se suma 1 cada vez que se ocupa un lugar de su fila, hay 1 contador por cada fila
-    const matriz = [ //Para acceder a indice usar coordenada 19-y, asi fila inferior es y = 0 y la superior es y = 19
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()]
-    ]  
 
-    method posEstaOcupada(x, y){
+    method posEstaOcupada(x, y){//1 si pos esta ocupada, 0 si no esta ocupada
         if (x < 18 || x > 27 || y < 0){
             return 1
         }
@@ -464,9 +468,9 @@ object controlador {
 
     method bajarLineas(indexLinea){//recibe el indice (de la matriz) de la fila que se elimino
         var matrizAuxiliar = matriz.take(indexLinea)//.filter({fila => fila.any({elemento => elemento.pieza() != null})}) //Agarro solo las filas que van a bajar y tienen alguna pieza
-        const contadorLineas= matrizAuxiliar.size() //La cantidad de lineas en esta matriz sera la cantidad de veces que se va a hacer el proceso de bajar
+        //La cantidad de lineas en esta matriz sera la cantidad de veces que se va a hacer el proceso de bajar
         var lineaActual = indexLinea-1 //La fila que se va a bajar primero 
-        contadorLineas.times({
+        indexLinea.times({
             _=>
             //De la ultima fila de esta matriz, bajamos todos 1 lugar
             matrizAuxiliar.last().forEach({elemento => 
