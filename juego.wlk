@@ -1,8 +1,8 @@
 import wollok.game.*
 class BloqueTetris{
-    var xCentro //Estas variables las deberiamos cambiar si queremos editar donde aparecen por primera vez los bloques
+    var xCentro
     var yCentro
- 
+
     var centro = game.at(xCentro, yCentro)
     const a 
     const b 
@@ -414,12 +414,11 @@ object controlador {
             }
         }else{
             matriz.get(19-y).get(x-18).pieza(pieza)
-            contadoresDeLineaCompleta = contadoresDeLineaCompleta.take(y) +[(contadoresDeLineaCompleta.get(y))+1] + contadoresDeLineaCompleta.drop(y+1)
-            if (contadoresDeLineaCompleta.get(y) == 10){
-                self.eliminarLinea(19-y)
-                contadoresDeLineaCompleta.remove(10)
-                contadoresDeLineaCompleta.add(0)
-            }
+            contadoresDeLineaCompleta = contadoresDeLineaCompleta.take(19 - y) + [(contadoresDeLineaCompleta.get(19 - y)) + 1] + contadoresDeLineaCompleta.drop(19 - y + 1)
+            if (contadoresDeLineaCompleta.get(19 - y) == 10) {
+            self.eliminarLinea(19 - y)
+            contadoresDeLineaCompleta = contadoresDeLineaCompleta.take(19 - y) + [0] + contadoresDeLineaCompleta.drop(19 - y + 1)
+        }
         }
     }
 
@@ -443,12 +442,12 @@ object controlador {
     }
 
     method eliminarLinea(indexLinea){
-         var columna = 0
+        var columna = 0
         10.times({_=>
             game.removeVisual(matriz.get(indexLinea).get(columna).pieza())
             matriz.get(indexLinea).get(columna).pieza(null)
             columna += 1
-            })
+        })
         self.bajarLineas(indexLinea)
     }
 
@@ -476,6 +475,26 @@ object controlador {
 
             contadorLineas -= 1
         })
+    }
+    method bajarLineas2(fila) { // Recibe el índice de la fila que se eliminó
+        if (fila >= 19) {
+            return
+        }
+        var filaActual = fila
+        const listaAuxiliar = [] // Lista de piezas que se van a bajar
+
+        // Copiar las piezas de la fila superior a la lista auxiliar
+        if (filaActual + 1 < matriz.size()) {
+            matriz.get(filaActual + 1).forEach({ elemento => listaAuxiliar.add(elemento.pieza()) })
+        }
+
+        // Asignar las piezas de la lista auxiliar a la fila actual
+        matriz.get(filaActual).forEach({ elemento => elemento.pieza(listaAuxiliar.pop()) })
+
+        filaActual += 1
+        self.bajarLineas(filaActual)
+        return
+
     }
 
 }
