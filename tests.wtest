@@ -1,6 +1,7 @@
 import juego.*
 import wollok.game.*
-describe "Testeo De tablero"{
+import controlador.*
+describe "Test De tablero"{
        test "Tablero inicializa en todo 0"{
             var y = 0
             var x = 18

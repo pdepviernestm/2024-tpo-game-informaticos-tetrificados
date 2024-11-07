@@ -1,11 +1,11 @@
 import juego.*
+import controlador.*
 import wollok.game.*
 
 program tetrizado {
     game.title("TETRIZADO")
     game.height(20)
     game.width(47)
-    //game.boardGround("")
     game.ground("celdaFondo.jpg") //imagen para cada celda
     game.cellSize(40) //tamaño de cada celda en pixeles que coincide con el tamaño de las piezas (hecho a ojo)
 

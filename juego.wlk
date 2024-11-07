@@ -1,16 +1,23 @@
 import wollok.game.*
+import BloquesJugables.*
+import controlador.*
 class BloqueTetris{
     var xCentro
     var yCentro
-
     var centro = game.at(xCentro, yCentro)
     const a 
     const b 
     const c 
     const d 
 
-        
-    method rotar(dir){ //Hacerlo Asi, seria precalculo?    
+    method xCentro() = xCentro
+    method yCentro() = yCentro
+    method a() = a
+    method b() = b
+    method c() = c
+    method d() = d
+
+    method rotar(dir){    
         if (dir == "derecha"){
             const listaValoresReturn = [self.rotarHoraria(a), self.rotarHoraria(b), self.rotarHoraria(c), self.rotarHoraria(d)]
             if (listaValoresReturn.all( {valorReturn => valorReturn == 0})){
@@ -29,7 +36,6 @@ class BloqueTetris{
                     self.rotar("derecha") //Intenta rotar nuevamente
                 }
             }
-
         }else{
             const listaValoresReturn = [self.rotarAntiHoraria(a), self.rotarAntiHoraria(b), self.rotarAntiHoraria(c), self.rotarAntiHoraria(d)]
             if (listaValoresReturn.any({valorReturn => valorReturn})){
@@ -51,7 +57,6 @@ class BloqueTetris{
         }
     }
 
-    // Las agrego aca ya que todas los bloques de tetris van a ser rotables
     method rotarHoraria(pieza){
         //le restamos el centro a la pieza
         var xRotada = pieza.position().x()-centro.x() //La coordenada x de la pieza
@@ -132,6 +137,10 @@ class BloqueTetris{
         }
     }
 
+    method estaEnElFondo(){//retorna T o F
+        return !controlador.dirEstaLibre("abajo", [a, b, c, d])
+    }
+
     method mostrar(){
             game.addVisual(a)
             game.addVisual(b)
@@ -150,10 +159,6 @@ class BloqueTetris{
         self.mover("abajo")
     }
 
-    method estaEnElFondo(){//retorna T o F
-        return !controlador.dirEstaLibre("abajo", [a, b, c, d])
-    }
-
     method hardDrop(){
         if(controlador.dirEstaLibre("abajo", [a, b, c, d])){
             self.caer()
@@ -165,7 +170,7 @@ class BloqueTetris{
     }	
 
     method establecerEnTablero(){
-        var yDeFilaCompleta = [controlador.ocuparPos(a), controlador.ocuparPos(b), controlador.ocuparPos(c), controlador.ocuparPos(d)].filter({flag => flag > -1})
+        const yDeFilaCompleta = [controlador.ocuparPos(a), controlador.ocuparPos(b), controlador.ocuparPos(c), controlador.ocuparPos(d)].filter({flag => flag > -1})
         if(yDeFilaCompleta.size() > 0){ //Si hubo una linea completa que se ejecute el method quitar linea completa
             const cantidadDeLineasCompletadas = yDeFilaCompleta.size()
             cantidadDeLineasCompletadas.times({_=>
@@ -175,12 +180,6 @@ class BloqueTetris{
         }
     }
 
-    method xCentro() = xCentro
-    method yCentro() = yCentro
-    method a() = a
-    method b() = b
-    method c() = c
-    method d() = d
 
     method crearSombra(){
         const sombraA = new Pieza(image = "sombraFina.png", position = game.at(a.position().x(), a.position().y()))
@@ -189,32 +188,6 @@ class BloqueTetris{
         const sombraD = new Pieza(image = "sombraFina.png", position = game.at(d.position().x(), d.position().y()))
         return new Tipo_bloqueSombra(xCentro = xCentro, yCentro = yCentro, a = sombraA, b = sombraB, c = sombraC, d = sombraD)
     }
-}
-
-class BloqueJugable inherits BloqueTetris{
-    const xCentroTablero
-    const yCentroTablero
-    const xCentroHold
-    const yCentroHold
-
-    method entrarEnTablero(){
-        a.asignarPosicion((xCentro-a.position().x())+xCentroTablero, (yCentro-a.position().y())+yCentroTablero)
-        b.asignarPosicion((xCentro-b.position().x())+xCentroTablero, (yCentro-b.position().y())+yCentroTablero)
-        c.asignarPosicion((xCentro-c.position().x())+xCentroTablero, (yCentro-c.position().y())+yCentroTablero)
-        d.asignarPosicion((xCentro-d.position().x())+xCentroTablero, (yCentro-d.position().y())+yCentroTablero)
-        xCentro = xCentroTablero
-        yCentro = yCentroTablero
-    }
-
-    method entrarEnHold(){
-        a.asignarPosicion((xCentro-a.position().x())+xCentroHold, (yCentro-a.position().y())+yCentroHold)
-        b.asignarPosicion((xCentro-b.position().x())+xCentroHold, (yCentro-b.position().y())+yCentroHold)
-        c.asignarPosicion((xCentro-c.position().x())+xCentroHold, (yCentro-c.position().y())+yCentroHold)
-        d.asignarPosicion((xCentro-d.position().x())+xCentroHold, (yCentro-d.position().y())+yCentroHold)
-        xCentro = xCentroHold
-        yCentro = yCentroHold
-    }
-
 }
 
 //esto podriamos generalizarlo con clases o herencias para incluir al bloque linea
@@ -247,68 +220,6 @@ class Pieza{//un "pixel" del bloque de tetris
 
 }
 
-class Tipo_bloqueL inherits BloqueJugable (xCentro = 32, yCentro = 16, xCentroTablero = 23, yCentroTablero = 21, xCentroHold = 15, yCentroHold = 16,
-                                            a = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro+1)) ,
-                                            b = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro)),
-                                            c = new Pieza(image = "naranja.png", position = game.at(xCentro, yCentro-1)),
-                                            d = new Pieza(image = "naranja.png", position = game.at(xCentro+1, yCentro-1)))
-{
-}
-
-
-class Tipo_bloqueLinv inherits BloqueJugable(xCentro = 33, yCentro = 16, xCentroTablero = 23, yCentroTablero = 21, xCentroHold = 15, yCentroHold = 16,
-                                            a = new Pieza(image = "azul.png", position = game.at(xCentro, yCentro+1)) ,
-                                            b = new Pieza(image = "azul.png", position = game.at(xCentro, yCentro)),
-                                            c = new Pieza(image = "azul.png", position = game.at(xCentro, yCentro-1)),
-                                            d = new Pieza(image = "azul.png", position = game.at(xCentro-1, yCentro-1))
-                                            )
-{
-}
-
-class Tipo_bloqueCuadrado inherits BloqueJugable(xCentro = (32.5), yCentro = (15.5),xCentroTablero = 22.5, yCentroTablero = 20.5, xCentroHold = 14.5, yCentroHold = 15.5,
-                                            a = new Pieza(image = "amarillo.png", position = game.at(xCentro-0.5, yCentro+0.5)) ,
-                                            b = new Pieza(image = "amarillo.png", position = game.at(xCentro-0.5, yCentro-0.5)),
-                                            c = new Pieza(image = "amarillo.png", position = game.at(xCentro+0.5, yCentro-0.5)),
-                                            d = new Pieza(image = "amarillo.png", position = game.at(xCentro+0.5, yCentro+0.5))
-                                            )
-{
-}
-class Tipo_bloqueLinea inherits BloqueJugable(xCentro = 33.5, yCentro = 16.5, xCentroTablero = 22.5, yCentroTablero = 21.5, xCentroHold = 15.5, yCentroHold = 16.5,
-                                            a = new Pieza(image = "celeste.png", position = game.at(xCentro-0.5, yCentro+1.5)) ,
-                                            b = new Pieza(image = "celeste.png", position = game.at(xCentro-0.5, yCentro+0.5)),
-                                            c = new Pieza(image = "celeste.png", position = game.at(xCentro-0.5, yCentro-0.5)),
-                                            d = new Pieza(image = "celeste.png", position = game.at(xCentro-0.5, yCentro-1.5))
-                                            )
-{
-}
-
-class Tipo_bloqueS inherits BloqueJugable(xCentro = 33, yCentro = 15, xCentroTablero = 23, yCentroTablero = 20, xCentroHold = 15, yCentroHold = 15,
-                                            a = new Pieza(image = "verde.png", position = game.at(xCentro-1, yCentro)) ,
-                                            b = new Pieza(image = "verde.png", position = game.at(xCentro, yCentro)),
-                                            c = new Pieza(image = "verde.png", position = game.at(xCentro, yCentro+1)),
-                                            d = new Pieza(image = "verde.png", position = game.at(xCentro+1, yCentro+1))
-                                            )
-{
-}
-
-class Tipo_bloqueSinv inherits BloqueJugable(xCentro = 33, yCentro = 16,xCentroTablero = 23, yCentroTablero = 20, xCentroHold = 15, yCentroHold = 16,
-                                            a = new Pieza(image = "rojo.png", position = game.at(xCentro-1, yCentro)) ,
-                                            b = new Pieza(image = "rojo.png", position = game.at(xCentro, yCentro)),
-                                            c = new Pieza(image = "rojo.png", position = game.at(xCentro, yCentro-1)),
-                                            d = new Pieza(image = "rojo.png", position = game.at(xCentro+1, yCentro-1))
-                                            )
-{
-}
-
-class Tipo_bloqueT inherits BloqueJugable(xCentro = 33, yCentro = 16, xCentroTablero = 23, yCentroTablero = 20, xCentroHold = 15, yCentroHold = 16,
-                                            a = new Pieza(image = "violeta.png", position = game.at(xCentro-1, yCentro)) ,
-                                            b = new Pieza(image = "violeta.png", position = game.at(xCentro, yCentro)),
-                                            c = new Pieza(image = "violeta.png", position = game.at(xCentro, yCentro-1)),
-                                            d = new Pieza(image = "violeta.png", position = game.at(xCentro+1, yCentro))
-                                            )
-{    
-}
-
 class Tipo_bloqueSombra inherits BloqueTetris(){
     method descender(){
         if(controlador.dirEstaLibre("abajo", [a, b, c, d])){
@@ -335,210 +246,6 @@ class Tipo_bloqueSombra inherits BloqueTetris(){
     }
 }
 
-object controlador {
-    var finjuego = false 
-    var contadoresDeLineaCompleta = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] //Se suma 1 cada vez que se ocupa un lugar de su fila, hay 1 contador por cada fila
-    const matriz = [ //Para acceder a indice usar coordenada 19-y, asi fila inferior es y = 0 y la superior es y = 19
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()]
-    ]  
-
-    const cantidadDeBloques = 7
-    method generarBloqueAleatorio() {
-        const numeroAleatorio = (-0.999).randomUpTo(cantidadDeBloques - 1).roundUp()
-        
-        var bloque = new Tipo_bloqueL()
-        if (numeroAleatorio == 0) {
-            bloque = new Tipo_bloqueL()
-        } else if (numeroAleatorio == 1) {
-            bloque = new Tipo_bloqueLinv()
-        } else if (numeroAleatorio == 2) {
-            bloque = new Tipo_bloqueCuadrado()
-        } else if (numeroAleatorio == 3) {
-            bloque = new Tipo_bloqueLinea()
-        } else if (numeroAleatorio == 4) {
-            bloque = new Tipo_bloqueS()
-        } else if (numeroAleatorio == 5) {
-            bloque = new Tipo_bloqueSinv()
-        } else if (numeroAleatorio == 6) {
-            bloque = new Tipo_bloqueT()
-        } else {
-            bloque = new Tipo_bloqueLinv() //esto esta para evitar un error
-        }
-        return bloque
-    }
-    
-    method perder(){
-        game.addVisual(gameOver)
-        game.removeTickEvent("Caida")
-        game.schedule(100, {game.stop()})
-    }
-
-    method actualizarNivel(contador, bloqueUnidad, bloqueDecena){
-        bloqueUnidad.image("numero" + (contador%10) + ".png")
-        bloqueDecena.image("numero" + (contador/10).truncate(0) + ".png")
-    }
-
-    method posEstaOcupada(x, y){//1 si pos esta ocupada, 0 si no esta ocupada
-        if (x < 18 || x > 27 || y < 0){
-            return 1
-        }
-        if (y > 19){
-            return 0
-        }
-        if (matriz.get(19-y).get(x-18).pieza() != null){
-            return 1
-        }
-        return 0
-    }
-
-    method ocuparPos(pieza){
-        const x = pieza.position().x()
-        const y = pieza.position().y()
-        if(y > 19){
-            if (!finjuego){
-                finjuego = true
-                self.perder()
-            }
-            return -1
-        }else{
-            matriz.get(19-y).get(x-18).pieza(pieza)
-            contadoresDeLineaCompleta = contadoresDeLineaCompleta.take(19 - y) + [(contadoresDeLineaCompleta.get(19 - y)) + 1] + contadoresDeLineaCompleta.drop(19 - y + 1)
-            const huboLineaCompleta = (contadoresDeLineaCompleta.get(19 - y) == 10) //La agrego porque si no al retornar me marca un warning de que estoy usando mal el if
-            if (huboLineaCompleta) {
-                return y
-            }
-            return -1
-        }
-    }
-    method quitarLineaCompleta(yDeFilaCompleta){
-        self.eliminarLinea(19 - yDeFilaCompleta)
-        self.bajarLineas(19 - yDeFilaCompleta)
-    }
-
-    method dirEstaLibre(dir, listaPiezas){
-        if (dir == "derecha"){
-            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x()+1, p.position().y()) == 1}
-        }
-        if (dir == "izquierda"){
-            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x()-1, p.position().y()) == 1}
-        }
-        if (dir == "abajo"){
-            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x(), p.position().y()-1) == 1} 
-        }
-        if (dir == "arriba"){
-            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x(), p.position().y()+1) == 1}
-        }
-        if (dir == "actual"){
-            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x(), p.position().y()) == 1}
-        }
-        return EvaluationError
-    }
-
-    method eliminarLinea(indexLinea){
-        var columna = 0
-        contadoresDeLineaCompleta = [0] + contadoresDeLineaCompleta.take(indexLinea) + contadoresDeLineaCompleta.drop(indexLinea + 1)//Saco la linea completa de los contadores
-        10.times({_=>
-            game.removeVisual(matriz.get(indexLinea).get(columna).pieza())
-            matriz.get(indexLinea).get(columna).pieza(null)
-            columna += 1
-        })
-        
-    }
-
-
-    method bajarLineas(indexLinea){//recibe el indice (de la matriz) de la fila que se elimino
-        var matrizAuxiliar = matriz.take(indexLinea)//.filter({fila => fila.any({elemento => elemento.pieza() != null})}) //Agarro solo las filas que van a bajar y tienen alguna pieza
-        //La cantidad de lineas en esta matriz sera la cantidad de veces que se va a hacer el proceso de bajar
-        var lineaActual = indexLinea-1 //La fila que se va a bajar primero 
-        indexLinea.times({
-            _=>
-            //De la ultima fila de esta matriz, bajamos todos 1 lugar
-            matrizAuxiliar.last().forEach({elemento => 
-                if(elemento.pieza() != null){
-                    elemento.pieza().caer() //actualizamos la posision real (visual) de la pieza
-                    matriz.get(lineaActual+1).get(elemento.pieza().position().x()-18).pieza(elemento.pieza()) //Ponemos la nueva pos de la pieza en la matriz
-                }
-            })
-            matriz.get(lineaActual).forEach({elemento => elemento.pieza(null)}) //Borramos la linea de la matriz
-            lineaActual -= 1
-            matrizAuxiliar = matrizAuxiliar.take(matrizAuxiliar.size()-1) //sacamos la linea de la matriz auxiliar
-        })
-        
-
-        
-    }
-    method bajarLineasViejo(indexLinea){//recibe el indice (de la matriz) de la fila que se elimino
-        var listaAuxiliar = []
-        var contadorLineas= indexLinea
-
-        indexLinea.times({
-            _=>
-            
-            // Copiar las piezas de la fila superior a la lista auxiliar
-            matriz.get(contadorLineas+1).forEach({elemento => listaAuxiliar.add(elemento.pieza())})
-
-            // Asignar las piezas de la lista auxiliar a la fila actual
-            matriz.get(contadorLineas).forEach({
-                elemento => 
-                elemento.pieza(listaAuxiliar.head())
-                listaAuxiliar = listaAuxiliar.drop(1)
-                if(elemento.pieza() != null){                   
-                    elemento.pieza().caer() //actualizamos la posision real (visual) de la pieza
-                }
-            
-            })
-
-            contadorLineas -= 1
-        })
-    }
-    method bajarLineas2(fila) { // Recibe el índice de la fila que se eliminó
-        if (fila >= 19) {
-            return
-        }
-        var filaActual = fila
-        const listaAuxiliar = [] // Lista de piezas que se van a bajar
-
-        // Copiar las piezas de la fila superior a la lista auxiliar
-        if (filaActual + 1 < matriz.size()) {
-            matriz.get(filaActual + 1).forEach({ elemento => listaAuxiliar.add(elemento.pieza()) })
-        }
-
-        // Asignar las piezas de la lista auxiliar a la fila actual
-        matriz.get(filaActual).forEach({ elemento => elemento.pieza(listaAuxiliar.pop()) })
-
-        filaActual += 1
-        self.bajarLineas(filaActual)
-        return
-
-    }
-
-}
-
-object gameOver {
-    method image() = "gameover.png"
-    method position() = game.at(19, 10)
-}
-
 class Fondo{
     const posision
     const imagen
@@ -561,8 +268,3 @@ class Numero{
     method position() = posision
 }
 
-class ElementoMatriz{
-    var pieza = null
-    method pieza() = pieza
-    method pieza(nuevaPieza){pieza = nuevaPieza}
-}
