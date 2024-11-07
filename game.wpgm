@@ -4,43 +4,206 @@ import wollok.game.*
 program tetrizado {
     game.title("TETRIZADO")
     game.height(20)
-    game.width(10)
+    game.width(47)
     //game.boardGround("")
     game.ground("celdaFondo.jpg") //imagen para cada celda
     game.cellSize(40) //tamaño de cada celda en pixeles que coincide con el tamaño de las piezas (hecho a ojo)
 
-    var velocidadCaida = 1000 //milisiegundos cada los que las piezas descienden una posicion en el tablero
+    var ticksCaida = 500 //milisiegundos cada los que las piezas descienden una posicion en el tablero
     var bloqueActual = controlador.generarBloqueAleatorio()
+    var bloqueNext = controlador.generarBloqueAleatorio()
+    var bloqueHold
+    var bloqueSombra
+    var contadorHolds = 0
+    var contadorNivel = 1
+
+    const puntajeUnidad = new Numero(posision = game.at(37,12), imagen = "numero0.png")
+    const puntajeDecena = new Numero(posision = game.at(36,12), imagen = "numero0.png")
+    const puntajeCentena = new Numero(posision = game.at(35,12), imagen = "numero0.png")
+    const puntajeUnidadDeMil = new Numero(posision = game.at(34,12), imagen = "numero0.png")
+    const puntajeDecenaDeMil = new Numero(posision = game.at(33,12), imagen = "numero0.png")
+
+    const linasUnidad = new Numero(posision = game.at(37,10), imagen = "numero0.png")
+    const linasDecena = new Numero(posision = game.at(36,10), imagen = "numero0.png")
+    const linasCentena = new Numero(posision = game.at(35,10), imagen = "numero0.png")
+    const lineasUnidadDeMil = new Numero(posision = game.at(34,10), imagen = "numero0.png")
+
+    const nivelUnidad = new Numero(posision = game.at(37,8), imagen = "numero1.png")
+    const nivelDecena = new Numero(posision = game.at(36,8), imagen = "numero0.png")
+
+
+    game.addVisual(new Fondo(posision = game.at(0,0), imagen = "fondoDiseñoIzq.png"))
+    game.addVisual(new Fondo(posision = game.at(28,0), imagen = "fondoDiseñoDer.png"))
+    game.addVisual(new Palabra(posision = game.at(29,12), imagen = "puntajeDiseño.png"))
+    game.addVisual(puntajeUnidad)
+    game.addVisual(puntajeDecena)
+    game.addVisual(puntajeCentena)
+    game.addVisual(puntajeUnidadDeMil)
+    game.addVisual(puntajeDecenaDeMil)
+    game.addVisual(new Palabra(posision = game.at(29,10), imagen = "lineasDiseño.png"))
+    game.addVisual(linasUnidad)
+    game.addVisual(linasDecena)
+    game.addVisual(linasCentena)
+    game.addVisual(lineasUnidadDeMil)
+    game.addVisual(new Palabra(posision = game.at(29,8), imagen = "nivelDiseño.png"))
+    game.addVisual(nivelUnidad)
+    game.addVisual(nivelDecena)
+    game.addVisual(new Palabra(posision = game.at(29,18), imagen = "nextDiseño.png"))
+    game.addVisual(new Palabra(posision = game.at(11,18), imagen = "holdDiseño.png"))
+    //celdas para next
+    game.addVisual(new Palabra(posision = game.at(32,18), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(32,17), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(32,16), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(32,15), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(33,18), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(33,17), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(33,16), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(33,15), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(34,18), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(34,17), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(34,16), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(34,15), imagen = "celdaFondo2.jpg"))
+    //celdas para hold
+    game.addVisual(new Palabra(posision = game.at(14,18), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(14,17), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(14,16), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(14,15), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(15,18), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(15,17), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(15,16), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(15,15), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(16,18), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(16,17), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(16,16), imagen = "celdaFondo2.jpg"))
+    game.addVisual(new Palabra(posision = game.at(16,15), imagen = "celdaFondo2.jpg"))
+
+
+    bloqueActual.entrarEnTablero()
+    bloqueSombra = bloqueActual.crearSombra()
+    bloqueSombra.descender()
+    bloqueSombra.mostrar()
     bloqueActual.mostrar()
+    bloqueNext.mostrar()
 
     game.start()
 
     keyboard.z().onPressDo({
         bloqueActual.rotar("izquierda")
+        bloqueSombra.imitarPos(bloqueActual)
     })
-
+ 
     keyboard.up().onPressDo({
         bloqueActual.rotar("derecha")
+        bloqueSombra.imitarPos(bloqueActual)
     })
 
     keyboard.left().onPressDo({
         bloqueActual.mover("izquierda")
+        bloqueSombra.imitarPos(bloqueActual)
     })
 
     keyboard.right().onPressDo({
         bloqueActual.mover("derecha")
+        bloqueSombra.imitarPos(bloqueActual)
+    })
+
+    keyboard.down().onPressDo({
+        bloqueActual.mover("abajo")
+    })
+
+    keyboard.space().onPressDo({
+        const retorno = bloqueActual.hardDrop()
+        if (retorno == 0){
+            bloqueActual = bloqueNext
+            contadorHolds = 0
+            bloqueActual.entrarEnTablero()
+            bloqueNext = controlador.generarBloqueAleatorio()
+            bloqueNext.mostrar()
+            bloqueSombra.eliminar()
+            bloqueSombra = bloqueActual.crearSombra()
+            bloqueSombra.descender()
+            bloqueSombra.mostrar()
+
+            //esto es para que la sombra no quede por encima del bloqueActual cuando se superpongan
+                bloqueActual.remover()
+                bloqueActual.mostrar()
+        }
     })
     
-    game.onTick(velocidadCaida, "Caida", 
+    keyboard.c().onPressDo({
+        if(contadorHolds == 0){
+            contadorHolds += 1
+            if(bloqueHold == null){
+                bloqueHold = bloqueActual
+                bloqueHold.entrarEnHold()
+                bloqueActual = bloqueNext
+                bloqueActual.entrarEnTablero()
+                bloqueNext = controlador.generarBloqueAleatorio()
+                bloqueNext.mostrar()
+                bloqueSombra.eliminar()
+                bloqueSombra = bloqueActual.crearSombra()
+                bloqueSombra.descender()
+                bloqueSombra.mostrar()
+            }else{
+                var bloqueAux
+                bloqueAux = bloqueHold
+                bloqueHold = bloqueActual
+                bloqueActual = bloqueAux
+                bloqueHold.entrarEnHold()
+                bloqueActual.entrarEnTablero()
+                bloqueSombra.eliminar()
+                bloqueSombra = bloqueActual.crearSombra()
+                bloqueSombra.descender()
+                bloqueSombra.mostrar()
+            }
+
+            //esto es para que la sombra no quede por encima del bloqueActual cuando se superpongan
+                bloqueActual.remover()
+                bloqueActual.mostrar()
+
+        }
+    })
+    
+    game.onTick(ticksCaida, "Caida", 
     {
         bloqueActual.caer()
 
         if(bloqueActual.estaEnElFondo()){
-            bloqueActual.establecerEnTablero()
-            bloqueActual = controlador.generarBloqueAleatorio()
-            bloqueActual.mostrar()
+            game.schedule(500, { //La idea de esto es que tengas un ratito para mover la pieza antes de que se quede fija
+                if (bloqueActual.estaEnElFondo()){
+                    bloqueActual.establecerEnTablero()
+                    bloqueActual = bloqueNext
+                    contadorHolds = 0
+                    bloqueActual.entrarEnTablero()
+                    bloqueNext = controlador.generarBloqueAleatorio()
+                    bloqueNext.mostrar()
+                    bloqueSombra.eliminar()
+                    bloqueSombra = bloqueActual.crearSombra()
+                    bloqueSombra.descender()
+                    bloqueSombra.mostrar()
+
+                    //esto es para que la sombra no quede por encima del bloqueActual cuando se superpongan
+                    bloqueActual.remover()
+                    bloqueActual.mostrar()
+                }
+            })
         }
     })
-
     
+    //cada 1 minuto (60 segundos) se reduce el tiempo de caida
+    game.onTick(1000*60 , "Incremento de Dificultad", {
+        if(ticksCaida > 50){
+            ticksCaida -= 50
+            contadorNivel += 1
+            controlador.actualizarNivel(contadorNivel, nivelUnidad, nivelDecena)
+        } else {
+            game.removeTickEvent("Incremento de Dificultad")
+        }
+    })
+    /*
+       No pareciera acelerarse la velocidad de caida de las piezas...
+       Quizas porque hay muchas acciones que se hacen cada vez que la pieza cae y 
+       hasta que no se hacen todas no se vuelve a ejecutar el evento de caida
+    */
+
 }
