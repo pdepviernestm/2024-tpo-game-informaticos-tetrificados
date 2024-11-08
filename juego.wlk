@@ -26,10 +26,7 @@ class BloqueTetris{
                 c.asumirPosicionRotada()
                 d.asumirPosicionRotada()
             }
-            else if(listaValoresReturn.any({valorReturn => valorReturn == 1})){ 
-                return
-            }
-            else{
+            else if(!listaValoresReturn.any({valorReturn => valorReturn == 1})){ 
                 const dirLejosDePared = listaValoresReturn.filter({valorReturn => valorReturn != 1 && valorReturn != 0}).head()
                 if(controlador.dirEstaLibre(dirLejosDePared, [a, b, c, d])){
                     self.mover(dirLejosDePared)// Se mueve 1 casilla lejos de la pared lateral
@@ -44,10 +41,7 @@ class BloqueTetris{
                 c.asumirPosicionRotada()
                 d.asumirPosicionRotada()
             }
-            else if(listaValoresReturn.any({valorReturn => valorReturn == 1})){ 
-                return
-            }
-            else{
+            else if(!listaValoresReturn.any({valorReturn => valorReturn == 1})){ 
                 const dirLejosDePared = listaValoresReturn.filter({valorReturn => valorReturn != 1 && valorReturn != 0}).head()
                 if(controlador.dirEstaLibre(dirLejosDePared, [a, b, c, d])){
                     self.mover(dirLejosDePared)// Se mueve 1 casilla lejos de la pared lateral
