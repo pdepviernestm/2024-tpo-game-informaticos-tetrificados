@@ -11,10 +11,7 @@
 El juego se basa en un tetris. Nos inspiramos en el tetris oficial y buscamos imitar su funcionamiento.
 
 ## Capturas
-
-[Piezas](https://drive.google.com/file/d/1IDfAXGo_7XQEf8TX_SjRxgHXMUrCuEF7/view?usp=drive_link)
-
-![Tetrizado](assets/Tetrizado.png)
+![Tetrizado](assets/Captura.jpg)
 
 ## Reglas de Juego / Instrucciones
 - Tecla UP: rotar bloque en sentido horario
