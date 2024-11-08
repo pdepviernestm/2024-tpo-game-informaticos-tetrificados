@@ -254,10 +254,20 @@ class Tipo_bloqueSombra inherits BloqueTetris{
         c.asignarPosicion(bloque.c().position().x(), c.position().y())
         d.asignarPosicion(bloque.d().position().x(), d.position().y())
         xCentro = bloque.xCentro()
-        if (!controlador.dirEstaLibre("actual", [a, b, c, d])){
-            self.mover("arriba")
-        } else if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
-            self.descender()
+        if (controlador.columnasLibresApartiDePieza([a,b,c,d], [bloque.a(), bloque.b(), bloque.c(), bloque.d()]) ){
+            if (!controlador.dirEstaLibre("actual", [a, b, c, d])){
+                self.mover("arriba")
+            } else if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
+                self.descender()
+            }
+        }else {
+            a.asignarPosicion(bloque.a().position().x(), bloque.a().position().y())
+            b.asignarPosicion(bloque.b().position().x(), bloque.b().position().y())
+            c.asignarPosicion(bloque.c().position().x(), bloque.c().position().y())
+            d.asignarPosicion(bloque.d().position().x(), bloque.d().position().y())
+            if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
+                self.descender()
+            }
         }
     }
 
@@ -266,10 +276,20 @@ class Tipo_bloqueSombra inherits BloqueTetris{
         b.asignarPosicion(bloque.b().position().x() - bloque.xCentro() + xCentro, bloque.b().position().y()- bloque.yCentro() + yCentro)
         c.asignarPosicion(bloque.c().position().x() - bloque.xCentro() + xCentro, bloque.c().position().y()- bloque.yCentro() + yCentro)
         d.asignarPosicion(bloque.d().position().x() - bloque.xCentro() + xCentro, bloque.d().position().y()- bloque.yCentro() + yCentro)
-        if (!controlador.dirEstaLibre("actual", [a, b, c, d])){
-            self.mover("arriba")
-        } else if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
-            self.descender()
+        if (controlador.columnasLibresApartiDePieza([a,b,c,d], [bloque.a(), bloque.b(), bloque.c(), bloque.d()])){
+            if (!controlador.dirEstaLibre("actual", [a, b, c, d])){
+                self.mover("arriba")
+            } else if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
+                self.descender()
+            }
+        } else{
+            a.asignarPosicion(bloque.a().position().x(), bloque.a().position().y())
+            b.asignarPosicion(bloque.b().position().x(), bloque.b().position().y())
+            c.asignarPosicion(bloque.c().position().x(), bloque.c().position().y())
+            d.asignarPosicion(bloque.d().position().x(), bloque.d().position().y())
+            if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
+                self.descender()
+            }
         }
     }
 }
