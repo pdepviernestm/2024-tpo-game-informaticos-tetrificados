@@ -214,7 +214,7 @@ class Pieza{//un "pixel" del bloque de tetris
 
 }
 
-class Tipo_bloqueSombra inherits BloqueTetris(){
+class Tipo_bloqueSombra inherits BloqueTetris{
     method descender(){
         if(controlador.dirEstaLibre("abajo", [a, b, c, d])){
             self.caer()
