@@ -275,8 +275,8 @@ class Tipo_bloqueSombra inherits BloqueTetris{
         a.asignarPosicion(bloque.a().position().x() - bloque.xCentro() + xCentro, bloque.a().position().y()- bloque.yCentro() + yCentro)
         b.asignarPosicion(bloque.b().position().x() - bloque.xCentro() + xCentro, bloque.b().position().y()- bloque.yCentro() + yCentro)
         c.asignarPosicion(bloque.c().position().x() - bloque.xCentro() + xCentro, bloque.c().position().y()- bloque.yCentro() + yCentro)
-        d.asignarPosicion(bloque.d().position().x() - bloque.xCentro() + xCentro, bloque.d().position().y()- bloque.yCentro() + yCentro)
-        if (controlador.columnasLibresApartiDePieza([a,b,c,d], [bloque.a(), bloque.b(), bloque.c(), bloque.d()])){
+        d.asignarPosicion(bloque.d().position().x() - bloque.xCentro() + xCentro, bloque.d().position().y()- bloque.yCentro() + yCentro) //No sumar ni restar centro X
+        if (controlador.columnasLibresApartiDePieza([a,b,c,d], [bloque.a(), bloque.b(), bloque.c(), bloque.d()])){ 
             if (!controlador.dirEstaLibre("actual", [a, b, c, d])){
                 self.mover("arriba")
             } else if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
