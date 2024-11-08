@@ -67,12 +67,12 @@ program tetrizado {
     bloqueNext.mostrar()
 
     game.start()
-
+/*
     keyboard.z().onPressDo({
         bloqueActual.rotar("izquierda")
         bloqueSombra.imitarPos(bloqueActual)
     })
- 
+ */
     keyboard.up().onPressDo({
         bloqueActual.rotar("derecha")
         bloqueSombra.imitarPos(bloqueActual)
