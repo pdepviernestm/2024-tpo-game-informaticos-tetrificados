@@ -167,9 +167,18 @@ class BloqueTetris{
         const yDeFilaCompleta = [controlador.ocuparPos(a), controlador.ocuparPos(b), controlador.ocuparPos(c), controlador.ocuparPos(d)].filter({flag => flag > -1})
         if(yDeFilaCompleta.size() > 0){ //Si hubo una linea completa que se ejecute el method quitar linea completa
             const cantidadDeLineasCompletadas = yDeFilaCompleta.size()
+            var iterador = 1
             cantidadDeLineasCompletadas.times({_=>
                 controlador.quitarLineaCompleta(yDeFilaCompleta.max())
                 yDeFilaCompleta.remove(yDeFilaCompleta.max())
+                if(iterador < 3){
+                    controlador.actualizarPuntaje(100)
+                } else if(iterador == 3){
+                    controlador.actualizarPuntaje(200)
+                } else if(iterador == 4){
+                    controlador.actualizarPuntaje(400)
+                }
+                iterador += 1
             })
         }
     }

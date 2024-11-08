@@ -1,10 +1,13 @@
-import juego.BloqueTetris
+import juego.*
 import BloquesJugables.*
 import wollok.game.*
 
 object controlador {
     var finjuego = false 
     var contadoresDeLineaCompleta = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] //Se suma 1 cada vez que se ocupa un lugar de su fila, hay 1 contador por cada fila
+    var contadorLineas = 0
+    var contadorPuntaje = 0
+    
     const matriz = [ //Para acceder a indice usar coordenada 19-y, asi fila inferior es y = 0 y la superior es y = 19
         [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
         [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
@@ -100,6 +103,7 @@ object controlador {
     method quitarLineaCompleta(yDeFilaCompleta){
         self.eliminarLinea(19 - yDeFilaCompleta)
         self.bajarLineas(19 - yDeFilaCompleta)
+        self.actualizarLineasCompletadas()
     }
 
     method dirEstaLibre(dir, listaPiezas){
@@ -151,6 +155,23 @@ object controlador {
             matrizAuxiliar = matrizAuxiliar.take(matrizAuxiliar.size()-1) //sacamos la linea de la matriz auxiliar
         }) 
     }
+
+    method actualizarLineasCompletadas(){
+        contadorLineas += 1
+        puntajes.lineasUnidad().image("numero" + (contadorLineas%10) + ".png")
+        puntajes.lineasDecena().image("numero" + ((contadorLineas/10).truncate(0) %10) + ".png")
+        puntajes.lineasCentena().image("numero" + ((contadorLineas/100).truncate(0) %10) + ".png")
+        puntajes.lineasUnidadDeMil().image("numero" + ((contadorLineas/1000).truncate(0) %10) + ".png")
+    }
+
+    method actualizarPuntaje(valor){
+        contadorPuntaje += valor
+        puntajes.puntajeUnidad().image("numero" + (contadorPuntaje%10) + ".png")
+        puntajes.puntajeDecena().image("numero" + ((contadorPuntaje/10).truncate(0) %10) + ".png")
+        puntajes.puntajeCentena().image("numero" + ((contadorPuntaje/100).truncate(0) %10) + ".png")
+        puntajes.puntajeUnidadDeMil().image("numero" + ((contadorPuntaje/1000).truncate(0) %10) + ".png")
+        puntajes.puntajeDecenaDeMil().image("numero" + ((contadorPuntaje/10000).truncate(0) %10) + ".png")
+    }
 }
 
 class ElementoMatriz{
@@ -161,4 +182,43 @@ class ElementoMatriz{
 object gameOver {
     method image() = "gameover.png"
     method position() = game.at(19, 10)
+}
+
+object puntajes {
+    const linasUnidad = new Numero(posision = game.at(37,10), imagen = "numero0.png")
+    const linasDecena = new Numero(posision = game.at(36,10), imagen = "numero0.png")
+    const linasCentena = new Numero(posision = game.at(35,10), imagen = "numero0.png")
+    const lineasUnidadDeMil = new Numero(posision = game.at(34,10), imagen = "numero0.png")
+
+    method lineasUnidad() = linasUnidad
+    method lineasDecena() = linasDecena
+    method lineasCentena() = linasCentena
+    method lineasUnidadDeMil() = lineasUnidadDeMil
+
+    const puntajeUnidad = new Numero(posision = game.at(37,12), imagen = "numero0.png")
+    const puntajeDecena = new Numero(posision = game.at(36,12), imagen = "numero0.png")
+    const puntajeCentena = new Numero(posision = game.at(35,12), imagen = "numero0.png")
+    const puntajeUnidadDeMil = new Numero(posision = game.at(34,12), imagen = "numero0.png")
+    const puntajeDecenaDeMil = new Numero(posision = game.at(33,12), imagen = "numero0.png")
+
+    method puntajeUnidad() = puntajeUnidad
+    method puntajeDecena() = puntajeDecena
+    method puntajeCentena() = puntajeCentena
+    method puntajeUnidadDeMil() = puntajeUnidadDeMil
+    method puntajeDecenaDeMil() = puntajeDecenaDeMil
+
+
+    method agregarVisuales(){
+        game.addVisual(linasUnidad)
+        game.addVisual(linasDecena)
+        game.addVisual(linasCentena)
+        game.addVisual(lineasUnidadDeMil)
+
+        game.addVisual(puntajeUnidad)
+        game.addVisual(puntajeDecena)
+        game.addVisual(puntajeCentena)
+        game.addVisual(puntajeUnidadDeMil)
+        game.addVisual(puntajeDecenaDeMil)
+
+    }
 }
