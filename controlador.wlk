@@ -118,7 +118,7 @@ object controlador {
         if (dir == "actual"){
             return !listaPiezas.any{p => self.posEstaOcupada(p.position().x(), p.position().y()) == 1}
         }
-        return
+        return "error"
     }
 
     method eliminarLinea(indexLinea){
