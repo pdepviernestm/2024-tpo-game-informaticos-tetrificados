@@ -1,12 +1,13 @@
 import juego.*
 import wollok.game.*
-describe "Testeo De tablero"{
+import controlador.*
+describe "Test De tablero"{
        test "Tablero inicializa en todo 0"{
             var y = 0
             var x = 18
             const listaValores = []
-            20.times({ _=>
-                10.times({_=>
+            20.times({ a=>
+                10.times({b=>
                     listaValores.add(controlador.posEstaOcupada(x, y))
                     x += 1
                 })
