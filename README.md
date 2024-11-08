@@ -8,8 +8,7 @@
 - Lucas Cerutti
   
 ## IDEA PRINCIPAL DE JUEGO
-Juego se basa en un tetris el cual va a tener una introduccion informativa acerca de su historia
-Se puede acceder a secciones, las cuales tendran variantes del tetris tradicional inventadas por nosotros
+El juego se basa en un tetris. Nos inspiramos en el tetris oficial y buscamos imitar su funcionamiento.
 
 ## Capturas
 
@@ -18,7 +17,11 @@ Se puede acceder a secciones, las cuales tendran variantes del tetris tradiciona
 ![Tetrizado](assets/Tetrizado.png)
 
 ## Reglas de Juego / Instrucciones
-
+Tecla UP: rotar bloque a derecha
+Tecla DOWN: descender bloque una posision
+Tecla LEFT: mover bloque a la izquierda
+Tecla RIGHT: mover bloque a la derecha
+Tecla SPACE: hard drop (enviar el bloque al fondo)
 
 
 ## Otros
