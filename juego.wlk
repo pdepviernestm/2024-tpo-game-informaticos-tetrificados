@@ -1,6 +1,8 @@
 import wollok.game.*
 import BloquesJugables.*
 import controlador.*
+
+// ------------------ Bloque de Tetris ------------------
 class BloqueTetris{
     var xCentro
     var yCentro
@@ -9,13 +11,14 @@ class BloqueTetris{
     const b 
     const c 
     const d 
-
     method xCentro() = xCentro
     method yCentro() = yCentro
     method a() = a
     method b() = b
     method c() = c
     method d() = d
+
+// -------------------- Rotacion ------------------------
 
     method rotar(dir){    
         if (dir == "derecha"){
@@ -102,7 +105,7 @@ class BloqueTetris{
             return controlador.posEstaOcupada(xRotada, yRotada)
         }
     }
-    
+// ------------------ Mover -----------------------  
     method mover(dir){
         if (dir == "derecha" && controlador.dirEstaLibre("derecha", [a, b, c, d])){ 
             xCentro += 1
@@ -164,6 +167,7 @@ class BloqueTetris{
     method caer(){
         self.mover("abajo")
     }
+// --------------------------- HardDrop ----------------------------
 
     method hardDrop(){
         if(controlador.dirEstaLibre("abajo", [a, b, c, d])){
@@ -195,6 +199,7 @@ class BloqueTetris{
         }
     }
 
+// ------------------------------- Prediccion ---------------------------------------
 
     method crearSombra(){
         const sombraA = new Pieza(image = "sombraFina.png", position = game.at(a.position().x(), a.position().y()))
@@ -203,36 +208,6 @@ class BloqueTetris{
         const sombraD = new Pieza(image = "sombraFina.png", position = game.at(d.position().x(), d.position().y()))
         return new Tipo_bloqueSombra(xCentro = xCentro, yCentro = yCentro, a = sombraA, b = sombraB, c = sombraC, d = sombraD)
     }
-}
-
-//esto podriamos generalizarlo con clases o herencias para incluir al bloque linea
-
-class Pieza{//un "pixel" del bloque de tetris
-    var position
-    const image
-    var xRotada = 0
-    var yRotada = 0
-
-    method image() = image
-
-    method asignarPosicion(x, y){
-        position = game.at(x, y)
-    }
-    method position() = position
-
-    method caer(){
-        position = game.at(position.x(), position.y()-1)
-    }
-
-    method guardarPosicionRotada(x, y){
-        xRotada = x
-        yRotada = y
-    }
-
-    method asumirPosicionRotada(){
-        position = game.at(xRotada, yRotada)
-    }
-
 }
 
 class Tipo_bloqueSombra inherits BloqueTetris{
@@ -274,6 +249,40 @@ class Tipo_bloqueSombra inherits BloqueTetris{
     }
 }
 
+//esto podriamos generalizarlo con clases o herencias para incluir al bloque linea
+
+// ----------------------------- Piezas ------------------------------------
+class Pieza{//un "pixel" del bloque de tetris
+    var position
+    const image
+    var xRotada = 0
+    var yRotada = 0
+
+    method image() = image
+
+    method asignarPosicion(x, y){
+        position = game.at(x, y)
+    }
+    method position() = position
+
+    method caer(){
+        position = game.at(position.x(), position.y()-1)
+    }
+
+    method guardarPosicionRotada(x, y){
+        xRotada = x
+        yRotada = y
+    }
+
+    method asumirPosicionRotada(){
+        position = game.at(xRotada, yRotada)
+    }
+
+}
+
+
+
+// -------------------- VISUAL --------------------------------
 class Fondo{
     const posision
     const imagen
