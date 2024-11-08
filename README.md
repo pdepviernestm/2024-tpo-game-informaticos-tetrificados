@@ -17,11 +17,11 @@ El juego se basa en un tetris. Nos inspiramos en el tetris oficial y buscamos im
 ![Tetrizado](assets/Tetrizado.png)
 
 ## Reglas de Juego / Instrucciones
-Tecla UP: rotar bloque a derecha
-Tecla DOWN: descender bloque una posision
-Tecla LEFT: mover bloque a la izquierda
-Tecla RIGHT: mover bloque a la derecha
-Tecla SPACE: hard drop (enviar el bloque al fondo)
+- Tecla UP: rotar bloque a derecha
+- Tecla DOWN: descender bloque una posision
+- Tecla LEFT: mover bloque a la izquierda
+- Tecla RIGHT: mover bloque a la derecha
+- Tecla SPACE: hard drop (enviar el bloque al fondo)
 
 
 ## Otros
