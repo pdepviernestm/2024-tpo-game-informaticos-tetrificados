@@ -75,17 +75,17 @@ program tetrizado {
  */
     keyboard.up().onPressDo({
         bloqueActual.rotar("derecha")
-        bloqueSombra.imitarPos(bloqueActual)
+        bloqueSombra.imitarPosRot(bloqueActual)
     })
 
     keyboard.left().onPressDo({
         bloqueActual.mover("izquierda")
-        bloqueSombra.imitarPos(bloqueActual)
+        bloqueSombra.imitarPosMov(bloqueActual)
     })
 
     keyboard.right().onPressDo({
         bloqueActual.mover("derecha")
-        bloqueSombra.imitarPos(bloqueActual)
+        bloqueSombra.imitarPosMov(bloqueActual)
     })
 
     keyboard.down().onPressDo({
