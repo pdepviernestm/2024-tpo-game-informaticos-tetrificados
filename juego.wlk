@@ -132,18 +132,6 @@ class BloqueTetris{
             c.caer()
             d.caer()
         }
-        if (dir == "arriba"){
-            yCentro += 1
-            centro = game.at(xCentro, yCentro)
-            a.asignarPosicion(a.position().x(), a.position().y()+1)
-            b.asignarPosicion(b.position().x(), b.position().y()+1)
-            c.asignarPosicion(c.position().x(), c.position().y()+1)
-            d.asignarPosicion(d.position().x(), d.position().y()+1)
-            if (!controlador.dirEstaLibre("actual", [a, b, c, d])){
-                self.mover("arriba")
-            }
-        }
-
     }
 
     method estaEnElFondo(){//retorna T o F
@@ -223,24 +211,11 @@ class Tipo_bloqueSombra inherits BloqueTetris{
         game.removeVisual(c)
         game.removeVisual(d)
     }
-    method imitarPosMov(bloque){
-        a.asignarPosicion(bloque.a().position().x(), a.position().y())
-        b.asignarPosicion(bloque.b().position().x(), b.position().y())
-        c.asignarPosicion(bloque.c().position().x(), c.position().y())
-        d.asignarPosicion(bloque.d().position().x(), d.position().y())
-        xCentro = bloque.xCentro()
-        if (!controlador.dirEstaLibre("actual", [a, b, c, d])){
-            self.mover("arriba")
-        } else if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
-            self.descender()
-        }
-    }
-
-    method imitarPosRot(bloque){
-        a.asignarPosicion(bloque.a().position().x() - bloque.xCentro() + xCentro, bloque.a().position().y()- bloque.yCentro() + yCentro)
-        b.asignarPosicion(bloque.b().position().x() - bloque.xCentro() + xCentro, bloque.b().position().y()- bloque.yCentro() + yCentro)
-        c.asignarPosicion(bloque.c().position().x() - bloque.xCentro() + xCentro, bloque.c().position().y()- bloque.yCentro() + yCentro)
-        d.asignarPosicion(bloque.d().position().x() - bloque.xCentro() + xCentro, bloque.d().position().y()- bloque.yCentro() + yCentro)
+    method imitarPos(bloque){
+        a.asignarPosicion(bloque.a().position().x(), bloque.a().position().y())
+        b.asignarPosicion(bloque.b().position().x(), bloque.b().position().y())
+        c.asignarPosicion(bloque.c().position().x(), bloque.c().position().y())
+        d.asignarPosicion(bloque.d().position().x(), bloque.d().position().y())
         if (!controlador.dirEstaLibre("actual", [a, b, c, d])){
             self.mover("arriba")
         } else if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
