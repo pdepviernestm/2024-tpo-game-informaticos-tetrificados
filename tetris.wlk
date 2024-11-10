@@ -3,8 +3,8 @@ import juego.*
 import controlador.*
 
 object tetris {
-    const anchoTotal = 62
-	const altoTotal = 30
+    var anchoTotal = 62
+	var altoTotal = 30
     var ticksCaida = 500 //milisiegundos cada los que las piezas descienden una posicion en el tablero
     var bloqueActual = controlador.generarBloqueAleatorio()
     var bloqueNext = controlador.generarBloqueAleatorio()
@@ -25,16 +25,27 @@ object tetris {
         game.width(anchoTotal)
         game.ground("celdaFondo.jpg") //imagen para cada celda
         game.cellSize(40) //tamaño de cada celda en pixeles que coincide con el tamaño de las piezas (hecho a ojo)
-        game.addVisual(new Menu(posision = game.at(31,15), imagen = "gameBoy.png"))
+        game.addVisual(new Menu(posision = game.center(), imagen = "gameBoy.png"))
         keyboard.t().onPressDo({ self.configuracion() })
     }
     method clearGame() {
 		game.allVisuals().forEach({ visual => game.removeVisual(visual) })
 	}
     method configuracion(){
+        anchoTotal = 20
+	    altoTotal = 47
         self.clearGame()
+        game.title("TETRIZADO")
+        game.height(altoTotal)
+        game.width(anchoTotal)
+        game.ground("celdaFondo.jpg") //imagen para cada celda
+        game.cellSize(40)
         var bloqueHold
         var bloqueSombra
+         //---------------------MENU
+
+        game.addVisual(new Menu(posision = game.at(2,4), imagen = "Gameboyy.png"))
+
         //------------------------BACKGROUND
 
         game.addVisual(new Fondo(posision = game.at(0,0), imagen = "fondoDiseñoIzq.png"))
@@ -78,10 +89,7 @@ object tetris {
         game.addVisual(new Palabra(posision = game.at(16,16), imagen = "celdaFondo2.jpg"))
         game.addVisual(new Palabra(posision = game.at(16,15), imagen = "celdaFondo2.jpg"))
 
-        //---------------------MENU
-
-        game.addVisual(new Menu(posision = game.at(2,4), imagen = "gameBoy.png"))
-
+       
         //---------------------BLOQUE
 
         bloqueActual.entrarEnTablero()
