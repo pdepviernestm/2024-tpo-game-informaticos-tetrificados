@@ -2,6 +2,21 @@ import wollok.game.*
 import juego.*
 import controlador.*
 
+object persona{
+    var property position = game.origin()
+    method image() = "usuario1.png"
+    method text() = "Hola"
+    method textColor() = paleta.rojo()
+    }
+object paleta {
+  const property rojo = "FF0000FF"
+}
+object waterDrop {
+
+  method play(){
+    game.sound("tetrisgameboy.mp3").play()
+  }
+}
 object tetris {
     var anchoTotal = 62
 	var altoTotal = 30
@@ -19,14 +34,25 @@ object tetris {
     const nivelUnidad = new Numero(posision = game.at(37,8), imagen = "numero1.png")
     const nivelDecena = new Numero(posision = game.at(36,8), imagen = "numero0.png")
 
+    
     method inicio(){
         game.title("TETRIZADO")
         game.height(altoTotal)
         game.width(anchoTotal)
         game.ground("celdaFondo.jpg") //imagen para cada celda
         game.cellSize(40) //tamaño de cada celda en pixeles que coincide con el tamaño de las piezas (hecho a ojo)
-        game.addVisual(new Menu(posision = game.center(), imagen = "gameBoy.png"))
+        game.addVisual(new Menu(posicion = game.center(), imagen = "gameBoy.png"))
+        game.addVisualCharacter(persona)
         keyboard.t().onPressDo({ self.configuracion() })
+        //MUSICA
+        keyboard.enter().onPressDo({waterDrop.play()})
+        /*const tetris = game.sound("tetrisgameboy.mp3")
+        tetris.shouldLoop(true)
+        keyboard.p().onPressDo({tetris.pause()})
+        keyboard.r().onPressDo({tetris.resume()})
+        keyboard.s().onPressDo({tetris.stop()})
+        game.schedule(500, { tetris.play()} )*/
+        //-----FIN MUSICA
     }
     method clearGame() {
 		game.allVisuals().forEach({ visual => game.removeVisual(visual) })
@@ -44,7 +70,7 @@ object tetris {
         var bloqueSombra
          //---------------------MENU
 
-        game.addVisual(new Menu(posision = game.at(2,4), imagen = "Gameboyy.png"))
+        game.addVisual(new Menu(posicion = game.at(2,4), imagen = "Gameboyy.png"))
 
         //------------------------BACKGROUND
 
