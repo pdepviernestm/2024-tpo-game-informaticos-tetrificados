@@ -1,6 +1,8 @@
 import wollok.game.*
 import BloquesJugables.*
 import controlador.*
+
+// ------------------ Bloque de Tetris ------------------
 class BloqueTetris{
     var xCentro
     var yCentro
@@ -9,13 +11,14 @@ class BloqueTetris{
     const b 
     const c 
     const d 
-
     method xCentro() = xCentro
     method yCentro() = yCentro
     method a() = a
     method b() = b
     method c() = c
     method d() = d
+
+// -------------------- Rotacion ------------------------
 
     method rotar(dir){    
         if (dir == "derecha"){
@@ -102,7 +105,7 @@ class BloqueTetris{
             return controlador.posEstaOcupada(xRotada, yRotada)
         }
     }
-    
+// ------------------ Mover -----------------------  
     method mover(dir){
         if (dir == "derecha" && controlador.dirEstaLibre("derecha", [a, b, c, d])){ 
             xCentro += 1
@@ -129,18 +132,6 @@ class BloqueTetris{
             c.caer()
             d.caer()
         }
-        if (dir == "arriba"){
-            yCentro += 1
-            centro = game.at(xCentro, yCentro)
-            a.asignarPosicion(a.position().x(), a.position().y()+1)
-            b.asignarPosicion(b.position().x(), b.position().y()+1)
-            c.asignarPosicion(c.position().x(), c.position().y()+1)
-            d.asignarPosicion(d.position().x(), d.position().y()+1)
-            if (!controlador.dirEstaLibre("actual", [a, b, c, d])){
-                self.mover("arriba")
-            }
-        }
-
     }
 
     method estaEnElFondo(){//retorna T o F
@@ -164,6 +155,7 @@ class BloqueTetris{
     method caer(){
         self.mover("abajo")
     }
+// --------------------------- HardDrop ----------------------------
 
     method hardDrop(){
         if(controlador.dirEstaLibre("abajo", [a, b, c, d])){
@@ -195,6 +187,7 @@ class BloqueTetris{
         }
     }
 
+// ------------------------------- Prediccion ---------------------------------------
 
     method crearSombra(){
         const sombraA = new Pieza(image = "sombraFina.png", position = game.at(a.position().x(), a.position().y()))
@@ -205,8 +198,35 @@ class BloqueTetris{
     }
 }
 
+class Tipo_bloqueSombra inherits BloqueTetris{
+    method descender(){
+        if(controlador.dirEstaLibre("abajo", [a, b, c, d])){
+            self.caer()
+            self.descender()
+        }
+    }
+    method eliminar(){
+        game.removeVisual(a)
+        game.removeVisual(b)
+        game.removeVisual(c)
+        game.removeVisual(d)
+    }
+    method imitarPos(bloque){
+        a.asignarPosicion(bloque.a().position().x(), bloque.a().position().y())
+        b.asignarPosicion(bloque.b().position().x(), bloque.b().position().y())
+        c.asignarPosicion(bloque.c().position().x(), bloque.c().position().y())
+        d.asignarPosicion(bloque.d().position().x(), bloque.d().position().y())
+        if (!controlador.dirEstaLibre("actual", [a, b, c, d])){
+            self.mover("arriba")
+        } else if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
+            self.descender()
+        }
+    }
+}
+
 //esto podriamos generalizarlo con clases o herencias para incluir al bloque linea
 
+// ----------------------------- Piezas ------------------------------------
 class Pieza{//un "pixel" del bloque de tetris
     var position
     const image

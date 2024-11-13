@@ -2,12 +2,20 @@ import juego.*
 import BloquesJugables.*
 import wollok.game.*
 
+// -------------- Referencias del Matriz-Tablero -------------------- 
+
+class ElementoMatriz{
+    var pieza = null
+    method pieza() = pieza
+    method pieza(nuevaPieza){pieza = nuevaPieza}
+}
 object controlador {
     var finjuego = false 
     var contadoresDeLineaCompleta = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] //Se suma 1 cada vez que se ocupa un lugar de su fila, hay 1 contador por cada fila
     var contadorLineas = 0
     var contadorPuntaje = 0
-    
+// -------------- Tablero -------------------------------------------------
+
     const matriz = [ //Para acceder a indice usar coordenada 19-y, asi fila inferior es y = 0 y la superior es y = 19
         [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
         [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
@@ -31,6 +39,8 @@ object controlador {
         [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
         [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()]
     ]  
+
+// ------------- Crear Bloque ---------------------------------
 
     const cantidadDeBloques = 7
     method generarBloqueAleatorio() {
@@ -56,17 +66,24 @@ object controlador {
         }
         return bloque
     }
-    
+ // --------------------- Game Over - Implementacion ------------------------------
+
+
     method perder(){
         game.addVisual(gameOver)
         game.removeTickEvent("Caida")
         game.schedule(100, {game.stop()})
     }
 
+    
+// ---------------------- Level Up --------------------------------
+
     method actualizarNivel(contador, bloqueUnidad, bloqueDecena){
         bloqueUnidad.image("numero" + (contador%10) + ".png")
         bloqueDecena.image("numero" + (contador/10).truncate(0) + ".png")
     }
+
+// ----------------- Verificar posiciones -------------------- 
 
     method posEstaOcupada(x, y){//1 si pos esta ocupada, 0 si no esta ocupada
         if (x < 18 || x > 27 || y < 0){
@@ -100,6 +117,8 @@ object controlador {
             return -1
         }
     }
+// --------------------- Completar Linea ---------------------------- 
+
     method quitarLineaCompleta(yDeFilaCompleta){
         self.eliminarLinea(19 - yDeFilaCompleta)
         self.bajarLineas(19 - yDeFilaCompleta)
@@ -136,7 +155,6 @@ object controlador {
         
     }
 
-
     method bajarLineas(indexLinea){//recibe el indice (de la matriz) de la fila que se elimino
         var matrizAuxiliar = matriz.take(indexLinea)//.filter({fila => fila.any({elemento => elemento.pieza() != null})}) //Agarro solo las filas que van a bajar y tienen alguna pieza
         //La cantidad de lineas en esta matriz sera la cantidad de veces que se va a hacer el proceso de bajar
@@ -164,6 +182,8 @@ object controlador {
         puntajes.lineasUnidadDeMil().image("numero" + ((contadorLineas/1000).truncate(0) %10) + ".png")
     }
 
+// --------------------- Score ----------------------------------- 
+
     method actualizarPuntaje(valor){
         contadorPuntaje += valor
         puntajes.puntajeUnidad().image("numero" + (contadorPuntaje%10) + ".png")
@@ -190,16 +210,6 @@ object controlador {
         })
         return colsLibres.all({col => col})
     }
-}
-
-class ElementoMatriz{
-    var pieza = null
-    method pieza() = pieza
-    method pieza(nuevaPieza){pieza = nuevaPieza}
-}
-object gameOver {
-    method image() = "gameover.png"
-    method position() = game.at(19, 10)
 }
 
 object puntajes {
@@ -239,4 +249,10 @@ object puntajes {
         game.addVisual(puntajeDecenaDeMil)
 
     }
+}
+
+// ------- Game Over -------------------
+object gameOver {
+    method image() = "gameover.png"
+    method position() = game.at(19, 10)
 }
