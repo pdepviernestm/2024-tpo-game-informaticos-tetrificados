@@ -151,18 +151,7 @@ object controlador {
             matrizAuxiliar = matrizAuxiliar.take(matrizAuxiliar.size()-1) //sacamos la linea de la matriz auxiliar
         }) 
     }
-}
 
-class Incrementales {
-    var contador
-    const listaNumeros
-
-    method actuaizarVisuales(valor){
-        numero.mostrar(valor, listaNumeros)
-    }
-
-// ---------------- Para Movimiento de Sombra -------------------
- 
     method ColumnaEstaLibre(xCol, ySombra, yBloque){ //retorna false si hay algun objeto en la columna
         const matrizActual = matriz.take(20-ySombra).drop(20-yBloque)
         return !matrizActual.any({fila => fila.get(xCol-18).pieza() != null})
@@ -210,17 +199,22 @@ class Incrementales {
     }
 }
 
-object puntajes {
-    const linasUnidad = new Numero(posision = game.at(37,10), imagen = "numero0.png")
-    const linasDecena = new Numero(posision = game.at(36,10), imagen = "numero0.png")
-    const linasCentena = new Numero(posision = game.at(35,10), imagen = "numero0.png")
-    const lineasUnidadDeMil = new Numero(posision = game.at(34,10), imagen = "numero0.png")
+class Incrementales {
+    var contador
+    const listaNumeros
+
+    method actuaizarVisuales(valor){
+        numero.mostrar(valor, listaNumeros)
+    }
+    
     method sumar(valorQueSeSuma){
         contador += valorQueSeSuma
         self.actuaizarVisuales(contador)
     }
-
+ 
+    
 }
+
 object puntaje inherits Incrementales(contador= 0, listaNumeros = [unidad, decena, centena, unidadDeMil, decenaDeMil]){
     const unidad = new Numero(posision = game.at(37,12), imagen = "numero0.png")
     const decena = new Numero(posision = game.at(36,12), imagen = "numero0.png")
