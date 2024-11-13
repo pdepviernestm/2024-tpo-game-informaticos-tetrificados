@@ -1,0 +1,9 @@
+import juego.*
+import controlador.*
+import wollok.game.*
+import tetris.*
+
+program tetrizado {
+    tetris.inicio()
+    game.start()  
+}
