@@ -58,14 +58,14 @@ class BloqueTetris{
         direc.rotar(piezas)
     }
 
-    method rotarHoraria(pieza){
+    method rotarDireccion(pieza, xOrientacion, yOrientacion){ //si x = -1 e y = 1 entonces horaria, si x = 1 e y = -1 entonces antihoraria
         //le restamos el centro a la pieza
         var xRotada = pieza.position().x()-centro.x() //La coordenada x de la pieza
         var yRotada = pieza.position().y()-centro.y() //La coordenada y de la pieza
         //intercambiamos las coordenadas x'=y, y'=-x
         const aux = xRotada
-        xRotada = yRotada
-        yRotada = -(aux)
+        xRotada = yOrientacion * yRotada
+        yRotada = xOrientacion * (aux)
         //le sumamos el centro de vuelta
         xRotada += centro.x() 
         yRotada += centro.y() 
@@ -316,66 +316,50 @@ class Numero{
     method image(nuevaImagen){imagen = nuevaImagen} 
     method position() = posision
 }
-
-object derecha{
+class Direccion{
+    const xRotacion = 0
+    const yRotacion = 0
+    const modifX
+    const modifY
     method mover(listaPiezas){
         if (controlador.dirEstaLibre("derecha", listaPiezas)){
             listaPiezas.forEach({
                 pieza =>
-                pieza.right()
+                pieza.asignarPos(pieza.position().x() + modifX, pieza.position().y() + modifY)
             })
         }
-
     }
     method rotar(listaPiezas){
-        const listaValoresReturn = listaPiezas.map({pieza => self.rotarHoraria(pieza)})
-        /*
-        const llistaValoresReturn = [self.rotarHoraria(a), self.rotarHoraria(b), self.rotarHoraria(c), self.rotarHoraria(d)]
+        const listaValoresReturn = listaPiezas.map({pieza => BloqueTetris.rotarDireccion(pieza, xRotacion, yRotacion)})
             if (listaValoresReturn.all( {valorReturn => valorReturn == 0})){
-                a.asumirPosicionRotada()
-                b.asumirPosicionRotada()
-                c.asumirPosicionRotada()
-                d.asumirPosicionRotada()
+                listaPiezas.forEach({
+                    pieza =>
+                    pieza.asumirPosicionRotada()
+                })
             }
             else if(!listaValoresReturn.any({valorReturn => valorReturn == 1})){ 
                 const dirLejosDePared = listaValoresReturn.filter({valorReturn => valorReturn != 1 && valorReturn != 0}).head()
-                if(controlador.dirEstaLibre(dirLejosDePared, [a, b, c, d])){
+                if(controlador.dirEstaLibre(dirLejosDePared, listaPiezas)){
                     self.mover(dirLejosDePared)// Se mueve 1 casilla lejos de la pared lateral
-                    self.rotar("derecha") //Intenta rotar nuevamente
+                    self.rotar(listaPiezas) //Intenta rotar nuevamente
                 }
-            }*/
+            }
     }
+}
+
+object derecha inherits Direccion(modifX = 1, modifY = 0, xRotacion = -1, yRotacion = 1){
     method rotarHoraria(pieza){
 
     }
 }
-object izquierda{
-    
-    method mover(listaPiezas){
-        if (controlador.dirEstaLibre("izquierda", listaPiezas)){
-            listaPiezas.forEach({
-                pieza =>
-                pieza.left()
-            })
-        }
+object izquierda inherits Direccion(modifX = -1, modifY = 0, xRotacion = 1, yRotacion = -1){
+    method rotarHoraria(pieza){
 
     }
 }
-object abajo{
-    method mover(listaPiezas){
-        listaPiezas.forEach({
-            pieza =>
-            pieza.down()
-        })
+object abajo inherits Direccion(modifX = 0, modifY = -1){
 
-    }
 }
-object arriba{
-    method mover(listaPiezas){
-        listaPiezas.forEach({
-            pieza =>
-            pieza.up()
-        })
+object arriba inherits Direccion(modifX = 0, modifY = 1){
 
-    }
 }
