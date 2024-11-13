@@ -43,7 +43,7 @@ object tetris {
         game.cellSize(40) //tamaño de cada celda en pixeles que coincide con el tamaño de las piezas (hecho a ojo)
         game.addVisual(new Menu(posicion = game.center(), imagen = "gameBoy.png"))
         game.addVisualCharacter(persona)
-        keyboard.t().onPressDo({ self.configuracion() })
+        
         //MUSICA
         keyboard.enter().onPressDo({waterDrop.play()})
         /*const tetris = game.sound("tetrisgameboy.mp3")
@@ -53,6 +53,8 @@ object tetris {
         keyboard.s().onPressDo({tetris.stop()})
         game.schedule(500, { tetris.play()} )*/
         //-----FIN MUSICA
+        game.onCollideDo(persona, {tetris => tetris.configuracion()})
+        keyboard.t().onPressDo({ self.configuracion() })
     }
     method clearGame() {
 		game.allVisuals().forEach({ visual => game.removeVisual(visual) })
