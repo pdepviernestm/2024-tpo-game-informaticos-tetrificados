@@ -2,7 +2,8 @@ import wollok.game.*
 import BloquesJugables.*
 import controlador.*
 import tetris.*
-// ------------------ Bloque de Tetris ------------------
+
+// ----------BLOQUE-----
 class BloqueTetris{
     var xCentro
     var yCentro
@@ -18,7 +19,7 @@ class BloqueTetris{
     method c() = c
     method d() = d
 
-// -------------------- Rotacion ------------------------
+// -------------------- ROTACION ----------------------------
 
     method rotar(dir){    
         if (dir == "derecha"){
@@ -106,7 +107,7 @@ class BloqueTetris{
         }
     }
 
-// ------------------ MOVIMIENTOS -----------------------  
+// ------------------  MOVIMIENTOS --------------------------
 
     method mover(dir){
         if (dir == "derecha" && controlador.dirEstaLibre("derecha", [a, b, c, d])){ 
@@ -157,7 +158,7 @@ class BloqueTetris{
     method caer(){
         self.mover("abajo")
     }
-// --------------------------- HardDrop ----------------------------
+// ----------------------HARDROP ----------------------------
 
     method hardDrop(){
         if(controlador.dirEstaLibre("abajo", [a, b, c, d])){
@@ -189,7 +190,7 @@ class BloqueTetris{
         }
     }
 
-// ------------------------------- Prediccion / SOMBRA ---------------------------------------
+// ----------------------SOMBRA -----------------------------
 
     method crearSombra(){
         const sombraA = new Pieza(image = "sombraFina.png", position = game.at(a.position().x(), a.position().y()))
@@ -199,7 +200,7 @@ class BloqueTetris{
         return new Tipo_bloqueSombra(xCentro = xCentro, yCentro = yCentro, a = sombraA, b = sombraB, c = sombraC, d = sombraD)
     }
 }
-
+//-----TIPOS DE BLOQUES-
 class Tipo_bloqueSombra inherits BloqueTetris{
     method descender(){
         if(controlador.dirEstaLibre("abajo", [a, b, c, d])){
@@ -225,10 +226,9 @@ class Tipo_bloqueSombra inherits BloqueTetris{
         }
     }
 }
-
 //esto podriamos generalizarlo con clases o herencias para incluir al bloque linea
 
-// ----------------------------- Piezas/ACCIONES ------------------------------------
+// -----Piezas/ACCIONES-
 class Pieza{//un "pixel" del bloque de tetris
     var position
     const image
@@ -257,9 +257,7 @@ class Pieza{//un "pixel" del bloque de tetris
 
 }
 
-
-
-// -------------------- VISUAL --------------------------------
+// ----------VISUALES---
 class Fondo{
     const posision
     const imagen
@@ -283,11 +281,18 @@ class Numero{
 }
 
 class Menu{
-    const posision
+    const posicion
     const imagen
-   
     method image() = imagen
-    method position() = posision
+    method position() = posicion
+    
+}
+
+class Persona{
+    const posicion
+    const imagen
+    method image() = imagen
+    method position() = posicion
     
 }
 
