@@ -12,8 +12,7 @@ class ElementoMatriz{
 object controlador {
     var finjuego = false 
     var contadoresDeLineaCompleta = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] //Se suma 1 cada vez que se ocupa un lugar de su fila, hay 1 contador por cada fila
-    var contadorLineas = 0
-    var contadorPuntaje = 0
+
 // -------------- Tablero -------------------------------------------------
 
     const matriz = [ //Para acceder a indice usar coordenada 19-y, asi fila inferior es y = 0 y la superior es y = 19
@@ -75,13 +74,6 @@ object controlador {
         game.schedule(100, {game.stop()})
     }
 
-    
-// ---------------------- Level Up --------------------------------
-
-    method actualizarNivel(contador, bloqueUnidad, bloqueDecena){
-        bloqueUnidad.image("numero" + (contador%10) + ".png")
-        bloqueDecena.image("numero" + (contador/10).truncate(0) + ".png")
-    }
 
 // ----------------- Verificar posiciones -------------------- 
 
@@ -122,7 +114,7 @@ object controlador {
     method quitarLineaCompleta(yDeFilaCompleta){
         self.eliminarLinea(19 - yDeFilaCompleta)
         self.bajarLineas(19 - yDeFilaCompleta)
-        self.actualizarLineasCompletadas()
+        lineas.sumar(1)
     }
 
     method dirEstaLibre(dir, listaPiezas){
@@ -173,68 +165,124 @@ object controlador {
             matrizAuxiliar = matrizAuxiliar.take(matrizAuxiliar.size()-1) //sacamos la linea de la matriz auxiliar
         }) 
     }
-
-    method actualizarLineasCompletadas(){
-        contadorLineas += 1
-        puntajes.lineasUnidad().image("numero" + (contadorLineas%10) + ".png")
-        puntajes.lineasDecena().image("numero" + ((contadorLineas/10).truncate(0) %10) + ".png")
-        puntajes.lineasCentena().image("numero" + ((contadorLineas/100).truncate(0) %10) + ".png")
-        puntajes.lineasUnidadDeMil().image("numero" + ((contadorLineas/1000).truncate(0) %10) + ".png")
-    }
-
-// --------------------- Score ----------------------------------- 
-
-    method actualizarPuntaje(valor){
-        contadorPuntaje += valor
-        puntajes.puntajeUnidad().image("numero" + (contadorPuntaje%10) + ".png")
-        puntajes.puntajeDecena().image("numero" + ((contadorPuntaje/10).truncate(0) %10) + ".png")
-        puntajes.puntajeCentena().image("numero" + ((contadorPuntaje/100).truncate(0) %10) + ".png")
-        puntajes.puntajeUnidadDeMil().image("numero" + ((contadorPuntaje/1000).truncate(0) %10) + ".png")
-        puntajes.puntajeDecenaDeMil().image("numero" + ((contadorPuntaje/10000).truncate(0) %10) + ".png")
-    }
 }
 
-object puntajes {
-    const linasUnidad = new Numero(posision = game.at(37,10), imagen = "numero0.png")
-    const linasDecena = new Numero(posision = game.at(36,10), imagen = "numero0.png")
-    const linasCentena = new Numero(posision = game.at(35,10), imagen = "numero0.png")
-    const lineasUnidadDeMil = new Numero(posision = game.at(34,10), imagen = "numero0.png")
+class Incrementales {
+    var contador
+    const listaNumeros
 
-    method lineasUnidad() = linasUnidad
-    method lineasDecena() = linasDecena
-    method lineasCentena() = linasCentena
-    method lineasUnidadDeMil() = lineasUnidadDeMil
+    method actuaizarVisuales(valor){
+        numero.mostrar(valor, listaNumeros)
+    }
 
-    const puntajeUnidad = new Numero(posision = game.at(37,12), imagen = "numero0.png")
-    const puntajeDecena = new Numero(posision = game.at(36,12), imagen = "numero0.png")
-    const puntajeCentena = new Numero(posision = game.at(35,12), imagen = "numero0.png")
-    const puntajeUnidadDeMil = new Numero(posision = game.at(34,12), imagen = "numero0.png")
-    const puntajeDecenaDeMil = new Numero(posision = game.at(33,12), imagen = "numero0.png")
+    method sumar(valorQueSeSuma){
+        contador += valorQueSeSuma
+        self.actuaizarVisuales(contador)
+    }
 
-    method puntajeUnidad() = puntajeUnidad
-    method puntajeDecena() = puntajeDecena
-    method puntajeCentena() = puntajeCentena
-    method puntajeUnidadDeMil() = puntajeUnidadDeMil
-    method puntajeDecenaDeMil() = puntajeDecenaDeMil
+}
+object puntaje inherits Incrementales(contador= 0, listaNumeros = [unidad, decena, centena, unidadDeMil, decenaDeMil]){
+    const unidad = new Numero(posision = game.at(37,12), imagen = "numero0.png")
+    const decena = new Numero(posision = game.at(36,12), imagen = "numero0.png")
+    const centena = new Numero(posision = game.at(35,12), imagen = "numero0.png")
+    const unidadDeMil = new Numero(posision = game.at(34,12), imagen = "numero0.png")
+    const decenaDeMil = new Numero(posision = game.at(33,12), imagen = "numero0.png")
 
+    method unidad() = unidad
+    method decena() = decena
+    method centena() = centena
+    method unidadDeMil() = unidadDeMil
+    method decenaDeMil() = decenaDeMil
 
     method agregarVisuales(){
-        game.addVisual(linasUnidad)
-        game.addVisual(linasDecena)
-        game.addVisual(linasCentena)
-        game.addVisual(lineasUnidadDeMil)
-
-        game.addVisual(puntajeUnidad)
-        game.addVisual(puntajeDecena)
-        game.addVisual(puntajeCentena)
-        game.addVisual(puntajeUnidadDeMil)
-        game.addVisual(puntajeDecenaDeMil)
-
+        game.addVisual(unidad)
+        game.addVisual(decena)
+        game.addVisual(centena)
+        game.addVisual(unidadDeMil)
+        game.addVisual(decenaDeMil)
     }
 }
 
+object lineas inherits Incrementales(contador= 0, listaNumeros = [unidad, decena, centena, unidadDeMil]){
+    const unidad = new Numero(posision = game.at(37,10), imagen = "numero0.png")
+    const decena = new Numero(posision = game.at(36,10), imagen = "numero0.png")
+    const centena = new Numero(posision = game.at(35,10), imagen = "numero0.png")
+    const unidadDeMil = new Numero(posision = game.at(34,10), imagen = "numero0.png")
+
+    method unidad() = unidad
+    method decena() = decena
+    method centena() = centena
+    method unidadDeMil() = unidadDeMil
+
+    method agregarVisuales(){
+        game.addVisual(unidad)
+        game.addVisual(decena)
+        game.addVisual(centena)
+        game.addVisual(unidadDeMil)
+    }
+}
+
+object nivel inherits Incrementales(contador= 1, listaNumeros = [unidad, decena]){
+    const unidad = new Numero(posision = game.at(37,8), imagen = "numero1.png")
+    const decena = new Numero(posision = game.at(36,8), imagen = "numero0.png")
+
+    method unidad() = unidad
+    method dcena() = decena
+
+    method agregarVisuales(){
+        game.addVisual(unidad)
+        game.addVisual(decena)
+    }
+}
 // ------- Game Over -------------------
 object gameOver {
     method image() = "gameover.png"
     method position() = game.at(19, 10)
+}
+
+object visuales{
+    var xNext = 32
+    var yNext = 15
+    var xHold = 14
+    var yHold = 15
+    const anchoCacillas = 3
+    const altoCacillas = 4
+    method agregarVisuales(){
+        game.addVisual(new Fondo(posision = game.at(0,0), imagen = "fondoDiseñoIzq.png"))
+        game.addVisual(new Fondo(posision = game.at(28,0), imagen = "fondoDiseñoDer.png"))
+        game.addVisual(new Palabra(posision = game.at(29,12), imagen = "puntajeDiseño.png"))
+        game.addVisual(new Palabra(posision = game.at(29,10), imagen = "lineasDiseño.png"))
+        game.addVisual(new Palabra(posision = game.at(29,8), imagen = "nivelDiseño.png"))
+        puntaje.agregarVisuales()
+        lineas.agregarVisuales()
+        nivel.agregarVisuales()
+        game.addVisual(new Palabra(posision = game.at(29,18), imagen = "nextDiseño.png"))
+        game.addVisual(new Palabra(posision = game.at(11,18), imagen = "holdDiseño.png"))
+
+        //celdas para next y hold
+        anchoCacillas.times({_=> 
+            altoCacillas.times({_=>
+                game.addVisual(new Palabra(posision = game.at(xNext,yNext), imagen = "celdaFondo2.jpg"))
+                yNext += 1
+                game.addVisual(new Palabra(posision = game.at(xHold,yHold), imagen = "celdaFondo2.jpg"))
+                yHold += 1
+            })
+            yNext -= altoCacillas
+            yHold -= altoCacillas
+            xNext += 1
+            xHold += 1
+        })
+        
+    }
+}
+
+object numero{
+    method mostrar(valor, listaNumeros){
+        var divisor = 1
+        listaNumeros.forEach({
+            numero =>
+            numero.image("numero" + ((valor/divisor).truncate(0) %10) + ".png")
+            divisor *= 10
+        })
+    }
 }

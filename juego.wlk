@@ -17,6 +17,7 @@ class BloqueTetris{
     method b() = b
     method c() = c
     method d() = d
+    const piezas = [a, b, c, d]
 
 // -------------------- Rotacion ------------------------
 
@@ -52,6 +53,9 @@ class BloqueTetris{
                 }
             }
         }
+    }
+    method rotar2(direc){
+        direc.rotar(piezas)
     }
 
     method rotarHoraria(pieza){
@@ -105,33 +109,9 @@ class BloqueTetris{
             return controlador.posEstaOcupada(xRotada, yRotada)
         }
     }
-// ------------------ Mover -----------------------  
-    method mover(dir){
-        if (dir == "derecha" && controlador.dirEstaLibre("derecha", [a, b, c, d])){ 
-            xCentro += 1
-            centro = game.at(xCentro, yCentro)
-            a.asignarPosicion(a.position().x()+1, a.position().y())
-            b.asignarPosicion(b.position().x()+1, b.position().y())
-            c.asignarPosicion(c.position().x()+1, c.position().y())
-            d.asignarPosicion(d.position().x()+1, d.position().y())
-        }
-        if (dir == "izquierda" && controlador.dirEstaLibre("izquierda", [a, b, c, d]))
-        {
-            xCentro -= 1
-            centro = game.at(xCentro, yCentro)
-            a.asignarPosicion(a.position().x()-1, a.position().y())
-            b.asignarPosicion(b.position().x()-1, b.position().y())
-            c.asignarPosicion(c.position().x()-1, c.position().y())
-            d.asignarPosicion(d.position().x()-1, d.position().y())
-        }
-        if (dir == "abajo" && controlador.dirEstaLibre("abajo", [a, b, c, d]) ){
-            yCentro -= 1
-            centro = game.at(xCentro, yCentro)
-            a.caer()
-            b.caer()
-            c.caer()
-            d.caer()
-        }
+
+    method mover(direccion){
+        direccion.mover(piezas)
     }
 
     method estaEnElFondo(){//retorna T o F
@@ -139,23 +119,22 @@ class BloqueTetris{
     }
 
     method mostrar(){
-            game.addVisual(a)
-            game.addVisual(b)
-            game.addVisual(c)
-            game.addVisual(d)
+        piezas.forEach({
+            pieza =>
+            game.addVisual(pieza)
+        })
     }  
 
     method remover(){
-        game.removeVisual(a)
-        game.removeVisual(b)
-        game.removeVisual(c)
-        game.removeVisual(d)
+        piezas.forEach({
+            pieza =>
+            game.removeVisual(pieza)
+        })
     }
 
     method caer(){
-        self.mover("abajo")
+        self.mover(abajo)
     }
-// --------------------------- HardDrop ----------------------------
 
     method hardDrop(){
         if(controlador.dirEstaLibre("abajo", [a, b, c, d])){
@@ -175,12 +154,14 @@ class BloqueTetris{
             cantidadDeLineasCompletadas.times({_=>
                 controlador.quitarLineaCompleta(yDeFilaCompleta.max())
                 yDeFilaCompleta.remove(yDeFilaCompleta.max())
-                if(iterador < 3){
-                    controlador.actualizarPuntaje(100)
+                if(iterador == 1){
+                    puntaje.sumar(100)                
+                } else if( iterador == 2){
+                    puntaje.sumar(200) 
                 } else if(iterador == 3){
-                    controlador.actualizarPuntaje(200)
+                    puntaje.sumar(200)
                 } else if(iterador == 4){
-                    controlador.actualizarPuntaje(400)
+                    puntaje.sumar(300)
                 }
                 iterador += 1
             })
@@ -217,7 +198,7 @@ class Tipo_bloqueSombra inherits BloqueTetris{
         c.asignarPosicion(bloque.c().position().x(), bloque.c().position().y())
         d.asignarPosicion(bloque.d().position().x(), bloque.d().position().y())
         if (!controlador.dirEstaLibre("actual", [a, b, c, d])){
-            self.mover("arriba")
+            self.mover(arriba)
         } else if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
             self.descender()
         }
@@ -253,6 +234,22 @@ class Pieza{//un "pixel" del bloque de tetris
         position = game.at(xRotada, yRotada)
     }
 
+    method up(){
+        position = game.at(position.x(), position.y()+1)
+    }
+
+    method down(){
+        position = game.at(position.x(), position.y()-1)
+    }
+
+    method right(){
+        position = game.at(position.x()+1, position.y())
+    }
+
+    method left(){
+        position = game.at(position.x()-1, position.y())
+    }
+
 }
 
 
@@ -280,3 +277,65 @@ class Numero{
     method position() = posision
 }
 
+object derecha{
+    method mover(listaPiezas){
+        if (controlador.dirEstaLibre("derecha", listaPiezas)){
+            listaPiezas.forEach({
+                pieza =>
+                pieza.right()
+            })
+        }
+
+    }
+    method rotar(listaPiezas){
+        const listaValoresReturn = listaPiezas.map({pieza => self.rotarHoraria(pieza)})
+        /*
+        const llistaValoresReturn = [self.rotarHoraria(a), self.rotarHoraria(b), self.rotarHoraria(c), self.rotarHoraria(d)]
+            if (listaValoresReturn.all( {valorReturn => valorReturn == 0})){
+                a.asumirPosicionRotada()
+                b.asumirPosicionRotada()
+                c.asumirPosicionRotada()
+                d.asumirPosicionRotada()
+            }
+            else if(!listaValoresReturn.any({valorReturn => valorReturn == 1})){ 
+                const dirLejosDePared = listaValoresReturn.filter({valorReturn => valorReturn != 1 && valorReturn != 0}).head()
+                if(controlador.dirEstaLibre(dirLejosDePared, [a, b, c, d])){
+                    self.mover(dirLejosDePared)// Se mueve 1 casilla lejos de la pared lateral
+                    self.rotar("derecha") //Intenta rotar nuevamente
+                }
+            }*/
+    }
+    method rotarHoraria(pieza){
+
+    }
+}
+object izquierda{
+    
+    method mover(listaPiezas){
+        if (controlador.dirEstaLibre("izquierda", listaPiezas)){
+            listaPiezas.forEach({
+                pieza =>
+                pieza.left()
+            })
+        }
+
+    }
+}
+object abajo{
+    method mover(listaPiezas){
+        listaPiezas.forEach({
+            pieza =>
+            pieza.down()
+        })
+
+    }
+}
+object arriba{
+    method mover(listaPiezas){
+        listaPiezas.forEach({
+            pieza =>
+            pieza.up()
+        })
+
+    }
+}
