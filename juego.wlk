@@ -136,14 +136,12 @@ class BloqueTetris{
         self.mover(abajo)
     }
 
-    method hardDrop(){
-        if(controlador.dirEstaLibre("abajo", [a, b, c, d])){
-            self.caer()
-            self.hardDrop()
-        }else{
-            self.establecerEnTablero()
-        }
-        return 0
+    method hardDrop(sombra){
+        a.asignarPosicion(sombra.a().position().x(), sombra.a().position().y())
+        b.asignarPosicion(sombra.b().position().x(), sombra.b().position().y())
+        c.asignarPosicion(sombra.c().position().x(), sombra.c().position().y())
+        d.asignarPosicion(sombra.d().position().x(), sombra.d().position().y())
+        
     }	
 
     method establecerEnTablero(){
@@ -192,18 +190,60 @@ class Tipo_bloqueSombra inherits BloqueTetris{
         game.removeVisual(c)
         game.removeVisual(d)
     }
-    method imitarPos(bloque){
-        a.asignarPosicion(bloque.a().position().x(), bloque.a().position().y())
-        b.asignarPosicion(bloque.b().position().x(), bloque.b().position().y())
-        c.asignarPosicion(bloque.c().position().x(), bloque.c().position().y())
-        d.asignarPosicion(bloque.d().position().x(), bloque.d().position().y())
+    method imitarPosMov(bloque){
+        a.asignarPosicion(bloque.a().position().x(), a.position().y())
+        b.asignarPosicion(bloque.b().position().x(), b.position().y())
+        c.asignarPosicion(bloque.c().position().x(), c.position().y())
+        d.asignarPosicion(bloque.d().position().x(), d.position().y())
+        xCentro = bloque.xCentro()
+        if (controlador.columnasLibresApartiDePieza([a,b,c,d], [bloque.a(), bloque.b(), bloque.c(), bloque.d()]) ){
+            if (!controlador.dirEstaLibre("actual", [a, b, c, d])){
+                self.mover("arriba")
+            } else if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
+                self.descender()
+            }
+        }else {
+            a.asignarPosicion(bloque.a().position().x(), bloque.a().position().y())
+            b.asignarPosicion(bloque.b().position().x(), bloque.b().position().y())
+            c.asignarPosicion(bloque.c().position().x(), bloque.c().position().y())
+            d.asignarPosicion(bloque.d().position().x(), bloque.d().position().y())
+            if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
+                self.descender()
+            }
+        }
+    }
+
+    method imitarPosRot(bloque){
+        a.asignarPosicion(bloque.a().position().x(), bloque.a().position().y()- bloque.yCentro() + yCentro)
+        b.asignarPosicion(bloque.b().position().x(), bloque.b().position().y()- bloque.yCentro() + yCentro)
+        c.asignarPosicion(bloque.c().position().x(), bloque.c().position().y()- bloque.yCentro() + yCentro)
+        d.asignarPosicion(bloque.d().position().x(), bloque.d().position().y()- bloque.yCentro() + yCentro) //No sumar ni restar centro X
+            
+        if (controlador.columnasLibresApartiDePieza([a,b,c,d], [bloque.a(), bloque.b(), bloque.c(), bloque.d()])){ 
+            self.irAlineaSuperior()
+            if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
+                self.descender()
+            }
+        } else{
+            a.asignarPosicion(bloque.a().position().x(), bloque.a().position().y())
+            b.asignarPosicion(bloque.b().position().x(), bloque.b().position().y())
+            c.asignarPosicion(bloque.c().position().x(), bloque.c().position().y())
+            d.asignarPosicion(bloque.d().position().x(), bloque.d().position().y())
+            if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
+                self.descender()
+            }
+        }
+    }
+
+    method irAlineaSuperior(){
         if (!controlador.dirEstaLibre("actual", [a, b, c, d])){
             self.mover(arriba)
-        } else if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
-            self.descender()
+            self.irAlineaSuperior()
         }
     }
 }
+
+
 
 //esto podriamos generalizarlo con clases o herencias para incluir al bloque linea
 

@@ -8,21 +8,19 @@ program tetrizado {
     game.width(47)
     game.ground("celdaFondo.jpg") //imagen para cada celda
     game.cellSize(40) //tamaño de cada celda en pixeles que coincide con el tamaño de las piezas (hecho a ojo)
-
+    controlador.inicializarMatriz()
     var ticksCaida = 500 //milisiegundos cada los que las piezas descienden una posicion en el tablero
     var bloqueActual = controlador.generarBloqueAleatorio()
     var bloqueNext = controlador.generarBloqueAleatorio()
     var bloqueHold
     var bloqueSombra
-    var contadorHolds = 0
+    var sePuedeUsarHold = true
+    var juegoPausado = false
 
     visuales.agregarVisuales()
 
     bloqueActual.entrarEnTablero()
-    bloqueSombra = bloqueActual.crearSombra()
-    bloqueSombra.descender()
-    bloqueSombra.mostrar()
-    bloqueActual.mostrar()
+    bloqueSombra = controlador.crearSombraYUbicarla(bloqueActual)
     bloqueNext.mostrar()
 
     game.start()
@@ -31,20 +29,43 @@ program tetrizado {
         bloqueActual.rotar("izquierda")
         bloqueSombra.imitarPos(bloqueActual)
     })
- */
+ *//* Pausa?, no resume, ni tampoco frena al jugador de moverse, solo quita la caida supongo
+ 
+    keyboard.p().onPressDo({
+        if (!juegoPausado){
+            game.removeTickEvent("Caida")
+        }else{
+            game.onTick(ticksCaida, "Caida", 
+            {
+                bloqueActual.caer()
+
+                if(bloqueActual.estaEnElFondo()){
+                    game.schedule(500, { //La idea de esto es que tengas un ratito para mover la pieza antes de que se quede fija
+                        if (bloqueActual.estaEnElFondo()){
+                            sePuedeUsarHold = true
+                            bloqueActual = controlador.establecerYLlamarSiguente(bloqueActual, bloqueNext)
+                            bloqueNext = controlador.generarSiguienteBloque()
+                            bloqueSombra = controlador.ReemplazarSombra(bloqueActual, bloqueSombra)
+                        }
+                    })
+                }
+            })
+        }
+    })
+    */
     keyboard.up().onPressDo({
         bloqueActual.rotar("derecha")
-        bloqueSombra.imitarPos(bloqueActual)
+        bloqueSombra.imitarPosRot(bloqueActual)
     })
 
     keyboard.left().onPressDo({
         bloqueActual.mover(izquierda)
-        bloqueSombra.imitarPos(bloqueActual)
+        bloqueSombra.imitarPosMov(bloqueActual)
     })
 
     keyboard.right().onPressDo({
         bloqueActual.mover(derecha)
-        bloqueSombra.imitarPos(bloqueActual)
+        bloqueSombra.imitarPosMov(bloqueActual)
     })
 
     keyboard.down().onPressDo({
@@ -53,38 +74,23 @@ program tetrizado {
 
     keyboard.space().onPressDo({
         puntaje.sumar((bloqueActual.yCentro()*2).truncate(0))
-        const retorno = bloqueActual.hardDrop()
-        if (retorno == 0){
-            bloqueActual = bloqueNext
-            contadorHolds = 0
-            bloqueActual.entrarEnTablero()
-            bloqueNext = controlador.generarBloqueAleatorio()
-            bloqueNext.mostrar()
-            bloqueSombra.eliminar()
-            bloqueSombra = bloqueActual.crearSombra()
-            bloqueSombra.descender()
-            bloqueSombra.mostrar()
+        bloqueActual.hardDrop(bloqueSombra)
+        sePuedeUsarHold = true
+        bloqueActual = controlador.establecerYLlamarSiguente(bloqueActual, bloqueNext) 
+        bloqueNext = controlador.generarSiguienteBloque()
+        bloqueSombra = controlador.ReemplazarSombra(bloqueActual, bloqueSombra)
 
-            //esto es para que la sombra no quede por encima del bloqueActual cuando se superpongan
-                bloqueActual.remover()
-                bloqueActual.mostrar()
-        }
+
     })
     
     keyboard.c().onPressDo({
-        if(contadorHolds == 0){
-            contadorHolds += 1
+        if(sePuedeUsarHold){
+            sePuedeUsarHold = false
             if(bloqueHold == null){
                 bloqueHold = bloqueActual
                 bloqueHold.entrarEnHold()
-                bloqueActual = bloqueNext
-                bloqueActual.entrarEnTablero()
-                bloqueNext = controlador.generarBloqueAleatorio()
-                bloqueNext.mostrar()
-                bloqueSombra.eliminar()
-                bloqueSombra = bloqueActual.crearSombra()
-                bloqueSombra.descender()
-                bloqueSombra.mostrar()
+                bloqueActual = controlador.llamarSiguienteBloque(bloqueNext)
+                bloqueNext = controlador.generarSiguienteBloque()
             }else{
                 var bloqueAux
                 bloqueAux = bloqueHold
@@ -92,16 +98,8 @@ program tetrizado {
                 bloqueActual = bloqueAux
                 bloqueHold.entrarEnHold()
                 bloqueActual.entrarEnTablero()
-                bloqueSombra.eliminar()
-                bloqueSombra = bloqueActual.crearSombra()
-                bloqueSombra.descender()
-                bloqueSombra.mostrar()
             }
-
-            //esto es para que la sombra no quede por encima del bloqueActual cuando se superpongan
-                bloqueActual.remover()
-                bloqueActual.mostrar()
-
+            bloqueSombra = controlador.ReemplazarSombra(bloqueActual, bloqueSombra)
         }
     })
     
@@ -112,20 +110,10 @@ program tetrizado {
         if(bloqueActual.estaEnElFondo()){
             game.schedule(500, { //La idea de esto es que tengas un ratito para mover la pieza antes de que se quede fija
                 if (bloqueActual.estaEnElFondo()){
-                    bloqueActual.establecerEnTablero()
-                    bloqueActual = bloqueNext
-                    contadorHolds = 0
-                    bloqueActual.entrarEnTablero()
-                    bloqueNext = controlador.generarBloqueAleatorio()
-                    bloqueNext.mostrar()
-                    bloqueSombra.eliminar()
-                    bloqueSombra = bloqueActual.crearSombra()
-                    bloqueSombra.descender()
-                    bloqueSombra.mostrar()
-
-                    //esto es para que la sombra no quede por encima del bloqueActual cuando se superpongan
-                    bloqueActual.remover()
-                    bloqueActual.mostrar()
+                    sePuedeUsarHold = true
+                    bloqueActual = controlador.establecerYLlamarSiguente(bloqueActual, bloqueNext)
+                    bloqueNext = controlador.generarSiguienteBloque()
+                    bloqueSombra = controlador.ReemplazarSombra(bloqueActual, bloqueSombra)
                 }
             })
         }

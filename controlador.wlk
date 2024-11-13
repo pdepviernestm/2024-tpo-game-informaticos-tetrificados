@@ -15,29 +15,15 @@ object controlador {
 
 // -------------- Tablero -------------------------------------------------
 
-    const matriz = [ //Para acceder a indice usar coordenada 19-y, asi fila inferior es y = 0 y la superior es y = 19
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()]
-    ]  
+    const matriz = [] //Para acceder a indice usar coordenada 19-y, asi fila inferior es y = 0 y la superior es y = 19
+    method inicializarMatriz(){
+        20.times({_=>
+            matriz.add([new ElementoMatriz()])
+            9.times({_=>
+                matriz.last().add(new ElementoMatriz())
+            })
+        })
+    }  
 
 // ------------- Crear Bloque ---------------------------------
 
@@ -81,7 +67,7 @@ object controlador {
         if (x < 18 || x > 27 || y < 0){
             return 1
         }
-        if (y > 19){
+        if (y > 19 ){
             return 0
         }
         if (matriz.get(19-y).get(x-18).pieza() != null){
@@ -117,7 +103,7 @@ object controlador {
         lineas.sumar(1)
     }
 
-    method dirEstaLibre(dir, listaPiezas){
+    method dirEstaLibre(dir, listaPiezas){ //true si dir esta libre, false si no lo esta
         if (dir == "derecha"){
             return !listaPiezas.any{p => self.posEstaOcupada(p.position().x()+1, p.position().y()) == 1}
         }
@@ -175,6 +161,60 @@ class Incrementales {
         numero.mostrar(valor, listaNumeros)
     }
 
+// ---------------- Para Movimiento de Sombra -------------------
+ 
+    method ColumnaEstaLibre(xCol, ySombra, yBloque){ //retorna false si hay algun objeto en la columna
+        const matrizActual = matriz.take(20-ySombra).drop(20-yBloque)
+        return !matrizActual.any({fila => fila.get(xCol-18).pieza() != null})
+    }
+
+    method columnasLibresApartiDePieza(piezasSombra, piezasBloque){
+        var xCols = piezasSombra.map({pieza => pieza.position().x()}).asSet().asList()
+        const ySombra = piezasSombra.map({pieza => pieza.position().y()}).min()
+        const yBloque = piezasBloque.map({pieza => pieza.position().y()}).min()
+        const iterador = xCols.size()
+        const colsLibres = []
+        iterador.times({_=>
+            colsLibres.add(self.ColumnaEstaLibre(xCols.head(), ySombra, yBloque))
+            xCols = xCols.drop(1)
+        })
+        return colsLibres.all({col => col})
+    }
+    method crearSombraYUbicarla(bloqueActual){
+        const nuevoBloqueSombra = bloqueActual.crearSombra()
+        nuevoBloqueSombra.descender()
+        nuevoBloqueSombra.mostrar()
+        bloqueActual.remover()
+        bloqueActual.mostrar()
+        return nuevoBloqueSombra
+    }
+    method ReemplazarSombra(bloqueActual, bloqueSombra){
+        bloqueSombra.eliminar()
+        const nuevoBloqueSombra = self.crearSombraYUbicarla(bloqueActual)
+        //esto es para que la sombra no quede por encima del bloqueActual cuando se superpongan
+        return nuevoBloqueSombra
+    }
+
+    method llamarSiguienteBloque(bloqueNext){
+        bloqueNext.entrarEnTablero()
+        return bloqueNext
+    }
+    method generarSiguienteBloque(){
+        const bloqueNext = self.generarBloqueAleatorio()
+        bloqueNext.mostrar()
+        return bloqueNext
+    }
+    method establecerYLlamarSiguente(bloqueActual, bloqueNext){
+        bloqueActual.establecerEnTablero()
+        return self.llamarSiguienteBloque(bloqueNext)
+    }
+}
+
+object puntajes {
+    const linasUnidad = new Numero(posision = game.at(37,10), imagen = "numero0.png")
+    const linasDecena = new Numero(posision = game.at(36,10), imagen = "numero0.png")
+    const linasCentena = new Numero(posision = game.at(35,10), imagen = "numero0.png")
+    const lineasUnidadDeMil = new Numero(posision = game.at(34,10), imagen = "numero0.png")
     method sumar(valorQueSeSuma){
         contador += valorQueSeSuma
         self.actuaizarVisuales(contador)
