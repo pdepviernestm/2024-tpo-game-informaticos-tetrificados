@@ -20,7 +20,7 @@ class BloqueTetris{
     const piezas = [a, b, c, d]
 
 // -------------------- Rotacion ------------------------
-
+/*
     method rotar(dir){    
         if (dir == "derecha"){
             const listaValoresReturn = [self.rotarHoraria(a), self.rotarHoraria(b), self.rotarHoraria(c), self.rotarHoraria(d)]
@@ -54,6 +54,7 @@ class BloqueTetris{
             }
         }
     }
+*/
     method rotar2(direc){
         direc.rotar(piezas)
     }
