@@ -2,50 +2,44 @@ import wollok.game.*
 import juego.*
 import controlador.*
 
-object persona{
-    var property position = game.origin()
-    method image() = "usuario1.png"
-    method text() = "Hola"
-    method textColor() = paleta.rojo()
-}
-object paleta {
-  const property rojo = "FF0000FF"
-}
-object waterDrop {
-
-  method play(){
-    game.sound("tetrisgameboy.mp3").play()
-  }
-}
+// -----------------GAME DEFAULT---------------
 object tetris {
     var anchoTotal = 62
 	var altoTotal = 30
-    var ticksCaida = 500 //milisiegundos cada los que las piezas descienden una posicion en el tablero
-    var bloqueActual = controlador.generarBloqueAleatorio()
-    var bloqueNext = controlador.generarBloqueAleatorio()
+    var ticksCaida = 500
     var contadorHolds = 0
     var contadorNivel = 1
+    var bloqueActual = controlador.generarBloqueAleatorio()
+    var bloqueNext = controlador.generarBloqueAleatorio()
+    const nivelUnidad = new Numero
+        (
+        posision = game.at(37,8), 
+        imagen = "numero1.png")
+    const nivelDecena = new Numero
+        (
+        posision = game.at(36,8), 
+        imagen = "numero0.png")
     /*
     keyboard.z().onPressDo({
         bloqueActual.rotar("izquierda")
         bloqueSombra.imitarPos(bloqueActual)
     })
     */
-    const nivelUnidad = new Numero(posision = game.at(37,8), imagen = "numero1.png")
-    const nivelDecena = new Numero(posision = game.at(36,8), imagen = "numero0.png")
-
-    
     method inicio(){
+        //BACKGROUND
         game.title("TETRIZADO")
         game.height(altoTotal)
         game.width(anchoTotal)
         game.ground("celdaFondo.jpg") //imagen para cada celda
         game.cellSize(40) //tamaño de cada celda en pixeles que coincide con el tamaño de las piezas (hecho a ojo)
+        
+        //VISUALES
         game.addVisual(new Menu(posicion = game.center(), imagen = "gameBoy.png"))
         game.addVisualCharacter(persona)
-        
+        game.addVisual("celdaFondo.jpg")
+      
         //MUSICA
-        keyboard.enter().onPressDo({waterDrop.play()})
+        keyboard.enter().onPressDo({musica.play()})
         /*const tetris = game.sound("tetrisgameboy.mp3")
         tetris.shouldLoop(true)
         keyboard.p().onPressDo({tetris.pause()})
@@ -53,8 +47,10 @@ object tetris {
         keyboard.s().onPressDo({tetris.stop()})
         game.schedule(500, { tetris.play()} )*/
         //-----FIN MUSICA
-        game.onCollideDo(persona, {tetris => tetris.configuracion()})
-        keyboard.t().onPressDo({ self.configuracion() })
+        
+        //COLISION
+        game.onCollideDo(persona, {tetris => keyboard.t().onPressDo({ self.configuracion() })})
+        //keyboard.t().onPressDo({ self.configuracion() })
     }
     method clearGame() {
 		game.allVisuals().forEach({ visual => game.removeVisual(visual) })
@@ -70,26 +66,21 @@ object tetris {
         game.cellSize(40)
         var bloqueHold
         var bloqueSombra
-        //---------------------MENU
 
+        //------------------MENU
         game.addVisual(new Menu(posicion = game.at(2,4), imagen = "Gameboyy.png"))
 
-        //------------------------BACKGROUND
-
+        //------------------BACKGROUND
         game.addVisual(new Fondo(posision = game.at(0,0), imagen = "fondoDiseñoIzq.png"))
         game.addVisual(new Fondo(posision = game.at(28,0), imagen = "fondoDiseñoDer.png"))
         game.addVisual(new Palabra(posision = game.at(29,12), imagen = "puntajeDiseño.png"))
         game.addVisual(new Palabra(posision = game.at(29,10), imagen = "lineasDiseño.png"))
-
         puntajes.agregarVisuales()
-
         game.addVisual(new Palabra(posision = game.at(29,8), imagen = "nivelDiseño.png"))
-
         game.addVisual(nivelUnidad)
         game.addVisual(nivelDecena)
         game.addVisual(new Palabra(posision = game.at(29,18), imagen = "nextDiseño.png"))
         game.addVisual(new Palabra(posision = game.at(11,18), imagen = "holdDiseño.png"))
-
         //celdas para NEXT
         game.addVisual(new Palabra(posision = game.at(32,18), imagen = "celdaFondo2.jpg"))
         game.addVisual(new Palabra(posision = game.at(32,17), imagen = "celdaFondo2.jpg"))
@@ -116,10 +107,8 @@ object tetris {
         game.addVisual(new Palabra(posision = game.at(16,17), imagen = "celdaFondo2.jpg"))
         game.addVisual(new Palabra(posision = game.at(16,16), imagen = "celdaFondo2.jpg"))
         game.addVisual(new Palabra(posision = game.at(16,15), imagen = "celdaFondo2.jpg"))
-
-       
-        //---------------------BLOQUE
-
+        /////////////////////////////
+        //-----------------BLOQUE
         bloqueActual.entrarEnTablero()
         bloqueSombra = bloqueActual.crearSombra()
         bloqueSombra.descender()
@@ -127,8 +116,7 @@ object tetris {
         bloqueActual.mostrar()
         bloqueNext.mostrar()
 
-        //------------------TECLADO
-
+        //-------------------TECLADO
         keyboard.up().onPressDo({
             bloqueActual.rotar("derecha")
             bloqueSombra.imitarPos(bloqueActual)
@@ -145,8 +133,7 @@ object tetris {
             bloqueActual.mover("abajo")
         })
 
-        //- -------------------HARDROP
-
+        //- ------------------HARDROP
         keyboard.space().onPressDo({
             controlador.actualizarPuntaje((bloqueActual.yCentro()*2).truncate(0))
             const retorno = bloqueActual.hardDrop()
@@ -163,15 +150,16 @@ object tetris {
                 //esto es para que la sombra no quede por encima del bloqueActual cuando se superpongan
                     bloqueActual.remover()
                     bloqueActual.mostrar()
+                }
             }
-        })
+        )
 
         //--------------------HOLD
-
         keyboard.c().onPressDo({
             if(contadorHolds == 0){
                 contadorHolds += 1
-                if(bloqueHold == null){
+                if(bloqueHold == null)
+                {
                     bloqueHold = bloqueActual
                     bloqueHold.entrarEnHold()
                     bloqueActual = bloqueNext
@@ -182,7 +170,8 @@ object tetris {
                     bloqueSombra = bloqueActual.crearSombra()
                     bloqueSombra.descender()
                     bloqueSombra.mostrar()
-                }else{
+                 }else
+                {
                     var bloqueAux
                     bloqueAux = bloqueHold
                     bloqueHold = bloqueActual
@@ -193,15 +182,15 @@ object tetris {
                     bloqueSombra = bloqueActual.crearSombra()
                     bloqueSombra.descender()
                     bloqueSombra.mostrar()
-                }
-                //esto es para que la sombra no quede por encima del bloqueActual cuando se superpongan
-                    bloqueActual.remover()
-                    bloqueActual.mostrar()
+                 }
+                //esto es para que la sombra no quede 
+                //por encima del bloqueActual cuando se superpongan
+                bloqueActual.remover()
+                bloqueActual.mostrar()
             }
         })
-
+        ///////////////////////////
         //--------------------CAIDA
-
         game.onTick(ticksCaida, "Caida", 
         {
             bloqueActual.caer()
@@ -226,25 +215,48 @@ object tetris {
                 })
             }
         })
-
-        //---------------LEVEL
+        //--------------------LEVEL
         //cada 1 minuto (60 segundos) se reduce el tiempo de caida
-
         game.onTick(1000*60 , "Incremento de Dificultad", 
             {
-                if(ticksCaida > 50){
+                if(ticksCaida > 50)
+                {
                     ticksCaida -= 50
                     contadorNivel += 1
                     controlador.actualizarNivel(contadorNivel, nivelUnidad, nivelDecena)
-                } else {
+                } else 
+                {
                     game.removeTickEvent("Incremento de Dificultad")
                 }
-            }
+             }
         )
         /*
-        No pareciera acelerarse la velocidad de caida de las piezas...
-        Quizas porque hay muchas acciones que se hacen cada vez que la pieza cae y 
-        hasta que no se hacen todas no se vuelve a ejecutar el evento de caida
-        */
+            No pareciera acelerarse la velocidad de caida de las piezas...
+            Quizas porque hay muchas acciones que se hacen cada vez que la pieza cae y 
+            hasta que no se hacen todas no se vuelve a ejecutar el evento de caida
+            */
         }
 }
+object musica {
+
+  method play(){
+    game.sound("tetrisgameboy.mp3").play()
+  }
+}
+
+// -----------------PRIMER INTERFAZ---------------
+object persona{
+    var property position = game.origin()
+    method image() = "usuario.png"
+    method text() = "Bienvenidx, Soy Alekséi Leonídovich Pázhitnov"
+    method textColor() = paletaColorText.rojo()
+}
+object paletaColorText {
+  const property rojo = "FF0000FF"
+}
+//HACCCCEEEEEEEEEEEEEEEEEEEEEEEEEERRRR - NO APARECE, ES JPG
+object papiro{
+    var property position = game.at(23, 56) 
+    method image() = "papiro.jpg"
+}
+

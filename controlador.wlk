@@ -1,20 +1,26 @@
 import juego.*
 import BloquesJugables.*
 import wollok.game.*
-
-// ------------ MATRIZ-TABLERO -------------------- 
+//////////////////////////////////////////////////////
+// ------------ MATRIZ-TABLERO ----------------------- 
 class ElementoMatriz{
     var pieza = null
     method pieza() = pieza
     method pieza(nuevaPieza){pieza = nuevaPieza}
 }
+
+// ------------ CONTROLADOR-TABLERO ------------------
 object controlador {
     var finjuego = false 
-    var contadoresDeLineaCompleta = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] //Se suma 1 cada vez que se ocupa un lugar de su fila, hay 1 contador por cada fila
-
-// -------------- TABLETO ----------------------------
-
-    const matriz = [] //Para acceder a indice usar coordenada 19-y, asi fila inferior es y = 0 y la superior es y = 19
+    //Se suma 1 cada vez que se ocupa un lugar de su fila, 
+    //hay 1 contador por cada fila
+    var contadoresDeLineaCompleta = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    
+    // -------------- TABLERO ----------------------------
+    //Para acceder a indice usar coordenada 19-y, 
+    //asi fila inferior es y = 0 y la superior es y = 19
+    const matriz = [] 
     method inicializarMatriz(){
         20.times({_=>
             matriz.add([new ElementoMatriz()])
@@ -23,11 +29,9 @@ object controlador {
             })
         })
     }  
-
-// ------------- CREAR BLOQUE ------------------------
-
+    // ------------- CREAR BLOQUE ------------------------
     const cantidadDeBloques = 7
-    method generarBloqueAleatorio() {
+    method generarBloqueAleatorio(){
         const numeroAleatorio = (-0.999).randomUpTo(cantidadDeBloques - 1).roundUp()
         
         var bloque = new Tipo_bloqueL()
@@ -50,19 +54,15 @@ object controlador {
         }
         return bloque
     }
- // --------------------- Game Over - Implementacion ------------------------------
-
-
+    // -------------GAME OVER ----------------------------
     method perder(){
         game.addVisual(gameOver)
         game.removeTickEvent("Caida")
         game.schedule(100, {game.stop()})
     }
-
-
-// --------- VERIFICAR POSICIONES --------------------
-
-    method posEstaOcupada(x, y){//1 si pos esta ocupada, 0 si no esta ocupada
+    // --------- VERIFICAR POSICIONES --------------------
+    //1 si pos esta ocupada, 0 si no esta ocupada
+    method posEstaOcupada(x, y){
         if (x < 18 || x > 27 || y < 0){
             return 1
         }
@@ -74,7 +74,6 @@ object controlador {
         }
         return 0
     }
-
     method ocuparPos(pieza){
         const x = pieza.position().x()
         const y = pieza.position().y()
@@ -94,15 +93,14 @@ object controlador {
             return -1
         }
     }
-// ------------- COMPLETAR LINEA ---------------------
-
+    // ------------- COMPLETAR LINEA ---------------------
     method quitarLineaCompleta(yDeFilaCompleta){
         self.eliminarLinea(19 - yDeFilaCompleta)
         self.bajarLineas(19 - yDeFilaCompleta)
         lineas.sumar(1)
     }
-
-    method dirEstaLibre(dir, listaPiezas){ //true si dir esta libre, false si no lo esta
+    //true si dir esta libre, false si no lo esta
+    method dirEstaLibre(dir, listaPiezas){
         if (dir == "derecha"){
             return !listaPiezas.any{p => self.posEstaOcupada(p.position().x()+1, p.position().y()) == 1}
         }
@@ -120,7 +118,6 @@ object controlador {
         }
         return "error"
     }
-
     method eliminarLinea(indexLinea){
         var columna = 0
         contadoresDeLineaCompleta = [0] + contadoresDeLineaCompleta.take(indexLinea) + contadoresDeLineaCompleta.drop(indexLinea + 1)//Saco la linea completa de los contadores
@@ -131,8 +128,8 @@ object controlador {
         })
         
     }
-
-    method bajarLineas(indexLinea){//recibe el indice (de la matriz) de la fila que se elimino
+    //recibe el indice (de la matriz) de la fila que se elimino
+    method bajarLineas(indexLinea){
         var matrizAuxiliar = matriz.take(indexLinea)//.filter({fila => fila.any({elemento => elemento.pieza() != null})}) //Agarro solo las filas que van a bajar y tienen alguna pieza
         //La cantidad de lineas en esta matriz sera la cantidad de veces que se va a hacer el proceso de bajar
         var lineaActual = indexLinea-1 //La fila que se va a bajar primero 
@@ -150,12 +147,12 @@ object controlador {
             matrizAuxiliar = matrizAuxiliar.take(matrizAuxiliar.size()-1) //sacamos la linea de la matriz auxiliar
         }) 
     }
-
-    method ColumnaEstaLibre(xCol, ySombra, yBloque){ //retorna false si hay algun objeto en la columna
+    // ------------ SOMBRA -------------------------------
+    //retorna false si hay algun objeto en la columna
+    method columnaEstaLibre(xCol, ySombra, yBloque){
         const matrizActual = matriz.take(20-ySombra).drop(20-yBloque)
         return !matrizActual.any({fila => fila.get(xCol-18).pieza() != null})
     }
-
     method columnasLibresApartiDePieza(piezasSombra, piezasBloque){
         var xCols = piezasSombra.map({pieza => pieza.position().x()}).asSet().asList()
         const ySombra = piezasSombra.map({pieza => pieza.position().y()}).min()
@@ -163,7 +160,7 @@ object controlador {
         const iterador = xCols.size()
         const colsLibres = []
         iterador.times({_=>
-            colsLibres.add(self.ColumnaEstaLibre(xCols.head(), ySombra, yBloque))
+            colsLibres.add(self.columnaEstaLibre(xCols.head(), ySombra, yBloque))
             xCols = xCols.drop(1)
         })
         return colsLibres.all({col => col})
@@ -182,7 +179,7 @@ object controlador {
         //esto es para que la sombra no quede por encima del bloqueActual cuando se superpongan
         return nuevoBloqueSombra
     }
-
+    // ------------- SECUENCIA DE BLOQUES -----------------
     method llamarSiguienteBloque(bloqueNext){
         bloqueNext.entrarEnTablero()
         return bloqueNext
@@ -197,7 +194,8 @@ object controlador {
         return self.llamarSiguienteBloque(bloqueNext)
     }
 }
-// -------------  ---------------------
+///////////////////////////////////////////////////////
+// ------------- SCORE -------------------------------
 class Incrementales {
     var contador
     const listaNumeros
@@ -210,8 +208,13 @@ class Incrementales {
         self.actuaizarVisuales(contador)
     }   
 }
-// ------------- SCORE ---------------------
-object puntaje inherits Incrementales(contador= 0, listaNumeros = [unidad, decena, centena, unidadDeMil, decenaDeMil]){
+// ---------------------------------------------------
+// ------------- PUNTAJE TOTAL -----------------------
+object puntaje inherits Incrementales
+    (
+    contador= 0, 
+    listaNumeros = [unidad, decena, centena, unidadDeMil, decenaDeMil])
+    {
     const unidad = new Numero(posision = game.at(37,12), imagen = "numero0.png")
     const decena = new Numero(posision = game.at(36,12), imagen = "numero0.png")
     const centena = new Numero(posision = game.at(35,12), imagen = "numero0.png")
@@ -223,7 +226,6 @@ object puntaje inherits Incrementales(contador= 0, listaNumeros = [unidad, decen
     method centena() = centena
     method unidadDeMil() = unidadDeMil
     method decenaDeMil() = decenaDeMil
-
     method agregarVisuales(){
         game.addVisual(unidad)
         game.addVisual(decena)
@@ -231,9 +233,13 @@ object puntaje inherits Incrementales(contador= 0, listaNumeros = [unidad, decen
         game.addVisual(unidadDeMil)
         game.addVisual(decenaDeMil)
     }
-}
-
-object lineas inherits Incrementales(contador= 0, listaNumeros = [unidad, decena, centena, unidadDeMil]){
+     }
+// ------------- CANTIDAD LINEA-----------------------
+object lineas inherits Incrementales
+    (
+    contador= 0, 
+    listaNumeros = [unidad, decena, centena, unidadDeMil])
+    {
     const unidad = new Numero(posision = game.at(37,10), imagen = "numero0.png")
     const decena = new Numero(posision = game.at(36,10), imagen = "numero0.png")
     const centena = new Numero(posision = game.at(35,10), imagen = "numero0.png")
@@ -243,16 +249,19 @@ object lineas inherits Incrementales(contador= 0, listaNumeros = [unidad, decena
     method decena() = decena
     method centena() = centena
     method unidadDeMil() = unidadDeMil
-
     method agregarVisuales(){
         game.addVisual(unidad)
         game.addVisual(decena)
         game.addVisual(centena)
         game.addVisual(unidadDeMil)
     }
-}
-// ------------- INDICADORES ---------------------
-object nivel inherits Incrementales(contador= 1, listaNumeros = [unidad, decena]){
+     }
+// -------------- NIVELES ----------------------------
+object nivel inherits Incrementales
+    (
+    contador= 1, 
+    listaNumeros = [unidad, decena])
+    {
     const unidad = new Numero(posision = game.at(37,8), imagen = "numero1.png")
     const decena = new Numero(posision = game.at(36,8), imagen = "numero0.png")
 
@@ -263,15 +272,16 @@ object nivel inherits Incrementales(contador= 1, listaNumeros = [unidad, decena]
         game.addVisual(unidad)
         game.addVisual(decena)
     }
-}
-
-object visuales{
+     }
+// -------------- PUNTAJES ---------------------------
+object puntajes{
     var xNext = 32
     var yNext = 15
     var xHold = 14
     var yHold = 15
     const anchoCacillas = 3
     const altoCacillas = 4
+    // VISUAL ------------
     method agregarVisuales(){
         game.addVisual(new Fondo(posision = game.at(0,0), imagen = "fondoDiseñoIzq.png"))
         game.addVisual(new Fondo(posision = game.at(28,0), imagen = "fondoDiseñoDer.png"))
@@ -297,11 +307,11 @@ object visuales{
             xNext += 1
             xHold += 1
         })
-        
     }
 }
-
+// -------------- NUMEROS ----------------------------
 object numero{
+    // MOSTRAR
     method mostrar(valor, listaNumeros){
         var divisor = 1
         listaNumeros.forEach({
@@ -311,9 +321,10 @@ object numero{
         })
     }
 }
-
-// ------------ GAME OVER -------------------
+//////////////////////////////////////////////////////
+// ------------- GAME OVER ---------------------------
 object gameOver {
     method image() = "gameover.png"
     method position() = game.at(19, 10)
 }
+/////////////////////////////////////////////////////

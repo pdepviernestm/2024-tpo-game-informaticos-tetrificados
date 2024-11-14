@@ -1,10 +1,11 @@
 import wollok.game.*
 import BloquesJugables.*
 import controlador.*
-import tetris.*
+import inicioTetris.*
 
-// ----------BLOQUE-----
+// ----------BLOQUE------------------
 class BloqueTetris{
+
     var xCentro
     var yCentro
     var centro = game.at(xCentro, yCentro)
@@ -18,13 +19,10 @@ class BloqueTetris{
     method b() = b
     method c() = c
     method d() = d
-
-// -------------------- ROTACION ----------------------------
-
     const piezas = [a, b, c, d]
 
-
-/*
+    // ROTACION ----------------------------
+    /*
     method rotar(dir){    
         if (dir == "derecha"){
             const listaValoresReturn = [self.rotarHoraria(a), self.rotarHoraria(b), self.rotarHoraria(c), self.rotarHoraria(d)]
@@ -60,11 +58,11 @@ class BloqueTetris{
     }
 
     method rotarHoraria(pieza){
-*/
+    }
+    */
     method rotar2(direc){
         direc.rotar(piezas)
     }
-
     method rotarDireccion(pieza, xOrientacion, yOrientacion){ //si x = -1 e y = 1 entonces horaria, si x = 1 e y = -1 entonces antihoraria
         //le restamos el centro a la pieza
         var xRotada = pieza.position().x()-centro.x() //La coordenada x de la pieza
@@ -90,7 +88,6 @@ class BloqueTetris{
             return controlador.posEstaOcupada(xRotada, yRotada)
         }
     }
-
     method rotarAntiHoraria(pieza){
         //le restamos el centro a la pieza
         var xRotada = pieza.position().x()-centro.x() //La coordenada x de la pieza
@@ -116,33 +113,29 @@ class BloqueTetris{
             return controlador.posEstaOcupada(xRotada, yRotada)
         }
     }
-// ------------------  MOVIMIENTOS --------------------------
+    //  MOVIMIENTOS --------------------------
     method mover(direccion){
         direccion.mover(piezas)
     }
-
     method estaEnElFondo(){//retorna T o F
         return !controlador.dirEstaLibre("abajo", [a, b, c, d])
     }
-
     method mostrar(){
         piezas.forEach({
             pieza =>
             game.addVisual(pieza)
         })
     }  
-
     method remover(){
         piezas.forEach({
             pieza =>
             game.removeVisual(pieza)
         })
     }
-
     method caer(){
         self.mover(abajo)
     }
-// ----------------------HARDROP ----------------------------
+    // HARDROP ----------------------------
     method hardDrop(sombra){
         a.asignarPosicion(sombra.a().position().x(), sombra.a().position().y())
         b.asignarPosicion(sombra.b().position().x(), sombra.b().position().y())
@@ -150,7 +143,6 @@ class BloqueTetris{
         d.asignarPosicion(sombra.d().position().x(), sombra.d().position().y())
         
     }	
-
     method establecerEnTablero(){
         const yDeFilaCompleta = [controlador.ocuparPos(a), controlador.ocuparPos(b), controlador.ocuparPos(c), controlador.ocuparPos(d)].filter({flag => flag > -1})
         if(yDeFilaCompleta.size() > 0){ //Si hubo una linea completa que se ejecute el method quitar linea completa
@@ -172,9 +164,7 @@ class BloqueTetris{
             })
         }
     }
-
-// ----------------------SOMBRA -----------------------------
-
+    // SOMBRA -----------------------------
     method crearSombra(){
         const sombraA = new Pieza(image = "sombraFina.png", position = game.at(a.position().x(), a.position().y()))
         const sombraB = new Pieza(image = "sombraFina.png", position = game.at(b.position().x(), b.position().y()))
@@ -183,7 +173,8 @@ class BloqueTetris{
         return new Tipo_bloqueSombra(xCentro = xCentro, yCentro = yCentro, a = sombraA, b = sombraB, c = sombraC, d = sombraD)
     }
 }
-//-----TIPOS DE BLOQUES-
+
+// ----TIPOS DE BLOQUES--------------
 class Tipo_bloqueSombra inherits BloqueTetris{
     method descender(){
         if(controlador.dirEstaLibre("abajo", [a, b, c, d])){
@@ -247,57 +238,47 @@ class Tipo_bloqueSombra inherits BloqueTetris{
         }
     }
 }
-
-//esto podriamos generalizarlo con clases o herencias para incluir al bloque linea
-
-// -----Piezas/ACCIONES-
-class Pieza{//un "pixel" del bloque de tetris
+//esto podriamos generalizarlo con clases o herencias,
+//para incluir al bloque linea
+//////////////////////////////////////
+// -----Piezas/ACCIONES--------------
+//un "pixel" del bloque de tetris
+class Pieza
+    {
     var position
     const image
     var xRotada = 0
     var yRotada = 0
 
     method image() = image
-
     method asignarPosicion(x, y){
         position = game.at(x, y)
     }
     method position() = position
-
     method caer(){
         position = game.at(position.x(), position.y()-1)
     }
-
     method guardarPosicionRotada(x, y){
         xRotada = x
         yRotada = y
     }
-
     method asumirPosicionRotada(){
         position = game.at(xRotada, yRotada)
     }
-
     method up(){
         position = game.at(position.x(), position.y()+1)
     }
-
     method down(){
         position = game.at(position.x(), position.y()-1)
     }
-
     method right(){
         position = game.at(position.x()+1, position.y())
     }
-
     method left(){
         position = game.at(position.x()-1, position.y())
-    }
+    }}
 
-}
-
-
-
-// ----------VISUALES---
+// ----------VISUALES----------------
 class Fondo{
     const posision
     const imagen
@@ -324,18 +305,16 @@ class Menu{
     const posicion
     const imagen
     method image() = imagen
-    method position() = posicion
-    
+    method position() = posicion   
 }
 
 class Persona{
     const posicion
     const imagen
     method image() = imagen
-    method position() = posicion
-    
+    method position() = posicion   
 }
-
+// -----------DIRECCIONES------------
 class Direccion{
     const xRotacion = 0
     const yRotacion = 0
@@ -367,19 +346,35 @@ class Direccion{
     }
 }
 
-object derecha inherits Direccion(modifX = 1, modifY = 0, xRotacion = -1, yRotacion = 1){
+object derecha inherits Direccion
+    (modifX = 1, 
+    modifY = 0, 
+    xRotacion = -1, 
+    yRotacion = 1){
     method rotarHoraria(pieza){
 
-    }
-}
-object izquierda inherits Direccion(modifX = -1, modifY = 0, xRotacion = 1, yRotacion = -1){
+    }}
+object izquierda inherits Direccion
+    (modifX = -1, 
+    modifY = 0, 
+    xRotacion = 1, 
+    yRotacion = -1){
     method rotarHoraria(pieza){
 
+    }}
+object abajo inherits Direccion
+   (modifX = 0, 
+   modifY = -1)
+    {
+
     }
-}
-object abajo inherits Direccion(modifX = 0, modifY = -1){
+object arriba inherits Direccion
+    (modifX = 0, 
+    modifY = 1)
+    {
 
-}
-object arriba inherits Direccion(modifX = 0, modifY = 1){
+    }
 
-}
+//////////////////////////////////////
+/*object rotar
+object direccion inherits Rotar(){}*/
