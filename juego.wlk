@@ -18,105 +18,26 @@ class BloqueTetris{
     method c() = c
     method d() = d
     const piezas = [a, b, c, d]
-
-// -------------------- Rotacion ------------------------
-/*
-    method rotar(dir){    
-        if (dir == "derecha"){
-            const listaValoresReturn = [self.rotarHoraria(a), self.rotarHoraria(b), self.rotarHoraria(c), self.rotarHoraria(d)]
-            if (listaValoresReturn.all( {valorReturn => valorReturn == 0})){
-                a.asumirPosicionRotada()
-                b.asumirPosicionRotada()
-                c.asumirPosicionRotada()
-                d.asumirPosicionRotada()
-            }
-            else if(!listaValoresReturn.any({valorReturn => valorReturn == 1})){ 
-                const dirLejosDePared = listaValoresReturn.filter({valorReturn => valorReturn != 1 && valorReturn != 0}).head()
-                if(controlador.dirEstaLibre(dirLejosDePared, [a, b, c, d])){
-                    self.mover(dirLejosDePared)// Se mueve 1 casilla lejos de la pared lateral
-                    self.rotar("derecha") //Intenta rotar nuevamente
-                }
-            }
-        }else{
-            const listaValoresReturn = [self.rotarAntiHoraria(a), self.rotarAntiHoraria(b), self.rotarAntiHoraria(c), self.rotarAntiHoraria(d)]
-            if (listaValoresReturn.any({valorReturn => valorReturn})){
-                a.asumirPosicionRotada()
-                b.asumirPosicionRotada()
-                c.asumirPosicionRotada()
-                d.asumirPosicionRotada()
-            }
-            else if(!listaValoresReturn.any({valorReturn => valorReturn == 1})){ 
-                const dirLejosDePared = listaValoresReturn.filter({valorReturn => valorReturn != 1 && valorReturn != 0}).head()
-                if(controlador.dirEstaLibre(dirLejosDePared, [a, b, c, d])){
-                    self.mover(dirLejosDePared)// Se mueve 1 casilla lejos de la pared lateral
-                    self.rotar("izquierda") //Intenta rotar nuevamente
-                }
-            }
+    method piezas() = piezas
+    method centro() = centro
+    
+    method rotar(direccion){
+        const centroAntesDeRotar = centro
+        piezas.forEach({pieza => pieza.guardarPosicionAntesDeRotar()})
+        if(!direccion.rotar(self)){
+            piezas.forEach({pieza => pieza.revertirRotacion()})
+            centro = centroAntesDeRotar
         }
-    }
-*/
-    method rotar2(direc){
-        direc.rotar(piezas)
-    }
-
-    method rotarDireccion(pieza, xOrientacion, yOrientacion){ //si x = -1 e y = 1 entonces horaria, si x = 1 e y = -1 entonces antihoraria
-        //le restamos el centro a la pieza
-        var xRotada = pieza.position().x()-centro.x() //La coordenada x de la pieza
-        var yRotada = pieza.position().y()-centro.y() //La coordenada y de la pieza
-        //intercambiamos las coordenadas x'=y, y'=-x
-        const aux = xRotada
-        xRotada = yOrientacion * yRotada
-        yRotada = xOrientacion * (aux)
-        //le sumamos el centro de vuelta
-        xRotada += centro.x() 
-        yRotada += centro.y() 
         
-        if(xRotada < 18){
-            return "derecha"
-        }
-        else if(xRotada > 27){
-            return "izquierda"
-        }
-        else{
-            //guardamos la posicion rotada a la pieza
-            pieza.guardarPosicionRotada(xRotada, yRotada)
-            //retornamos si la posicion rotada esta ocupada o no (es decir si esa pieza puede girar o no)
-            return controlador.posEstaOcupada(xRotada, yRotada)
-        }
-    }
-
-    method rotarAntiHoraria(pieza){
-        //le restamos el centro a la pieza
-        var xRotada = pieza.position().x()-centro.x() //La coordenada x de la pieza
-        var yRotada = pieza.position().y()-centro.y() //La coordenada y de la pieza
-        //intercambiamos las coordenadas x'=-y, y'=x
-        const aux = xRotada
-        xRotada = -(yRotada)
-        yRotada = aux
-        //le sumamos el centro de vuelta
-        xRotada += centro.x()
-        yRotada += centro.y()
-
-        if(xRotada < 18){
-            return "derecha"
-        }
-        else if(xRotada > 27){
-            return "izquierda"
-        }
-        else{
-            //guardamos la posicion rotada a la pieza
-            pieza.guardarPosicionRotada(xRotada, yRotada)
-            //retornamos si la posicion rotada esta ocupada o no (es decir si esa pieza puede girar o no)
-            return controlador.posEstaOcupada(xRotada, yRotada)
-        }
     }
 
     method mover(direccion){
-        direccion.mover(piezas)
+        direccion.mover(self)
+        centro = direccion.moverCentro(centro)
     }
 
     method estaEnElFondo(){//retorna T o F
-        return !controlador.dirEstaLibre("abajo", [a, b, c, d])
+        return !controlador.dirEstaLibre(abajo, [a, b, c, d])
     }
 
     method mostrar(){
@@ -180,7 +101,7 @@ class BloqueTetris{
 
 class Tipo_bloqueSombra inherits BloqueTetris{
     method descender(){
-        if(controlador.dirEstaLibre("abajo", [a, b, c, d])){
+        if(controlador.dirEstaLibre(abajo, [a, b, c, d])){
             self.caer()
             self.descender()
         }
@@ -198,9 +119,9 @@ class Tipo_bloqueSombra inherits BloqueTetris{
         d.asignarPosicion(bloque.d().position().x(), d.position().y())
         xCentro = bloque.xCentro()
         if (controlador.columnasLibresApartiDePieza([a,b,c,d], [bloque.a(), bloque.b(), bloque.c(), bloque.d()]) ){
-            if (!controlador.dirEstaLibre("actual", [a, b, c, d])){
-                self.mover("arriba")
-            } else if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
+            if (!controlador.dirEstaLibre(actual, [a, b, c, d])){
+                self.mover(arriba)
+            } else if (controlador.dirEstaLibre(abajo, [a, b, c, d])){
                 self.descender()
             }
         }else {
@@ -208,7 +129,7 @@ class Tipo_bloqueSombra inherits BloqueTetris{
             b.asignarPosicion(bloque.b().position().x(), bloque.b().position().y())
             c.asignarPosicion(bloque.c().position().x(), bloque.c().position().y())
             d.asignarPosicion(bloque.d().position().x(), bloque.d().position().y())
-            if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
+            if (controlador.dirEstaLibre(abajo, [a, b, c, d])){
                 self.descender()
             }
         }
@@ -222,7 +143,7 @@ class Tipo_bloqueSombra inherits BloqueTetris{
             
         if (controlador.columnasLibresApartiDePieza([a,b,c,d], [bloque.a(), bloque.b(), bloque.c(), bloque.d()])){ 
             self.irAlineaSuperior()
-            if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
+            if (controlador.dirEstaLibre(abajo, [a, b, c, d])){
                 self.descender()
             }
         } else{
@@ -230,14 +151,14 @@ class Tipo_bloqueSombra inherits BloqueTetris{
             b.asignarPosicion(bloque.b().position().x(), bloque.b().position().y())
             c.asignarPosicion(bloque.c().position().x(), bloque.c().position().y())
             d.asignarPosicion(bloque.d().position().x(), bloque.d().position().y())
-            if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
+            if (controlador.dirEstaLibre(abajo, [a, b, c, d])){
                 self.descender()
             }
         }
     }
 
     method irAlineaSuperior(){
-        if (!controlador.dirEstaLibre("actual", [a, b, c, d])){
+        if (!controlador.dirEstaLibre(actual, [a, b, c, d])){
             self.mover(arriba)
             self.irAlineaSuperior()
         }
@@ -252,8 +173,8 @@ class Tipo_bloqueSombra inherits BloqueTetris{
 class Pieza{//un "pixel" del bloque de tetris
     var position
     const image
-    var xRotada = 0
-    var yRotada = 0
+    var positionAntesDeRotar = game.at(0, 0)
+
 
     method image() = image
 
@@ -262,24 +183,19 @@ class Pieza{//un "pixel" del bloque de tetris
     }
     method position() = position
 
-    method caer(){
-        position = game.at(position.x(), position.y()-1)
+    method guardarPosicionAntesDeRotar(){
+        positionAntesDeRotar = position
     }
 
-    method guardarPosicionRotada(x, y){
-        xRotada = x
-        yRotada = y
-    }
-
-    method asumirPosicionRotada(){
-        position = game.at(xRotada, yRotada)
+    method revertirRotacion(){
+        position = positionAntesDeRotar
     }
 
     method up(){
-        position = game.at(position.x(), position.y()+1)
+        position = game.at(position.x(), position.y() + 1)
     }
 
-    method down(){
+    method caer(){
         position = game.at(position.x(), position.y()-1)
     }
 
@@ -288,7 +204,7 @@ class Pieza{//un "pixel" del bloque de tetris
     }
 
     method left(){
-        position = game.at(position.x()-1, position.y())
+        position = game.at(position.x()-1, position.y() + 1)
     }
 
 }
@@ -317,50 +233,99 @@ class Numero{
     method image(nuevaImagen){imagen = nuevaImagen} 
     method position() = posision
 }
-class Direccion{
-    const xRotacion = 0
-    const yRotacion = 0
+
+
+class DireccionLibre{
     const modifX
     const modifY
-    method mover(listaPiezas){
-        if (controlador.dirEstaLibre("derecha", listaPiezas)){
-            listaPiezas.forEach({
+    method dirEstaLibre(listaPiezas){ //true si dir esta libre, false si no lo esta
+        return !listaPiezas.any{pieza => controlador.posEstaOcupada(pieza.position().x() + modifX, pieza.position().y() + modifY) == 1}
+    }
+}
+class AccionesConDir inherits DireccionLibre{
+    method mover(bloque){
+        if (controlador.dirEstaLibre(self, bloque.piezas())){
+            bloque.piezas().forEach({
                 pieza =>
-                pieza.asignarPos(pieza.position().x() + modifX, pieza.position().y() + modifY)
+                pieza.asignarPosicion(pieza.position().x() + modifX, pieza.position().y() + modifY)
             })
         }
     }
-    method rotar(listaPiezas){
-        const listaValoresReturn = listaPiezas.map({pieza => BloqueTetris.rotarDireccion(pieza, xRotacion, yRotacion)})
-            if (listaValoresReturn.all( {valorReturn => valorReturn == 0})){
-                listaPiezas.forEach({
-                    pieza =>
-                    pieza.asumirPosicionRotada()
-                })
+    method moverCentro(centroBloque){
+        return game.at(centroBloque.x() + modifX, centroBloque.y() + modifY)
+    }
+}
+class RotarConSentido{
+    const xRotacion = 0
+    const yRotacion = 0
+    
+  method rotarDireccion(pieza, centro, xOrientacion, yOrientacion){ //si x = -1 e y = 1 entonces horaria, si x = 1 e y = -1 entonces antihoraria
+        //le restamos el centro a la pieza
+        var xRotada = pieza.position().x()-centro.x() //La coordenada x de la pieza
+        var yRotada = pieza.position().y()-centro.y() //La coordenada y de la pieza
+        //intercambiamos las coordenadas x'=y, y'=-x
+        const aux = xRotada
+        xRotada = yOrientacion * yRotada
+        yRotada = xOrientacion * (aux)
+        //le sumamos el centro de vuelta
+        xRotada += centro.x() 
+        yRotada += centro.y() 
+        //retornamos si la posicion rotada
+        return game.at(xRotada, yRotada)
+    }
+
+    method rotar(bloque){ //Retorna TRUE si se pudo rotar, FALSE si no se pudo
+        var listaPosRotadas = bloque.piezas().map({pieza => self.rotarDireccion(pieza, bloque.centro(), xRotacion, yRotacion)})
+        const hayRotacLibre = listaPosRotadas.all( {posRotada => controlador.posEstaOcupada(posRotada.x(), posRotada.y()) == 0 }) //lo agrego en una constante ya que me salta warning si lo uso directamente
+        // Caso borde derecha:si al rotar se va del limite por derecha
+        if (listaPosRotadas.any({posRotada => posRotada.x() > constsGlobales.paredDerTablero()})){ 
+            //Si se puede move a derecha, que se mueva e intente rotar nuevamente. 
+            //Si no se puede mover a derecha, entonces no hay lugar para que rote, por lo tanto no rotara
+            if (controlador.dirEstaLibre(izquierda, bloque.piezas())){
+                bloque.mover(izquierda)
+                return bloque.rotar(self)
+            }else {
+                return false
             }
-            else if(!listaValoresReturn.any({valorReturn => valorReturn == 1})){ 
-                const dirLejosDePared = listaValoresReturn.filter({valorReturn => valorReturn != 1 && valorReturn != 0}).head()
-                if(controlador.dirEstaLibre(dirLejosDePared, listaPiezas)){
-                    self.mover(dirLejosDePared)// Se mueve 1 casilla lejos de la pared lateral
-                    self.rotar(listaPiezas) //Intenta rotar nuevamente
-                }
+        
+        // Caso borde izquierda:si al rotar se va del limite por izquierda
+        }else if (listaPosRotadas.any({posRotada => posRotada.x() < constsGlobales.paredIzqTablero()})){
+            //Si se puede move a izquierda, que se mueva e intente rotar nuevamente. 
+            //Si no se puede mover a izquierda, entonces no hay lugar para que rote, por lo tanto no rotara
+            if (controlador.dirEstaLibre(derecha, bloque.piezas())){
+                bloque.mover(derecha)
+                return bloque.rotar(self)
+            }else{
+                return false
             }
+        
+        // Caso rotacion libre: si al rotar no hay obstaculos
+        }else if(hayRotacLibre){
+            bloque.piezas().forEach({pieza => 
+                pieza.asignarPosicion(listaPosRotadas.head().x(), listaPosRotadas.head().y()) //se asume pos rotada
+                listaPosRotadas = listaPosRotadas.drop(1)
+            })
+            return hayRotacLibre
+        }
+        else{
+            return hayRotacLibre
+        }
     }
 }
 
-object derecha inherits Direccion(modifX = 1, modifY = 0, xRotacion = -1, yRotacion = 1){
-    method rotarHoraria(pieza){
+object derecha inherits AccionesConDir(modifX = 1, modifY = 0){}
+object izquierda inherits AccionesConDir(modifX = -1, modifY = 0){}
+object abajo inherits AccionesConDir(modifX = 0, modifY = -1){}
+object arriba inherits AccionesConDir(modifX = 0, modifY = 1){}
+object actual inherits DireccionLibre(modifX = 0, modifY = 0){}
 
-    }
-}
-object izquierda inherits Direccion(modifX = -1, modifY = 0, xRotacion = 1, yRotacion = -1){
-    method rotarHoraria(pieza){
+object horaria inherits RotarConSentido(xRotacion = -1, yRotacion = 1){}
+object antihoraria inherits RotarConSentido(xRotacion = 1, yRotacion = -1){}
 
-    }
+object constsGlobales{
+    const property paredIzqTablero = 18
+    const property paredDerTablero = 27
+    const property posicionPosible = -1
+    const property posicionNoEsPosible = -2
 }
-object abajo inherits Direccion(modifX = 0, modifY = -1){
 
-}
-object arriba inherits Direccion(modifX = 0, modifY = 1){
-
-}

@@ -24,12 +24,8 @@ program tetrizado {
     bloqueNext.mostrar()
 
     game.start()
-/*
-    keyboard.z().onPressDo({
-        bloqueActual.rotar("izquierda")
-        bloqueSombra.imitarPos(bloqueActual)
-    })
- *//* Pausa?, no resume, ni tampoco frena al jugador de moverse, solo quita la caida supongo
+
+ /* Pausa?, no resume, ni tampoco frena al jugador de moverse, solo quita la caida supongo
  
     keyboard.p().onPressDo({
         if (!juegoPausado){
@@ -53,8 +49,12 @@ program tetrizado {
         }
     })
     */
+    keyboard.z().onPressDo({
+        bloqueActual.rotar(antihoraria)
+        bloqueSombra.imitarPos(bloqueActual)
+    })
     keyboard.up().onPressDo({
-        bloqueActual.rotar("derecha")
+        bloqueActual.rotar(horaria)
         bloqueSombra.imitarPosRot(bloqueActual)
     })
 

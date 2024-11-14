@@ -103,23 +103,8 @@ object controlador {
         lineas.sumar(1)
     }
 
-    method dirEstaLibre(dir, listaPiezas){ //true si dir esta libre, false si no lo esta
-        if (dir == "derecha"){
-            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x()+1, p.position().y()) == 1}
-        }
-        if (dir == "izquierda"){
-            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x()-1, p.position().y()) == 1}
-        }
-        if (dir == "abajo"){
-            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x(), p.position().y()-1) == 1} 
-        }
-        if (dir == "arriba"){
-            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x(), p.position().y()+1) == 1}
-        }
-        if (dir == "actual"){
-            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x(), p.position().y()) == 1}
-        }
-        return "error"
+    method dirEstaLibre(dir, listaPiezas){
+        return dir.dirEstaLibre(listaPiezas)
     }
 
     method eliminarLinea(indexLinea){
