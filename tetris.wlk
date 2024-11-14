@@ -7,7 +7,7 @@ object persona{
     method image() = "usuario1.png"
     method text() = "Hola"
     method textColor() = paleta.rojo()
-    }
+}
 object paleta {
   const property rojo = "FF0000FF"
 }
@@ -70,7 +70,7 @@ object tetris {
         game.cellSize(40)
         var bloqueHold
         var bloqueSombra
-         //---------------------MENU
+        //---------------------MENU
 
         game.addVisual(new Menu(posicion = game.at(2,4), imagen = "Gameboyy.png"))
 

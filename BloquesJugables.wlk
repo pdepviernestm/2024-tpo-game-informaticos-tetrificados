@@ -1,6 +1,9 @@
 import juego.*
 import wollok.game.*
 import controlador.controlador
+
+//---------------------------------BLOQUE---------------------------------------
+
 class BloqueJugable inherits BloqueTetris{
     const xCentroTablero
     const yCentroTablero
@@ -15,7 +18,6 @@ class BloqueJugable inherits BloqueTetris{
         xCentro = xCentroTablero
         yCentro = yCentroTablero
     }
-
 }
 
 //-----------------------------TIPOS DE BLOQUES---------------------------------------
@@ -56,16 +58,16 @@ class Tipo_bloqueLinv inherits BloqueJugable(
         c = new Pieza(image = "azul.png", position = game.at(xCentro, yCentro-1)),
         d = new Pieza(image = "azul.png", position = game.at(xCentro-1, yCentro-1))
         )
-    {
-        method entrarEnHold(){
-            xCentro = xCentroHold
-            yCentro = yCentroHold
-            a.asignarPosicion(xCentro, yCentro+1)
-            b.asignarPosicion(xCentro, yCentro)
-            c.asignarPosicion(xCentro, yCentro-1)
-            d.asignarPosicion(xCentro-1, yCentro-1)
-        }
+{
+    method entrarEnHold(){
+        xCentro = xCentroHold
+        yCentro = yCentroHold
+        a.asignarPosicion(xCentro, yCentro+1)
+        b.asignarPosicion(xCentro, yCentro)
+        c.asignarPosicion(xCentro, yCentro-1)
+        d.asignarPosicion(xCentro-1, yCentro-1)
     }
+}
 
 // BLOQUE AMARILLO
 class Tipo_bloqueCuadrado inherits BloqueJugable(
@@ -80,16 +82,16 @@ class Tipo_bloqueCuadrado inherits BloqueJugable(
         c = new Pieza(image = "amarillo.png", position = game.at(xCentro+0.5, yCentro-0.5)),
         d = new Pieza(image = "amarillo.png", position = game.at(xCentro+0.5, yCentro+0.5))
         )
-    {
-        method entrarEnHold(){
-            xCentro = xCentroHold
-            yCentro = yCentroHold
-            a.asignarPosicion(xCentro-0.5, yCentro+0.5)
-            b.asignarPosicion(xCentro-0.5, yCentro-0.5)
-            c.asignarPosicion(xCentro+0.5, yCentro-0.5)
-            d.asignarPosicion(xCentro+0.5, yCentro+0.5)
-        }
+{
+    method entrarEnHold(){
+        xCentro = xCentroHold
+        yCentro = yCentroHold
+        a.asignarPosicion(xCentro-0.5, yCentro+0.5)
+        b.asignarPosicion(xCentro-0.5, yCentro-0.5)
+        c.asignarPosicion(xCentro+0.5, yCentro-0.5)
+        d.asignarPosicion(xCentro+0.5, yCentro+0.5)
     }
+}
 
 // BLOQUE CELESTE
 class Tipo_bloqueLinea inherits BloqueJugable(
@@ -104,16 +106,16 @@ class Tipo_bloqueLinea inherits BloqueJugable(
             c = new Pieza(image = "celeste.png", position = game.at(xCentro-0.5, yCentro-0.5)),
             d = new Pieza(image = "celeste.png", position = game.at(xCentro-0.5, yCentro-1.5))
             )
-    {
-        method entrarEnHold(){
-            xCentro = xCentroHold
-            yCentro = yCentroHold
-            a.asignarPosicion(xCentro-0.5, yCentro+1.5)
-            b.asignarPosicion(xCentro-0.5, yCentro+0.5)
-            c.asignarPosicion(xCentro-0.5, yCentro-0.5)
-            d.asignarPosicion(xCentro-0.5, yCentro-1.5)
-            }
-        }
+{
+    method entrarEnHold(){
+        xCentro = xCentroHold
+        yCentro = yCentroHold
+        a.asignarPosicion(xCentro-0.5, yCentro+1.5)
+        b.asignarPosicion(xCentro-0.5, yCentro+0.5)
+        c.asignarPosicion(xCentro-0.5, yCentro-0.5)
+        d.asignarPosicion(xCentro-0.5, yCentro-1.5)
+    }
+}
 
 // BLOQUE VERDE
 class Tipo_bloqueS inherits BloqueJugable(
@@ -128,16 +130,16 @@ class Tipo_bloqueS inherits BloqueJugable(
             c = new Pieza(image = "verde.png", position = game.at(xCentro, yCentro+1)),
             d = new Pieza(image = "verde.png", position = game.at(xCentro+1, yCentro+1))
             )
-    {
-        method entrarEnHold(){
-            xCentro = xCentroHold
-            yCentro = yCentroHold
-            a.asignarPosicion(xCentro-1, yCentro)
-            b.asignarPosicion(xCentro, yCentro)
-            c.asignarPosicion(xCentro, yCentro+1)
-            d.asignarPosicion(xCentro+1, yCentro+1)
-            }
-        }
+{
+    method entrarEnHold(){
+        xCentro = xCentroHold
+        yCentro = yCentroHold
+        a.asignarPosicion(xCentro-1, yCentro)
+        b.asignarPosicion(xCentro, yCentro)
+        c.asignarPosicion(xCentro, yCentro+1)
+        d.asignarPosicion(xCentro+1, yCentro+1)
+    }
+}
 
 // BLOQUE ROJO
 class Tipo_bloqueSinv inherits BloqueJugable(
@@ -152,16 +154,16 @@ class Tipo_bloqueSinv inherits BloqueJugable(
         c = new Pieza(image = "rojo.png", position = game.at(xCentro, yCentro-1)),
         d = new Pieza(image = "rojo.png", position = game.at(xCentro+1, yCentro-1))
         )
-    {
-        method entrarEnHold(){
-            xCentro = xCentroHold
-            yCentro = yCentroHold
-            a.asignarPosicion(xCentro-1, yCentro)
-            b.asignarPosicion(xCentro, yCentro)
-            c.asignarPosicion(xCentro, yCentro-1)
-            d.asignarPosicion(xCentro+1, yCentro-1)
-            }
-        }   
+{
+    method entrarEnHold(){
+        xCentro = xCentroHold
+        yCentro = yCentroHold
+        a.asignarPosicion(xCentro-1, yCentro)
+        b.asignarPosicion(xCentro, yCentro)
+        c.asignarPosicion(xCentro, yCentro-1)
+        d.asignarPosicion(xCentro+1, yCentro-1)
+    }
+}
 
 // BLOQUE VIOLETA
 class Tipo_bloqueT inherits BloqueJugable(
@@ -176,14 +178,14 @@ class Tipo_bloqueT inherits BloqueJugable(
         c = new Pieza(image = "violeta.png", position = game.at(xCentro, yCentro-1)),
         d = new Pieza(image = "violeta.png", position = game.at(xCentro+1, yCentro))
         )
-    {    
-        method entrarEnHold(){
-            xCentro = xCentroHold
-            yCentro = yCentroHold
-            a.asignarPosicion(xCentro-1, yCentro)
-            b.asignarPosicion(xCentro, yCentro)
-            c.asignarPosicion(xCentro, yCentro-1)
-            d.asignarPosicion(xCentro+1, yCentro)
-            }
-        }
+{    
+    method entrarEnHold(){
+        xCentro = xCentroHold
+        yCentro = yCentroHold
+        a.asignarPosicion(xCentro-1, yCentro)
+        b.asignarPosicion(xCentro, yCentro)
+        c.asignarPosicion(xCentro, yCentro-1)
+        d.asignarPosicion(xCentro+1, yCentro)
+    }
+}
 

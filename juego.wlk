@@ -21,6 +21,10 @@ class BloqueTetris{
 
 // -------------------- ROTACION ----------------------------
 
+    const piezas = [a, b, c, d]
+
+
+/*
     method rotar(dir){    
         if (dir == "derecha"){
             const listaValoresReturn = [self.rotarHoraria(a), self.rotarHoraria(b), self.rotarHoraria(c), self.rotarHoraria(d)]
@@ -56,13 +60,19 @@ class BloqueTetris{
     }
 
     method rotarHoraria(pieza){
+*/
+    method rotar2(direc){
+        direc.rotar(piezas)
+    }
+
+    method rotarDireccion(pieza, xOrientacion, yOrientacion){ //si x = -1 e y = 1 entonces horaria, si x = 1 e y = -1 entonces antihoraria
         //le restamos el centro a la pieza
         var xRotada = pieza.position().x()-centro.x() //La coordenada x de la pieza
         var yRotada = pieza.position().y()-centro.y() //La coordenada y de la pieza
         //intercambiamos las coordenadas x'=y, y'=-x
         const aux = xRotada
-        xRotada = yRotada
-        yRotada = -(aux)
+        xRotada = yOrientacion * yRotada
+        yRotada = xOrientacion * (aux)
         //le sumamos el centro de vuelta
         xRotada += centro.x() 
         yRotada += centro.y() 
@@ -106,35 +116,9 @@ class BloqueTetris{
             return controlador.posEstaOcupada(xRotada, yRotada)
         }
     }
-
 // ------------------  MOVIMIENTOS --------------------------
-
-    method mover(dir){
-        if (dir == "derecha" && controlador.dirEstaLibre("derecha", [a, b, c, d])){ 
-            xCentro += 1
-            centro = game.at(xCentro, yCentro)
-            a.asignarPosicion(a.position().x()+1, a.position().y())
-            b.asignarPosicion(b.position().x()+1, b.position().y())
-            c.asignarPosicion(c.position().x()+1, c.position().y())
-            d.asignarPosicion(d.position().x()+1, d.position().y())
-        }
-        if (dir == "izquierda" && controlador.dirEstaLibre("izquierda", [a, b, c, d]))
-        {
-            xCentro -= 1
-            centro = game.at(xCentro, yCentro)
-            a.asignarPosicion(a.position().x()-1, a.position().y())
-            b.asignarPosicion(b.position().x()-1, b.position().y())
-            c.asignarPosicion(c.position().x()-1, c.position().y())
-            d.asignarPosicion(d.position().x()-1, d.position().y())
-        }
-        if (dir == "abajo" && controlador.dirEstaLibre("abajo", [a, b, c, d]) ){
-            yCentro -= 1
-            centro = game.at(xCentro, yCentro)
-            a.caer()
-            b.caer()
-            c.caer()
-            d.caer()
-        }
+    method mover(direccion){
+        direccion.mover(piezas)
     }
 
     method estaEnElFondo(){//retorna T o F
@@ -142,32 +126,29 @@ class BloqueTetris{
     }
 
     method mostrar(){
-            game.addVisual(a)
-            game.addVisual(b)
-            game.addVisual(c)
-            game.addVisual(d)
+        piezas.forEach({
+            pieza =>
+            game.addVisual(pieza)
+        })
     }  
 
     method remover(){
-        game.removeVisual(a)
-        game.removeVisual(b)
-        game.removeVisual(c)
-        game.removeVisual(d)
+        piezas.forEach({
+            pieza =>
+            game.removeVisual(pieza)
+        })
     }
 
     method caer(){
-        self.mover("abajo")
+        self.mover(abajo)
     }
 // ----------------------HARDROP ----------------------------
-
-    method hardDrop(){
-        if(controlador.dirEstaLibre("abajo", [a, b, c, d])){
-            self.caer()
-            self.hardDrop()
-        }else{
-            self.establecerEnTablero()
-        }
-        return 0
+    method hardDrop(sombra){
+        a.asignarPosicion(sombra.a().position().x(), sombra.a().position().y())
+        b.asignarPosicion(sombra.b().position().x(), sombra.b().position().y())
+        c.asignarPosicion(sombra.c().position().x(), sombra.c().position().y())
+        d.asignarPosicion(sombra.d().position().x(), sombra.d().position().y())
+        
     }	
 
     method establecerEnTablero(){
@@ -178,12 +159,14 @@ class BloqueTetris{
             cantidadDeLineasCompletadas.times({_=>
                 controlador.quitarLineaCompleta(yDeFilaCompleta.max())
                 yDeFilaCompleta.remove(yDeFilaCompleta.max())
-                if(iterador < 3){
-                    controlador.actualizarPuntaje(100)
+                if(iterador == 1){
+                    puntaje.sumar(100)                
+                } else if( iterador == 2){
+                    puntaje.sumar(200) 
                 } else if(iterador == 3){
-                    controlador.actualizarPuntaje(200)
+                    puntaje.sumar(200)
                 } else if(iterador == 4){
-                    controlador.actualizarPuntaje(400)
+                    puntaje.sumar(300)
                 }
                 iterador += 1
             })
@@ -214,18 +197,57 @@ class Tipo_bloqueSombra inherits BloqueTetris{
         game.removeVisual(c)
         game.removeVisual(d)
     }
-    method imitarPos(bloque){
-        a.asignarPosicion(bloque.a().position().x(), bloque.a().position().y())
-        b.asignarPosicion(bloque.b().position().x(), bloque.b().position().y())
-        c.asignarPosicion(bloque.c().position().x(), bloque.c().position().y())
-        d.asignarPosicion(bloque.d().position().x(), bloque.d().position().y())
+    method imitarPosMov(bloque){
+        a.asignarPosicion(bloque.a().position().x(), a.position().y())
+        b.asignarPosicion(bloque.b().position().x(), b.position().y())
+        c.asignarPosicion(bloque.c().position().x(), c.position().y())
+        d.asignarPosicion(bloque.d().position().x(), d.position().y())
+        xCentro = bloque.xCentro()
+        if (controlador.columnasLibresApartiDePieza([a,b,c,d], [bloque.a(), bloque.b(), bloque.c(), bloque.d()]) ){
+            if (!controlador.dirEstaLibre("actual", [a, b, c, d])){
+                self.mover("arriba")
+            } else if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
+                self.descender()
+            }
+        }else {
+            a.asignarPosicion(bloque.a().position().x(), bloque.a().position().y())
+            b.asignarPosicion(bloque.b().position().x(), bloque.b().position().y())
+            c.asignarPosicion(bloque.c().position().x(), bloque.c().position().y())
+            d.asignarPosicion(bloque.d().position().x(), bloque.d().position().y())
+            if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
+                self.descender()
+            }
+        }
+    }
+    method imitarPosRot(bloque){
+        a.asignarPosicion(bloque.a().position().x(), bloque.a().position().y()- bloque.yCentro() + yCentro)
+        b.asignarPosicion(bloque.b().position().x(), bloque.b().position().y()- bloque.yCentro() + yCentro)
+        c.asignarPosicion(bloque.c().position().x(), bloque.c().position().y()- bloque.yCentro() + yCentro)
+        d.asignarPosicion(bloque.d().position().x(), bloque.d().position().y()- bloque.yCentro() + yCentro) //No sumar ni restar centro X
+            
+        if (controlador.columnasLibresApartiDePieza([a,b,c,d], [bloque.a(), bloque.b(), bloque.c(), bloque.d()])){ 
+            self.irAlineaSuperior()
+            if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
+                self.descender()
+            }
+        } else{
+            a.asignarPosicion(bloque.a().position().x(), bloque.a().position().y())
+            b.asignarPosicion(bloque.b().position().x(), bloque.b().position().y())
+            c.asignarPosicion(bloque.c().position().x(), bloque.c().position().y())
+            d.asignarPosicion(bloque.d().position().x(), bloque.d().position().y())
+            if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
+                self.descender()
+            }
+        }
+    }
+    method irAlineaSuperior(){
         if (!controlador.dirEstaLibre("actual", [a, b, c, d])){
-            self.mover("arriba")
-        } else if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
-            self.descender()
+            self.mover(arriba)
+            self.irAlineaSuperior()
         }
     }
 }
+
 //esto podriamos generalizarlo con clases o herencias para incluir al bloque linea
 
 // -----Piezas/ACCIONES-
@@ -255,7 +277,25 @@ class Pieza{//un "pixel" del bloque de tetris
         position = game.at(xRotada, yRotada)
     }
 
+    method up(){
+        position = game.at(position.x(), position.y()+1)
+    }
+
+    method down(){
+        position = game.at(position.x(), position.y()-1)
+    }
+
+    method right(){
+        position = game.at(position.x()+1, position.y())
+    }
+
+    method left(){
+        position = game.at(position.x()-1, position.y())
+    }
+
 }
+
+
 
 // ----------VISUALES---
 class Fondo{
@@ -296,3 +336,50 @@ class Persona{
     
 }
 
+class Direccion{
+    const xRotacion = 0
+    const yRotacion = 0
+    const modifX
+    const modifY
+    method mover(listaPiezas){
+        if (controlador.dirEstaLibre("derecha", listaPiezas)){
+            listaPiezas.forEach({
+                pieza =>
+                pieza.asignarPos(pieza.position().x() + modifX, pieza.position().y() + modifY)
+            })
+        }
+    }
+    method rotar(listaPiezas){
+        const listaValoresReturn = listaPiezas.map({pieza => BloqueTetris.rotarDireccion(pieza, xRotacion, yRotacion)})
+            if (listaValoresReturn.all( {valorReturn => valorReturn == 0})){
+                listaPiezas.forEach({
+                    pieza =>
+                    pieza.asumirPosicionRotada()
+                })
+            }
+            else if(!listaValoresReturn.any({valorReturn => valorReturn == 1})){ 
+                const dirLejosDePared = listaValoresReturn.filter({valorReturn => valorReturn != 1 && valorReturn != 0}).head()
+                if(controlador.dirEstaLibre(dirLejosDePared, listaPiezas)){
+                    self.mover(dirLejosDePared)// Se mueve 1 casilla lejos de la pared lateral
+                    self.rotar(listaPiezas) //Intenta rotar nuevamente
+                }
+            }
+    }
+}
+
+object derecha inherits Direccion(modifX = 1, modifY = 0, xRotacion = -1, yRotacion = 1){
+    method rotarHoraria(pieza){
+
+    }
+}
+object izquierda inherits Direccion(modifX = -1, modifY = 0, xRotacion = 1, yRotacion = -1){
+    method rotarHoraria(pieza){
+
+    }
+}
+object abajo inherits Direccion(modifX = 0, modifY = -1){
+
+}
+object arriba inherits Direccion(modifX = 0, modifY = 1){
+
+}
