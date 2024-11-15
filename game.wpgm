@@ -1,7 +1,17 @@
 import juego.*
 import controlador.*
 import wollok.game.*
+import inicioTetris.*
+//////////////////////////////////////////////////////
+// ----- RUN
 
+<<<<<<< HEAD
+    program tetrizado {                                   
+        tetrisPresentacion.inicio()
+        game.start()  
+    }
+//////////////////////////////////////////////////////
+=======
 program tetrizado {
     game.title("TETRIZADO")
     game.height(20)
@@ -159,3 +169,4 @@ program tetrizado {
     */
 
 }
+>>>>>>> SimplificadoDeFunciones
