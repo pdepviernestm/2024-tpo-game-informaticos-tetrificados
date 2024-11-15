@@ -17,7 +17,6 @@ import wollok.game.*
         var contadoresDeLineaCompleta = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         
-<<<<<<< HEAD
         // -------------- TABLERO -------------------------
             //Para acceder a indice usar coordenada 19-y, 
             //asi fila inferior es y = 0 y la superior es y = 19
@@ -52,106 +51,6 @@ import wollok.game.*
                     bloque = new Tipo_bloqueT()
                 } else {
                     bloque = new Tipo_bloqueLinv() //esto esta para evitar un error
-=======
-        var bloque = new Tipo_bloqueL()
-        if (numeroAleatorio == 0) {
-            bloque = new Tipo_bloqueL()
-        } else if (numeroAleatorio == 1) {
-            bloque = new Tipo_bloqueLinv()
-        } else if (numeroAleatorio == 2) {
-            bloque = new Tipo_bloqueCuadrado()
-        } else if (numeroAleatorio == 3) {
-            bloque = new Tipo_bloqueLinea()
-        } else if (numeroAleatorio == 4) {
-            bloque = new Tipo_bloqueS()
-        } else if (numeroAleatorio == 5) {
-            bloque = new Tipo_bloqueSinv()
-        } else if (numeroAleatorio == 6) {
-            bloque = new Tipo_bloqueT()
-        } else {
-            bloque = new Tipo_bloqueLinv() //esto esta para evitar un error
-        }
-        return bloque
-    }
- // --------------------- Game Over - Implementacion ------------------------------
-
-
-    method perder(){
-        game.addVisual(gameOver)
-        game.removeTickEvent("Caida")
-        game.schedule(100, {game.stop()})
-    }
-
-
-// ----------------- Verificar posiciones -------------------- 
-
-    method posEstaOcupada(x, y){//1 si pos esta ocupada, 0 si no esta ocupada
-        if (x < 18 || x > 27 || y < 0){
-            return 1
-        }
-        if (y > 19 ){
-            return 0
-        }
-        if (matriz.get(19-y).get(x-18).pieza() != null){
-            return 1
-        }
-        return 0
-    }
-
-    method ocuparPos(pieza){
-        const x = pieza.position().x()
-        const y = pieza.position().y()
-        if(y > 19){
-            if (!finjuego){
-                finjuego = true
-                self.perder()
-            }
-            return -1
-        }else{
-            matriz.get(19-y).get(x-18).pieza(pieza)
-            contadoresDeLineaCompleta = contadoresDeLineaCompleta.take(19 - y) + [(contadoresDeLineaCompleta.get(19 - y)) + 1] + contadoresDeLineaCompleta.drop(19 - y + 1)
-            const huboLineaCompleta = (contadoresDeLineaCompleta.get(19 - y) == 10) //La agrego porque si no al retornar me marca un warning de que estoy usando mal el if
-            if (huboLineaCompleta) {
-                return y
-            }
-            return -1
-        }
-    }
-// --------------------- Completar Linea ---------------------------- 
-
-    method quitarLineaCompleta(yDeFilaCompleta){
-        self.eliminarLinea(19 - yDeFilaCompleta)
-        self.bajarLineas(19 - yDeFilaCompleta)
-        lineas.sumar(1)
-    }
-
-    method dirEstaLibre(dir, listaPiezas){
-        return dir.dirEstaLibre(listaPiezas)
-    }
-
-    method eliminarLinea(indexLinea){
-        var columna = 0
-        contadoresDeLineaCompleta = [0] + contadoresDeLineaCompleta.take(indexLinea) + contadoresDeLineaCompleta.drop(indexLinea + 1)//Saco la linea completa de los contadores
-        10.times({_=>
-            game.removeVisual(matriz.get(indexLinea).get(columna).pieza())
-            matriz.get(indexLinea).get(columna).pieza(null)
-            columna += 1
-        })
-        
-    }
-
-    method bajarLineas(indexLinea){//recibe el indice (de la matriz) de la fila que se elimino
-        var matrizAuxiliar = matriz.take(indexLinea)//.filter({fila => fila.any({elemento => elemento.pieza() != null})}) //Agarro solo las filas que van a bajar y tienen alguna pieza
-        //La cantidad de lineas en esta matriz sera la cantidad de veces que se va a hacer el proceso de bajar
-        var lineaActual = indexLinea-1 //La fila que se va a bajar primero 
-        indexLinea.times({
-            _=>
-            //De la ultima fila de esta matriz, bajamos todos 1 lugar
-            matrizAuxiliar.last().forEach({elemento => 
-                if(elemento.pieza() != null){
-                    elemento.pieza().caer() //actualizamos la posision real (visual) de la pieza
-                    matriz.get(lineaActual+1).get(elemento.pieza().position().x()-18).pieza(elemento.pieza()) //Ponemos la nueva pos de la pieza en la matriz
->>>>>>> SimplificadoDeFunciones
                 }
                 return bloque
             }
@@ -395,7 +294,6 @@ import wollok.game.*
             game.addVisual(new Palabra(posision = game.at(29,18), imagen = "nextDiseño.png"))
             game.addVisual(new Palabra(posision = game.at(11,18), imagen = "holdDiseño.png"))
 
-<<<<<<< HEAD
             //celdas para next y hold
             anchoCacillas.times({_=> 
                 altoCacillas.times({_=>
@@ -410,47 +308,6 @@ import wollok.game.*
                 xHold += 1
             })
         }
-=======
-object visuales{
-    var xNext = 32
-    var yNext = 15
-    var xHold = 14
-    var yHold = 15
-    const anchoCacillas = 3
-    const altoCacillas = 4
-
-    const ventanaPausa = new Fondo(posision = game.at(18,8), imagen = "ventana.png")
-
-    method agregarVisuales(){
-        game.addVisual(new Fondo(posision = game.at(0,0), imagen = "fondoDiseñoIzq.png"))
-        game.addVisual(new Fondo(posision = game.at(28,0), imagen = "fondoDiseñoDer.png"))
-        game.addVisual(new Palabra(posision = game.at(29,12), imagen = "puntajeDiseño.png"))
-        game.addVisual(new Palabra(posision = game.at(29,10), imagen = "lineasDiseño.png"))
-        game.addVisual(new Palabra(posision = game.at(29,8), imagen = "nivelDiseño.png"))
-        puntaje.agregarVisuales()
-        lineas.agregarVisuales()
-        nivel.agregarVisuales()
-        game.addVisual(new Palabra(posision = game.at(29,18), imagen = "nextDiseño.png"))
-        game.addVisual(new Palabra(posision = game.at(11,18), imagen = "holdDiseño.png"))
-
-        //celdas para next y hold
-        anchoCacillas.times({_=> 
-            altoCacillas.times({_=>
-                game.addVisual(new Palabra(posision = game.at(xNext,yNext), imagen = "celdaFondo2.jpg"))
-                yNext += 1
-                game.addVisual(new Palabra(posision = game.at(xHold,yHold), imagen = "celdaFondo2.jpg"))
-                yHold += 1
-            })
-            yNext -= altoCacillas
-            yHold -= altoCacillas
-            xNext += 1
-            xHold += 1
-        })
-    }
-    
-    method ventanaPausa(){
-        game.addVisual(ventanaPausa)
->>>>>>> SimplificadoDeFunciones
     }
 // ------------- NUMEROS -----------------------------
     object numero{
