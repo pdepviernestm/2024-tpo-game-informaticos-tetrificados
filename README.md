@@ -20,6 +20,8 @@ El juego se basa en un tetris. Nos inspiramos en el tetris oficial y buscamos im
 - Tecla LEFT: mover bloque a la izquierda
 - Tecla RIGHT: mover bloque a la derecha
 - Tecla SPACE: hard drop (enviar el bloque al fondo)
+- Tecla P: pausa y reanudar
+- Tecla R: restart
 
 
 ## Otros
