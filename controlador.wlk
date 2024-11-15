@@ -12,33 +12,18 @@ class ElementoMatriz{
 object controlador {
     var finjuego = false 
     var contadoresDeLineaCompleta = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] //Se suma 1 cada vez que se ocupa un lugar de su fila, hay 1 contador por cada fila
-    var contadorLineas = 0
-    var contadorPuntaje = 0
+
 // -------------- Tablero -------------------------------------------------
 
-    const matriz = [ //Para acceder a indice usar coordenada 19-y, asi fila inferior es y = 0 y la superior es y = 19
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()],
-        [new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz(), new ElementoMatriz()]
-    ]  
+    const matriz = [] //Para acceder a indice usar coordenada 19-y, asi fila inferior es y = 0 y la superior es y = 19
+    method inicializarMatriz(){
+        20.times({_=>
+            matriz.add([new ElementoMatriz()])
+            9.times({_=>
+                matriz.last().add(new ElementoMatriz())
+            })
+        })
+    }  
 
 // ------------- Crear Bloque ---------------------------------
 
@@ -75,24 +60,17 @@ object controlador {
         game.schedule(100, {game.stop()})
     }
 
-    
-// ---------------------- Level Up --------------------------------
-
-    method actualizarNivel(contador, bloqueUnidad, bloqueDecena){
-        bloqueUnidad.image("numero" + (contador%10) + ".png")
-        bloqueDecena.image("numero" + (contador/10).truncate(0) + ".png")
-    }
 
 // ----------------- Verificar posiciones -------------------- 
 
     method posEstaOcupada(x, y){//1 si pos esta ocupada, 0 si no esta ocupada
-        if (x < 18 || x > 27 || y < 0){
+        if (x < constsGlobales.paredIzqTablero() || x > constsGlobales.paredDerTablero() || y < 0){
             return 1
         }
-        if (y > 19){
+        if (y > 19 ){
             return 0
         }
-        if (matriz.get(19-y).get(x-18).pieza() != null){
+        if (matriz.get(19-y).get(constsGlobales.indEnTab(x)).pieza() != null){
             return 1
         }
         return 0
@@ -108,9 +86,9 @@ object controlador {
             }
             return -1
         }else{
-            matriz.get(19-y).get(x-18).pieza(pieza)
-            contadoresDeLineaCompleta = contadoresDeLineaCompleta.take(19 - y) + [(contadoresDeLineaCompleta.get(19 - y)) + 1] + contadoresDeLineaCompleta.drop(19 - y + 1)
-            const huboLineaCompleta = (contadoresDeLineaCompleta.get(19 - y) == 10) //La agrego porque si no al retornar me marca un warning de que estoy usando mal el if
+            matriz.get(19-y).get(constsGlobales.indEnTab(x)).pieza(pieza)
+            contadoresDeLineaCompleta = contadoresDeLineaCompleta.take(19-y) + [(contadoresDeLineaCompleta.get(19-y)) + 1] + contadoresDeLineaCompleta.drop(19-y + 1)
+            const huboLineaCompleta = (contadoresDeLineaCompleta.get(19-y) == 10) //La agrego porque si no al retornar me marca un warning de que estoy usando mal el if
             if (huboLineaCompleta) {
                 return y
             }
@@ -120,28 +98,13 @@ object controlador {
 // --------------------- Completar Linea ---------------------------- 
 
     method quitarLineaCompleta(yDeFilaCompleta){
-        self.eliminarLinea(19 - yDeFilaCompleta)
-        self.bajarLineas(19 - yDeFilaCompleta)
-        self.actualizarLineasCompletadas()
+        self.eliminarLinea(19-yDeFilaCompleta)
+        self.bajarLineas(19-yDeFilaCompleta)
+        lineas.sumar(1)
     }
 
     method dirEstaLibre(dir, listaPiezas){
-        if (dir == "derecha"){
-            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x()+1, p.position().y()) == 1}
-        }
-        if (dir == "izquierda"){
-            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x()-1, p.position().y()) == 1}
-        }
-        if (dir == "abajo"){
-            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x(), p.position().y()-1) == 1} 
-        }
-        if (dir == "arriba"){
-            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x(), p.position().y()+1) == 1}
-        }
-        if (dir == "actual"){
-            return !listaPiezas.any{p => self.posEstaOcupada(p.position().x(), p.position().y()) == 1}
-        }
-        return "error"
+        return dir.dirEstaLibre(listaPiezas)
     }
 
     method eliminarLinea(indexLinea){
@@ -174,23 +137,50 @@ object controlador {
         }) 
     }
 
-    method actualizarLineasCompletadas(){
-        contadorLineas += 1
-        puntajes.lineasUnidad().image("numero" + (contadorLineas%10) + ".png")
-        puntajes.lineasDecena().image("numero" + ((contadorLineas/10).truncate(0) %10) + ".png")
-        puntajes.lineasCentena().image("numero" + ((contadorLineas/100).truncate(0) %10) + ".png")
-        puntajes.lineasUnidadDeMil().image("numero" + ((contadorLineas/1000).truncate(0) %10) + ".png")
+    method ColumnaEstaLibre(xCol, ySombra, yBloque){ //retorna false si hay algun objeto en la columna
+        const matrizActual = matriz.take(20-ySombra).drop(20-yBloque)
+        return !matrizActual.any({fila => fila.get(constsGlobales.indEnTab(xCol)).pieza() != null})
     }
 
-// --------------------- Score ----------------------------------- 
+    method columnasLibresApartiDePieza(piezasSombra, piezasBloque){
+        var xCols = piezasSombra.map({pieza => pieza.position().x()}).asSet().asList()
+        const ySombra = piezasSombra.map({pieza => pieza.position().y()}).min()
+        const yBloque = piezasBloque.map({pieza => pieza.position().y()}).min()
+        const iterador = xCols.size()
+        const colsLibres = []
+        iterador.times({_=>
+            colsLibres.add(self.ColumnaEstaLibre(xCols.head(), ySombra, yBloque))
+            xCols = xCols.drop(1)
+        })
+        return colsLibres.all({col => col})
+    }
+    method crearSombraYUbicarla(bloqueActual){
+        const nuevoBloqueSombra = bloqueActual.crearSombra()
+        nuevoBloqueSombra.descender()
+        nuevoBloqueSombra.mostrar()
+        bloqueActual.remover()
+        bloqueActual.mostrar()
+        return nuevoBloqueSombra
+    }
+    method ReemplazarSombra(bloqueActual, bloqueSombra){
+        bloqueSombra.eliminar()
+        const nuevoBloqueSombra = self.crearSombraYUbicarla(bloqueActual)
+        //esto es para que la sombra no quede por encima del bloqueActual cuando se superpongan
+        return nuevoBloqueSombra
+    }
 
-    method actualizarPuntaje(valor){
-        contadorPuntaje += valor
-        puntajes.puntajeUnidad().image("numero" + (contadorPuntaje%10) + ".png")
-        puntajes.puntajeDecena().image("numero" + ((contadorPuntaje/10).truncate(0) %10) + ".png")
-        puntajes.puntajeCentena().image("numero" + ((contadorPuntaje/100).truncate(0) %10) + ".png")
-        puntajes.puntajeUnidadDeMil().image("numero" + ((contadorPuntaje/1000).truncate(0) %10) + ".png")
-        puntajes.puntajeDecenaDeMil().image("numero" + ((contadorPuntaje/10000).truncate(0) %10) + ".png")
+    method llamarSiguienteBloque(bloqueNext){
+        bloqueNext.entrarEnTablero()
+        return bloqueNext
+    }
+    method generarSiguienteBloque(){
+        const bloqueNext = self.generarBloqueAleatorio()
+        bloqueNext.mostrar()
+        return bloqueNext
+    }
+    method establecerYLlamarSiguente(bloqueActual, bloqueNext){
+        bloqueActual.establecerEnTablero()
+        return self.llamarSiguienteBloque(bloqueNext)
     }
 
     method ColumnaEstaLibre(xCol, ySombra, yBloque){ //retorna false si hay algun objeto en la columna
@@ -212,47 +202,143 @@ object controlador {
     }
 }
 
-object puntajes {
-    const linasUnidad = new Numero(posision = game.at(37,10), imagen = "numero0.png")
-    const linasDecena = new Numero(posision = game.at(36,10), imagen = "numero0.png")
-    const linasCentena = new Numero(posision = game.at(35,10), imagen = "numero0.png")
-    const lineasUnidadDeMil = new Numero(posision = game.at(34,10), imagen = "numero0.png")
+class Incrementales {
+    var contador
+    const listaNumeros
 
-    method lineasUnidad() = linasUnidad
-    method lineasDecena() = linasDecena
-    method lineasCentena() = linasCentena
-    method lineasUnidadDeMil() = lineasUnidadDeMil
+    method actuaizarVisuales(valor){
+        numero.mostrar(valor, listaNumeros)
+    }
+    
+    method sumar(valorQueSeSuma){
+        contador += valorQueSeSuma
+        self.actuaizarVisuales(contador)
+    }
+    
+    method resetear(){
+        contador = 0
+        self.actuaizarVisuales(contador)
+    }	
+    
+}
 
-    const puntajeUnidad = new Numero(posision = game.at(37,12), imagen = "numero0.png")
-    const puntajeDecena = new Numero(posision = game.at(36,12), imagen = "numero0.png")
-    const puntajeCentena = new Numero(posision = game.at(35,12), imagen = "numero0.png")
-    const puntajeUnidadDeMil = new Numero(posision = game.at(34,12), imagen = "numero0.png")
-    const puntajeDecenaDeMil = new Numero(posision = game.at(33,12), imagen = "numero0.png")
+object puntaje inherits Incrementales(contador= 0, listaNumeros = [unidad, decena, centena, unidadDeMil, decenaDeMil]){
+    const unidad = new Numero(posision = game.at(37,12), imagen = "numero0.png")
+    const decena = new Numero(posision = game.at(36,12), imagen = "numero0.png")
+    const centena = new Numero(posision = game.at(35,12), imagen = "numero0.png")
+    const unidadDeMil = new Numero(posision = game.at(34,12), imagen = "numero0.png")
+    const decenaDeMil = new Numero(posision = game.at(33,12), imagen = "numero0.png")
 
-    method puntajeUnidad() = puntajeUnidad
-    method puntajeDecena() = puntajeDecena
-    method puntajeCentena() = puntajeCentena
-    method puntajeUnidadDeMil() = puntajeUnidadDeMil
-    method puntajeDecenaDeMil() = puntajeDecenaDeMil
-
+    method unidad() = unidad
+    method decena() = decena
+    method centena() = centena
+    method unidadDeMil() = unidadDeMil
+    method decenaDeMil() = decenaDeMil
 
     method agregarVisuales(){
-        game.addVisual(linasUnidad)
-        game.addVisual(linasDecena)
-        game.addVisual(linasCentena)
-        game.addVisual(lineasUnidadDeMil)
-
-        game.addVisual(puntajeUnidad)
-        game.addVisual(puntajeDecena)
-        game.addVisual(puntajeCentena)
-        game.addVisual(puntajeUnidadDeMil)
-        game.addVisual(puntajeDecenaDeMil)
-
+        game.addVisual(unidad)
+        game.addVisual(decena)
+        game.addVisual(centena)
+        game.addVisual(unidadDeMil)
+        game.addVisual(decenaDeMil)
     }
 }
 
+object lineas inherits Incrementales(contador= 0, listaNumeros = [unidad, decena, centena, unidadDeMil]){
+    const unidad = new Numero(posision = game.at(37,10), imagen = "numero0.png")
+    const decena = new Numero(posision = game.at(36,10), imagen = "numero0.png")
+    const centena = new Numero(posision = game.at(35,10), imagen = "numero0.png")
+    const unidadDeMil = new Numero(posision = game.at(34,10), imagen = "numero0.png")
+
+    method unidad() = unidad
+    method decena() = decena
+    method centena() = centena
+    method unidadDeMil() = unidadDeMil
+
+    method agregarVisuales(){
+        game.addVisual(unidad)
+        game.addVisual(decena)
+        game.addVisual(centena)
+        game.addVisual(unidadDeMil)
+    }
+}
+
+object nivel inherits Incrementales(contador= 1, listaNumeros = [unidad, decena]){
+    const unidad = new Numero(posision = game.at(37,8), imagen = "numero1.png")
+    const decena = new Numero(posision = game.at(36,8), imagen = "numero0.png")
+
+    method unidad() = unidad
+    method dcena() = decena
+
+    method agregarVisuales(){
+        game.addVisual(unidad)
+        game.addVisual(decena)
+    }
+
+    override method resetear(){
+        contador = 1
+        self.actuaizarVisuales(contador)
+    }	
+}
 // ------- Game Over -------------------
 object gameOver {
     method image() = "gameover.png"
     method position() = game.at(19, 10)
+}
+
+object visuales{
+    var xNext = 32
+    var yNext = 15
+    var xHold = 14
+    var yHold = 15
+    const anchoCacillas = 3
+    const altoCacillas = 4
+
+    const ventanaPausa = new Fondo(posision = game.at(18,7), imagen = "ventanaPausa.png")
+
+    method agregarVisuales(){
+        game.addVisual(new Fondo(posision = game.at(0,0), imagen = "fondoDiseñoIzq.png"))
+        game.addVisual(new Fondo(posision = game.at(28,0), imagen = "fondoDiseñoDer.png"))
+        game.addVisual(new Palabra(posision = game.at(29,12), imagen = "puntajeDiseño.png"))
+        game.addVisual(new Palabra(posision = game.at(29,10), imagen = "lineasDiseño.png"))
+        game.addVisual(new Palabra(posision = game.at(29,8), imagen = "nivelDiseño.png"))
+        puntaje.agregarVisuales()
+        lineas.agregarVisuales()
+        nivel.agregarVisuales()
+        game.addVisual(new Palabra(posision = game.at(29,18), imagen = "nextDiseño.png"))
+        game.addVisual(new Palabra(posision = game.at(11,18), imagen = "holdDiseño.png"))
+
+        //celdas para next y hold
+        anchoCacillas.times({_=> 
+            altoCacillas.times({_=>
+                game.addVisual(new Palabra(posision = game.at(xNext,yNext), imagen = "celdaFondo2.jpg"))
+                yNext += 1
+                game.addVisual(new Palabra(posision = game.at(xHold,yHold), imagen = "celdaFondo2.jpg"))
+                yHold += 1
+            })
+            yNext -= altoCacillas
+            yHold -= altoCacillas
+            xNext += 1
+            xHold += 1
+        })
+    }
+
+    method mostrarVentanaPausa(){
+        game.addVisual(ventanaPausa)
+    }
+
+    method ocultarVentanaPausa(){
+        game.removeVisual(ventanaPausa)
+    }
+}
+
+object numero{
+    method mostrar(valor, listaNumeros){
+        var divisor = 1
+        listaNumeros.forEach({
+            numero =>
+            numero.image("numero" + ((valor/divisor).truncate(0) %10) + ".png")
+            divisor *= 10
+        })
+    }
 }
