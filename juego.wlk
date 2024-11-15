@@ -322,7 +322,7 @@ import inicioTetris.*
 // ----------PAPIRO------
     object papiro{
         var property position = game.at(10, 10) 
-        method image() = "papiro.jpg"
+        method image() = "papiro.png"
     }
 // --------DIRECCIONES-
     class Direccion{

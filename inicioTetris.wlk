@@ -2,8 +2,7 @@ import wollok.game.*
 import juego.*
 import controlador.*
 //////////////////////////////////////////////////////
-// -----------GAME DEFAULT---------------
-    object tetrisPresentacion {
+    class Juego{
         var anchoTotal = 62
         var altoTotal = 30
         var ticksCaida = 500
@@ -19,6 +18,10 @@ import controlador.*
             (
             posision = game.at(36,8), 
             imagen = "numero0.png")
+        
+    }
+// -----------GAME DEFAULT---------------
+    object tetrisPresentacion inherits Juego{
         /*
         keyboard.z().onPressDo({
             bloqueActual.rotar("izquierda")
@@ -50,14 +53,14 @@ import controlador.*
             
         //COLISION
             game.onCollideDo(persona, 
-                        {tetris => keyboard.t().onPressDo({ self.configuracionJuegoTetris() })})
+                        {tetris => keyboard.t().onPressDo({ tetrisJuego.configuracionJuegoTetris() })})
             //keyboard.t().onPressDo({ self.configuracion() })
         }
         
        
     }
 // -----------TETRIS
-    object tetrisJuego{
+    object tetrisJuego inherits Juego{
         //CLEAR
          method clearGame() {
             game.allVisuals().forEach({ visual => game.removeVisual(visual) })
