@@ -685,6 +685,8 @@ object constsGlobales{
     const property paredDerTablero = 27
     const property posicionPosible = -1
     const property posicionNoEsPosible = -2
+
+    method indEnTab(xCoord) = xCoord - paredIzqTablero
 }
 
 >>>>>>> parent of 60068fb (Merge branch 'develop' into SimplificadoDeFunciones)

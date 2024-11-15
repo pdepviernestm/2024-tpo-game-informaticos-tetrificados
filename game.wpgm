@@ -31,37 +31,14 @@ program tetrizado {
     bloqueNext.mostrar()
 
     game.start()
-
- /* Pausa?, no resume, ni tampoco frena al jugador de moverse, solo quita la caida supongo
- 
-    keyboard.p().onPressDo({
-        if (!juegoPausado){
-            game.removeTickEvent("Caida")
-        }else{
-            game.onTick(ticksCaida, "Caida", 
-            {
-                bloqueActual.caer()
-
-                if(bloqueActual.estaEnElFondo()){
-                    game.schedule(500, { //La idea de esto es que tengas un ratito para mover la pieza antes de que se quede fija
-                        if (bloqueActual.estaEnElFondo()){
-                            sePuedeUsarHold = true
-                            bloqueActual = controlador.establecerYLlamarSiguente(bloqueActual, bloqueNext)
-                            bloqueNext = controlador.generarSiguienteBloque()
-                            bloqueSombra = controlador.ReemplazarSombra(bloqueActual, bloqueSombra)
-                        }
-                    })
-                }
-            })
-        }
-    })
-    */
     
     keyboard.p().onPressDo({
         if (!juegoPausado){
             juegoPausado = true
+            visuales.mostrarVentanaPausa()
         }else{
             juegoPausado = false
+            visuales.ocultarVentanaPausa()
         }
     })
 
