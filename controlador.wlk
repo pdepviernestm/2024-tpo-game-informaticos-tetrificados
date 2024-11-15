@@ -65,6 +65,7 @@ object controlador {
 
     method perder(){
         game.addVisual(gameOver)
+        gameOver.sonido()
         game.removeTickEvent("Caida")
         game.schedule(100, {game.stop()})
     }
@@ -273,8 +274,13 @@ object nivel inherits Incrementales(contador= 1, listaNumeros = [unidad, decena]
 }
 // ------- Game Over -------------------
 object gameOver {
+    const sonido = game.sound("gameover.mp3")
     method image() = "gameover.png"
     method position() = game.at(19, 10)
+    method sonido(){
+        sonido.play()
+    }
+    
 }
 
 object visuales{

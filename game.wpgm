@@ -26,7 +26,6 @@ import tetris.*
         bloqueNext.mostrar()
 
         const sonidoFondo = game.sound("tetrisgameboy.mp3")
-       
 
         game.start()
         
