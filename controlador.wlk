@@ -64,13 +64,13 @@ object controlador {
 // ----------------- Verificar posiciones -------------------- 
 
     method posEstaOcupada(x, y){//1 si pos esta ocupada, 0 si no esta ocupada
-        if (x < 18 || x > 27 || y < 0){
+        if (x < constsGlobales.paredIzqTablero() || x > constsGlobales.paredDerTablero() || y < 0){
             return 1
         }
         if (y > 19 ){
             return 0
         }
-        if (matriz.get(19-y).get(x-18).pieza() != null){
+        if (matriz.get(19-y).get(constsGlobales.indEnTab(x)).pieza() != null){
             return 1
         }
         return 0
@@ -86,9 +86,9 @@ object controlador {
             }
             return -1
         }else{
-            matriz.get(19-y).get(x-18).pieza(pieza)
-            contadoresDeLineaCompleta = contadoresDeLineaCompleta.take(19 - y) + [(contadoresDeLineaCompleta.get(19 - y)) + 1] + contadoresDeLineaCompleta.drop(19 - y + 1)
-            const huboLineaCompleta = (contadoresDeLineaCompleta.get(19 - y) == 10) //La agrego porque si no al retornar me marca un warning de que estoy usando mal el if
+            matriz.get(19-y).get(constsGlobales.indEnTab(x)).pieza(pieza)
+            contadoresDeLineaCompleta = contadoresDeLineaCompleta.take(19-y) + [(contadoresDeLineaCompleta.get(19-y)) + 1] + contadoresDeLineaCompleta.drop(19-y + 1)
+            const huboLineaCompleta = (contadoresDeLineaCompleta.get(19-y) == 10) //La agrego porque si no al retornar me marca un warning de que estoy usando mal el if
             if (huboLineaCompleta) {
                 return y
             }
@@ -98,8 +98,8 @@ object controlador {
 // --------------------- Completar Linea ---------------------------- 
 
     method quitarLineaCompleta(yDeFilaCompleta){
-        self.eliminarLinea(19 - yDeFilaCompleta)
-        self.bajarLineas(19 - yDeFilaCompleta)
+        self.eliminarLinea(19-yDeFilaCompleta)
+        self.bajarLineas(19-yDeFilaCompleta)
         lineas.sumar(1)
     }
 
@@ -139,7 +139,7 @@ object controlador {
 
     method ColumnaEstaLibre(xCol, ySombra, yBloque){ //retorna false si hay algun objeto en la columna
         const matrizActual = matriz.take(20-ySombra).drop(20-yBloque)
-        return !matrizActual.any({fila => fila.get(xCol-18).pieza() != null})
+        return !matrizActual.any({fila => fila.get(constsGlobales.indEnTab(xCol)).pieza() != null})
     }
 
     method columnasLibresApartiDePieza(piezasSombra, piezasBloque){
@@ -196,7 +196,11 @@ class Incrementales {
         contador += valorQueSeSuma
         self.actuaizarVisuales(contador)
     }
- 
+    
+    method resetear(){
+        contador = 0
+        self.actuaizarVisuales(contador)
+    }	
     
 }
 
@@ -252,6 +256,11 @@ object nivel inherits Incrementales(contador= 1, listaNumeros = [unidad, decena]
         game.addVisual(unidad)
         game.addVisual(decena)
     }
+
+    override method resetear(){
+        contador = 1
+        self.actuaizarVisuales(contador)
+    }	
 }
 // ------- Game Over -------------------
 object gameOver {
@@ -267,7 +276,7 @@ object visuales{
     const anchoCacillas = 3
     const altoCacillas = 4
 
-    const ventanaPausa = new Fondo(posision = game.at(18,8), imagen = "ventana.png")
+    const ventanaPausa = new Fondo(posision = game.at(18,7), imagen = "ventanaPausa.png")
 
     method agregarVisuales(){
         game.addVisual(new Fondo(posision = game.at(0,0), imagen = "fondoDiseñoIzq.png"))
@@ -295,9 +304,13 @@ object visuales{
             xHold += 1
         })
     }
-    
-    method ventanaPausa(){
+
+    method mostrarVentanaPausa(){
         game.addVisual(ventanaPausa)
+    }
+
+    method ocultarVentanaPausa(){
+        game.removeVisual(ventanaPausa)
     }
 }
 
