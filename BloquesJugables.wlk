@@ -1,27 +1,27 @@
 import juego.*
 import wollok.game.*
 import controlador.*
-
+//////////////////////////////////////////////////////
 //-------------------------BLOQUE------------------------
-class BloqueJugable inherits BloqueTetris{
-    const xCentroTablero
-    const yCentroTablero
-    const xCentroHold
-    const yCentroHold
+    class BloqueJugable inherits BloqueTetris{
+        const xCentroTablero
+        const yCentroTablero
+        const xCentroHold
+        const yCentroHold
 
-    method entrarEnTablero(){
-        a.asignarPosicion((xCentro-a.position().x())+xCentroTablero, (yCentro-a.position().y())+yCentroTablero)
-        b.asignarPosicion((xCentro-b.position().x())+xCentroTablero, (yCentro-b.position().y())+yCentroTablero)
-        c.asignarPosicion((xCentro-c.position().x())+xCentroTablero, (yCentro-c.position().y())+yCentroTablero)
-        d.asignarPosicion((xCentro-d.position().x())+xCentroTablero, (yCentro-d.position().y())+yCentroTablero)
-        xCentro = xCentroTablero
-        yCentro = yCentroTablero
+        method entrarEnTablero(){
+            a.asignarPosicion((xCentro-a.position().x())+xCentroTablero, (yCentro-a.position().y())+yCentroTablero)
+            b.asignarPosicion((xCentro-b.position().x())+xCentroTablero, (yCentro-b.position().y())+yCentroTablero)
+            c.asignarPosicion((xCentro-c.position().x())+xCentroTablero, (yCentro-c.position().y())+yCentroTablero)
+            d.asignarPosicion((xCentro-d.position().x())+xCentroTablero, (yCentro-d.position().y())+yCentroTablero)
+            xCentro = xCentroTablero
+            yCentro = yCentroTablero
+        }
     }
-}
 
 //---------------------TIPOS DE BLOQUES------------------
 // BLOQUE NARANJA
-class Tipo_bloqueL inherits BloqueJugable
+    class Tipo_bloqueL inherits BloqueJugable
     (
     xCentro = 32, 
     yCentro = 16, 
@@ -43,7 +43,7 @@ class Tipo_bloqueL inherits BloqueJugable
             d.asignarPosicion(xCentro+1, yCentro-1)
         }}
 // BLOQUE AZUL
-class Tipo_bloqueLinv inherits BloqueJugable
+    class Tipo_bloqueLinv inherits BloqueJugable
     (
     xCentro = 33, 
     yCentro = 16, 
@@ -65,7 +65,7 @@ class Tipo_bloqueLinv inherits BloqueJugable
         d.asignarPosicion(xCentro-1, yCentro-1)
     }}
 // BLOQUE AMARILLO
-class Tipo_bloqueCuadrado inherits BloqueJugable
+    class Tipo_bloqueCuadrado inherits BloqueJugable
     (
     xCentro = (32.5), 
     yCentro = (15.5),
@@ -87,7 +87,7 @@ class Tipo_bloqueCuadrado inherits BloqueJugable
         d.asignarPosicion(xCentro+0.5, yCentro+0.5)
     }}
 // BLOQUE CELESTE
-class Tipo_bloqueLinea inherits BloqueJugable
+    class Tipo_bloqueLinea inherits BloqueJugable
     (
         xCentro = 33.5, 
         yCentro = 16.5, 
@@ -110,7 +110,7 @@ class Tipo_bloqueLinea inherits BloqueJugable
     }}
 
 // BLOQUE VERDE
-class Tipo_bloqueS inherits BloqueJugable
+    class Tipo_bloqueS inherits BloqueJugable
     (
         xCentro = 33, 
         yCentro = 15, 
@@ -133,7 +133,7 @@ class Tipo_bloqueS inherits BloqueJugable
     }}
 
 // BLOQUE ROJO
-class Tipo_bloqueSinv inherits BloqueJugable
+    class Tipo_bloqueSinv inherits BloqueJugable
     (
         xCentro = 33, 
         yCentro = 16,
@@ -155,7 +155,7 @@ class Tipo_bloqueSinv inherits BloqueJugable
         d.asignarPosicion(xCentro+1, yCentro-1)
     }}
 // BLOQUE VIOLETA
-class Tipo_bloqueT inherits BloqueJugable
+    class Tipo_bloqueT inherits BloqueJugable
     (
         xCentro = 33, 
         yCentro = 16, 
@@ -176,4 +176,5 @@ class Tipo_bloqueT inherits BloqueJugable
         c.asignarPosicion(xCentro, yCentro-1)
         d.asignarPosicion(xCentro+1, yCentro)
     }}
+//////////////////////////////////////////////////////
 

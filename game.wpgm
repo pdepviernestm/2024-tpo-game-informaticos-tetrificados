@@ -2,8 +2,11 @@ import juego.*
 import controlador.*
 import wollok.game.*
 import inicioTetris.*
+//////////////////////////////////////////////////////
+// ----- RUN
 
-program tetrizado {
-    tetris.inicio()
-    game.start()  
-}
+    program tetrizado {                                   
+        tetrisPresentacion.inicio()
+        game.start()  
+    }
+//////////////////////////////////////////////////////
