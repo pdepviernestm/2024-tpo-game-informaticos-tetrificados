@@ -18,23 +18,42 @@ import tetris.*
         var bloqueSombra
         var sePuedeUsarHold = true
         var juegoPausado = false
-
+        var juegoInicializado = false
+/*
         visuales.agregarVisuales()
 
         bloqueActual.entrarEnTablero()
         bloqueSombra = controlador.crearSombraYUbicarla(bloqueActual)
         bloqueNext.mostrar()
-
+*/
         const sonidoFondo = game.sound("tetrisgameboy.mp3")
 
         game.start()
-        
+
         sonidoFondo.shouldLoop(true)
-        game.schedule(50, { 
-            sonidoFondo.play() 
-            sonidoFondo.pause()
-            sonidoFondo.resume()
-        } )
+
+        sonidoFondo.play() 
+  
+        juegoPausado = true
+        game.allVisuals().forEach({ visual => game.removeVisual(visual) })
+        visuales.mostrarVentanaInicio()
+        sonidoFondo.pause()
+
+        keyboard.s().onPressDo({
+            if (juegoPausado && !juegoInicializado){
+                juegoPausado = false
+                juegoInicializado = true
+                visuales.ocultarVentanaInicio()
+                
+                visuales.agregarVisuales()
+
+                bloqueActual.entrarEnTablero()
+                bloqueSombra = controlador.crearSombraYUbicarla(bloqueActual)
+                bloqueNext.mostrar()
+
+                sonidoFondo.resume()
+            }
+        })
 
         keyboard.r().onPressDo({
             nivel.resetear()

@@ -292,6 +292,7 @@ object visuales{
     const altoCacillas = 4
 
     const ventanaPausa = new Fondo(posision = game.at(18,7), imagen = "ventanaPausa.png")
+    const ventanaInicio = new Fondo(posision = game.at(11,2), imagen = "ventanaInicio.png")
 
     method agregarVisuales(){
         game.addVisual(new Fondo(posision = game.at(0,0), imagen = "fondoDiseñoIzq.png"))
@@ -326,6 +327,14 @@ object visuales{
 
     method ocultarVentanaPausa(){
         game.removeVisual(ventanaPausa)
+    }
+
+    method mostrarVentanaInicio(){
+        game.addVisual(ventanaInicio)
+    }
+
+    method ocultarVentanaInicio(){
+        game.removeVisual(ventanaInicio)
     }
 }
 
