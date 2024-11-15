@@ -7,6 +7,7 @@ class BloqueTetris{
     var xCentro
     var yCentro
     var centro = game.at(xCentro, yCentro)
+    var centroAntesDeRotar = game.at(0, 0)
     const a 
     const b 
     const c 
@@ -22,13 +23,15 @@ class BloqueTetris{
     method centro() = centro
     
     method rotar(direccion){
-        const centroAntesDeRotar = centro
+        centroAntesDeRotar = centro
         piezas.forEach({pieza => pieza.guardarPosicionAntesDeRotar()})
-        if(!direccion.rotar(self)){
-            piezas.forEach({pieza => pieza.revertirRotacion()})
-            centro = centroAntesDeRotar
-        }
+        direccion.rotar(self)
         
+        
+    }
+    method deshacerRotacionBloque(){
+        piezas.forEach({pieza => pieza.revertirRotacion()})
+        centro = centroAntesDeRotar
     }
 
     method mover(direccion){
@@ -276,16 +279,16 @@ class RotarConSentido{
 
     method rotar(bloque){ //Retorna TRUE si se pudo rotar, FALSE si no se pudo
         var listaPosRotadas = bloque.piezas().map({pieza => self.rotarDireccion(pieza, bloque.centro(), xRotacion, yRotacion)})
-        const hayRotacLibre = listaPosRotadas.all( {posRotada => controlador.posEstaOcupada(posRotada.x(), posRotada.y()) == 0 }) //lo agrego en una constante ya que me salta warning si lo uso directamente
+        
         // Caso borde derecha:si al rotar se va del limite por derecha
         if (listaPosRotadas.any({posRotada => posRotada.x() > constsGlobales.paredDerTablero()})){ 
             //Si se puede move a derecha, que se mueva e intente rotar nuevamente. 
             //Si no se puede mover a derecha, entonces no hay lugar para que rote, por lo tanto no rotara
             if (controlador.dirEstaLibre(izquierda, bloque.piezas())){
                 bloque.mover(izquierda)
-                return bloque.rotar(self)
+                bloque.rotar(self)
             }else {
-                return false
+                bloque.deshacerRotacionBloque()
             }
         
         // Caso borde izquierda:si al rotar se va del limite por izquierda
@@ -294,21 +297,20 @@ class RotarConSentido{
             //Si no se puede mover a izquierda, entonces no hay lugar para que rote, por lo tanto no rotara
             if (controlador.dirEstaLibre(derecha, bloque.piezas())){
                 bloque.mover(derecha)
-                return bloque.rotar(self)
+                bloque.rotar(self)
             }else{
-                return false
+                bloque.deshacerRotacionBloque()
             }
         
         // Caso rotacion libre: si al rotar no hay obstaculos
-        }else if(hayRotacLibre){
+        }else if(listaPosRotadas.all( {posRotada => controlador.posEstaOcupada(posRotada.x(), posRotada.y()) == 0 })){
             bloque.piezas().forEach({pieza => 
                 pieza.asignarPosicion(listaPosRotadas.head().x(), listaPosRotadas.head().y()) //se asume pos rotada
                 listaPosRotadas = listaPosRotadas.drop(1)
             })
-            return hayRotacLibre
         }
         else{
-            return hayRotacLibre
+            bloque.deshacerRotacionBloque()
         }
     }
 }

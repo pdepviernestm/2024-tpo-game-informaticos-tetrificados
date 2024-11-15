@@ -49,73 +49,97 @@ program tetrizado {
         }
     })
     */
+    
+    keyboard.p().onPressDo({
+        if (!juegoPausado){
+            juegoPausado = true
+        }else{
+            juegoPausado = false
+        }
+    })
+
     keyboard.z().onPressDo({
-        bloqueActual.rotar(antihoraria)
-        bloqueSombra.imitarPos(bloqueActual)
+        if(!juegoPausado){
+            bloqueActual.rotar(antihoraria)
+            bloqueSombra.imitarPosRot(bloqueActual)
+        }
     })
     keyboard.up().onPressDo({
-        bloqueActual.rotar(horaria)
-        bloqueSombra.imitarPosRot(bloqueActual)
+        if(!juegoPausado){
+            bloqueActual.rotar(horaria)
+            bloqueSombra.imitarPosRot(bloqueActual)
+        }
     })
 
     keyboard.left().onPressDo({
-        bloqueActual.mover(izquierda)
-        bloqueSombra.imitarPosMov(bloqueActual)
+        if(!juegoPausado){
+            bloqueActual.mover(izquierda)
+            bloqueSombra.imitarPosMov(bloqueActual)
+        }
     })
 
     keyboard.right().onPressDo({
-        bloqueActual.mover(derecha)
-        bloqueSombra.imitarPosMov(bloqueActual)
+        if(!juegoPausado){
+            bloqueActual.mover(derecha)
+            bloqueSombra.imitarPosMov(bloqueActual)
+        }
     })
 
     keyboard.down().onPressDo({
-        bloqueActual.mover(abajo)
+        if(!juegoPausado){
+            bloqueActual.mover(abajo)
+        }
     })
 
     keyboard.space().onPressDo({
-        puntaje.sumar((bloqueActual.yCentro()*2).truncate(0))
-        bloqueActual.hardDrop(bloqueSombra)
-        sePuedeUsarHold = true
-        bloqueActual = controlador.establecerYLlamarSiguente(bloqueActual, bloqueNext) 
-        bloqueNext = controlador.generarSiguienteBloque()
-        bloqueSombra = controlador.ReemplazarSombra(bloqueActual, bloqueSombra)
-
+        if (!juegoPausado){
+            puntaje.sumar((bloqueActual.yCentro()*2).truncate(0))
+            bloqueActual.hardDrop(bloqueSombra)
+            sePuedeUsarHold = true
+            bloqueActual = controlador.establecerYLlamarSiguente(bloqueActual, bloqueNext) 
+            bloqueNext = controlador.generarSiguienteBloque()
+            bloqueSombra = controlador.ReemplazarSombra(bloqueActual, bloqueSombra)
+        }
 
     })
     
     keyboard.c().onPressDo({
-        if(sePuedeUsarHold){
-            sePuedeUsarHold = false
-            if(bloqueHold == null){
-                bloqueHold = bloqueActual
-                bloqueHold.entrarEnHold()
-                bloqueActual = controlador.llamarSiguienteBloque(bloqueNext)
-                bloqueNext = controlador.generarSiguienteBloque()
-            }else{
-                var bloqueAux
-                bloqueAux = bloqueHold
-                bloqueHold = bloqueActual
-                bloqueActual = bloqueAux
-                bloqueHold.entrarEnHold()
-                bloqueActual.entrarEnTablero()
+        if(!juegoPausado){
+            if(sePuedeUsarHold){
+                sePuedeUsarHold = false
+                if(bloqueHold == null){
+                    bloqueHold = bloqueActual
+                    bloqueHold.entrarEnHold()
+                    bloqueActual = controlador.llamarSiguienteBloque(bloqueNext)
+                    bloqueNext = controlador.generarSiguienteBloque()
+                }else{
+                    var bloqueAux
+                    bloqueAux = bloqueHold
+                    bloqueHold = bloqueActual
+                    bloqueActual = bloqueAux
+                    bloqueHold.entrarEnHold()
+                    bloqueActual.entrarEnTablero()
+                }
+                bloqueSombra = controlador.ReemplazarSombra(bloqueActual, bloqueSombra)
             }
-            bloqueSombra = controlador.ReemplazarSombra(bloqueActual, bloqueSombra)
         }
     })
     
     game.onTick(ticksCaida, "Caida", 
     {
-        bloqueActual.caer()
+        if (!juegoPausado){
+            bloqueActual.caer()
 
-        if(bloqueActual.estaEnElFondo()){
-            game.schedule(500, { //La idea de esto es que tengas un ratito para mover la pieza antes de que se quede fija
-                if (bloqueActual.estaEnElFondo()){
-                    sePuedeUsarHold = true
-                    bloqueActual = controlador.establecerYLlamarSiguente(bloqueActual, bloqueNext)
-                    bloqueNext = controlador.generarSiguienteBloque()
-                    bloqueSombra = controlador.ReemplazarSombra(bloqueActual, bloqueSombra)
-                }
-            })
+            if(bloqueActual.estaEnElFondo()){
+                game.schedule(500, { //La idea de esto es que tengas un ratito para mover la pieza antes de que se quede fija
+                    if (bloqueActual.estaEnElFondo()){
+                        sePuedeUsarHold = true
+                        bloqueActual = controlador.establecerYLlamarSiguente(bloqueActual, bloqueNext)
+                        bloqueNext = controlador.generarSiguienteBloque()
+                        bloqueSombra = controlador.ReemplazarSombra(bloqueActual, bloqueSombra)
+                    }
+                })
+            }
         }
     })
     

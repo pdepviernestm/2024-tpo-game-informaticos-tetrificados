@@ -266,6 +266,9 @@ object visuales{
     var yHold = 15
     const anchoCacillas = 3
     const altoCacillas = 4
+
+    const ventanaPausa = new Fondo(posision = game.at(18,8), imagen = "ventana.png")
+
     method agregarVisuales(){
         game.addVisual(new Fondo(posision = game.at(0,0), imagen = "fondoDiseñoIzq.png"))
         game.addVisual(new Fondo(posision = game.at(28,0), imagen = "fondoDiseñoDer.png"))
@@ -291,7 +294,10 @@ object visuales{
             xNext += 1
             xHold += 1
         })
-        
+    }
+    
+    method ventanaPausa(){
+        game.addVisual(ventanaPausa)
     }
 }
 
