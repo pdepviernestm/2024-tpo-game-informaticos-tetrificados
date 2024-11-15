@@ -15,6 +15,7 @@ El juego se basa en un tetris. Nos inspiramos en el tetris oficial y buscamos im
 
 ## Reglas de Juego / Instrucciones
 - Tecla UP: rotar bloque en sentido horario
+- Tecla Z: rotar bloque en sentido antihorario
 - Tecla DOWN: descender bloque una posision
 - Tecla LEFT: mover bloque a la izquierda
 - Tecla RIGHT: mover bloque a la derecha
