@@ -23,6 +23,15 @@ object controlador {
                 matriz.last().add(new ElementoMatriz())
             })
         })
+    }
+
+    method resetear(){
+        matriz.forEach({fila => fila.forEach({elemento => game.removeVisual(elemento.pieza())})})
+        matriz.forEach({fila => fila.forEach({elemento => elemento.pieza(null)})})
+        contadoresDeLineaCompleta = []
+        20.times({_=>
+            contadoresDeLineaCompleta.add(0)
+        })
     }  
 
 // ------------- Crear Bloque ---------------------------------
