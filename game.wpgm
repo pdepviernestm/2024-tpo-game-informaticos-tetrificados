@@ -79,11 +79,11 @@ import tetris.*
         })
 
         keyboard.p().onPressDo({
-            if (!juegoPausado){
+            if (!juegoPausado && juegoInicializado){
                 juegoPausado = true
                 visuales.mostrarVentanaPausa()
                 sonidoFondo.pause()
-            }else{
+            }else if (juegoInicializado){
                 juegoPausado = false
                 visuales.ocultarVentanaPausa()
                 sonidoFondo.resume()
