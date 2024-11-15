@@ -24,22 +24,19 @@ import tetris.*
         bloqueActual.entrarEnTablero()
         bloqueSombra = controlador.crearSombraYUbicarla(bloqueActual)
         bloqueNext.mostrar()
-        /*object musica {
-            method play(){
-            game.sound("tetrisgameboy.mp3").play()
-            }
-        }
-        keyboard.enter().onPressDo({musica.play()})
-        */
-        /*
-        method clearGame() {
-            game.allVisuals().forEach({ visual => game.removeVisual(visual) })
-        }
-        
-        self.clearGame()
-        */
+
+        const sonidoFondo = game.sound("tetrisgameboy.mp3")
+       
+
         game.start()
         
+        sonidoFondo.shouldLoop(true)
+        game.schedule(50, { 
+            sonidoFondo.play() 
+            sonidoFondo.pause()
+            sonidoFondo.resume()
+        } )
+
         keyboard.r().onPressDo({
             nivel.resetear()
             puntaje.resetear()
@@ -60,31 +57,18 @@ import tetris.*
             bloqueActual.entrarEnTablero()
             bloqueSombra = controlador.crearSombraYUbicarla(bloqueActual)
             bloqueNext.mostrar()
-            
-            /*
-            //reinniciamos numeros (ya existen los metodos)
-            //reiniciamos el tablero
-            //reiniciamos next y hold
-            //generamos nuevo bloque actual y nuevo bloque next
-            */
+        
         })
-        //MUSICA
-            //
-            /*const tetris = game.sound("tetrisgameboy.mp3")
-            tetris.shouldLoop(true)
-            keyboard.p().onPressDo({tetris.pause()})
-            keyboard.r().onPressDo({tetris.resume()})
-            keyboard.s().onPressDo({tetris.stop()})
-            game.schedule(500, { tetris.play()} )*/
-            //-----FIN MUSICA
 
         keyboard.p().onPressDo({
             if (!juegoPausado){
                 juegoPausado = true
                 visuales.mostrarVentanaPausa()
+                sonidoFondo.pause()
             }else{
                 juegoPausado = false
                 visuales.ocultarVentanaPausa()
+                sonidoFondo.resume()
             }
         })
 
