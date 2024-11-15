@@ -122,12 +122,15 @@ program tetrizado {
     
     //cada 1 minuto (60 segundos) se reduce el tiempo de caida
     game.onTick(1000*60 , "Incremento de Dificultad", {
+        if(!juegoPausado){
+            
         if(ticksCaida > 50){
             ticksCaida -= 50
             nivel.sumar(1)
         } else {
             game.removeTickEvent("Incremento de Dificultad")
         }
+        { }
     })
     /*
        No pareciera acelerarse la velocidad de caida de las piezas...

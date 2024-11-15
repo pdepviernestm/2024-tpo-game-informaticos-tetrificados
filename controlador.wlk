@@ -182,24 +182,6 @@ object controlador {
         bloqueActual.establecerEnTablero()
         return self.llamarSiguienteBloque(bloqueNext)
     }
-
-    method ColumnaEstaLibre(xCol, ySombra, yBloque){ //retorna false si hay algun objeto en la columna
-        const matrizActual = matriz.take(20-ySombra).drop(20-yBloque)
-        return !matrizActual.any({fila => fila.get(xCol-18).pieza() != null})
-    }
-
-    method columnasLibresApartiDePieza(piezasSombra, piezasBloque){
-        var xCols = piezasSombra.map({pieza => pieza.position().x()}).asSet().asList()
-        const ySombra = piezasSombra.map({pieza => pieza.position().y()}).min()
-        const yBloque = piezasBloque.map({pieza => pieza.position().y()}).min()
-        const iterador = xCols.size()
-        const colsLibres = []
-        iterador.times({_=>
-            colsLibres.add(self.ColumnaEstaLibre(xCols.head(), ySombra, yBloque))
-            xCols = xCols.drop(1)
-        })
-        return colsLibres.all({col => col})
-    }
 }
 
 class Incrementales {

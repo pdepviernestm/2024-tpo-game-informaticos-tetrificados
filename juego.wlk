@@ -212,65 +212,6 @@ class Pieza{//un "pixel" del bloque de tetris
 
 }
 
-class Tipo_bloqueSombra inherits BloqueTetris{
-    method descender(){
-        if(controlador.dirEstaLibre("abajo", [a, b, c, d])){
-            self.caer()
-            self.descender()
-        }
-    }
-    method eliminar(){
-        game.removeVisual(a)
-        game.removeVisual(b)
-        game.removeVisual(c)
-        game.removeVisual(d)
-    }
-    method imitarPosMov(bloque){
-        a.asignarPosicion(bloque.a().position().x(), a.position().y())
-        b.asignarPosicion(bloque.b().position().x(), b.position().y())
-        c.asignarPosicion(bloque.c().position().x(), c.position().y())
-        d.asignarPosicion(bloque.d().position().x(), d.position().y())
-        xCentro = bloque.xCentro()
-        if (controlador.columnasLibresApartiDePieza([a,b,c,d], [bloque.a(), bloque.b(), bloque.c(), bloque.d()]) ){
-            if (!controlador.dirEstaLibre("actual", [a, b, c, d])){
-                self.mover("arriba")
-            } else if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
-                self.descender()
-            }
-        }else {
-            a.asignarPosicion(bloque.a().position().x(), bloque.a().position().y())
-            b.asignarPosicion(bloque.b().position().x(), bloque.b().position().y())
-            c.asignarPosicion(bloque.c().position().x(), bloque.c().position().y())
-            d.asignarPosicion(bloque.d().position().x(), bloque.d().position().y())
-            if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
-                self.descender()
-            }
-        }
-    }
-
-    method imitarPosRot(bloque){
-        a.asignarPosicion(bloque.a().position().x() - bloque.xCentro() + xCentro, bloque.a().position().y()- bloque.yCentro() + yCentro)
-        b.asignarPosicion(bloque.b().position().x() - bloque.xCentro() + xCentro, bloque.b().position().y()- bloque.yCentro() + yCentro)
-        c.asignarPosicion(bloque.c().position().x() - bloque.xCentro() + xCentro, bloque.c().position().y()- bloque.yCentro() + yCentro)
-        d.asignarPosicion(bloque.d().position().x() - bloque.xCentro() + xCentro, bloque.d().position().y()- bloque.yCentro() + yCentro)
-        if (controlador.columnasLibresApartiDePieza([a,b,c,d], [bloque.a(), bloque.b(), bloque.c(), bloque.d()])){
-            if (!controlador.dirEstaLibre("actual", [a, b, c, d])){
-                self.mover("arriba")
-            } else if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
-                self.descender()
-            }
-        } else{
-            a.asignarPosicion(bloque.a().position().x(), bloque.a().position().y())
-            b.asignarPosicion(bloque.b().position().x(), bloque.b().position().y())
-            c.asignarPosicion(bloque.c().position().x(), bloque.c().position().y())
-            d.asignarPosicion(bloque.d().position().x(), bloque.d().position().y())
-            if (controlador.dirEstaLibre("abajo", [a, b, c, d])){
-                self.descender()
-            }
-        }
-    }
-}
-
 class Fondo{
     const posision
     const imagen
